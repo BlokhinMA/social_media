@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Фотографии</title>
+</head>
+<body>
+
+<form th:action="@{/create_photos}" method="post" enctype="multipart/form-data">
+    <input type="file" accept="image/*" multiple required>
+    <button>Добавить фотографию(и)</button>
+</form>
+
+<!--<div th:each="photo : ${photos}">
+    <img th:src="@{/photo/{id}(id=${photo.id})}">
+</div>-->
+
+</body>
+</html>

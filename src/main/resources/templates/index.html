@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+<body>
+
+<!--<div th:each="user : ${user}">
+    <a th:text="${user.getId()}"></a>
+</div>-->
+
+<div>Главная страница</div>
+<p><a th:href="@{/sign_up}">Зарегистрироваться</a></p>
+<p><a th:href="@{/sign_in}">Войти</a></p>
+
+</body>
+</html>

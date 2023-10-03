@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заявки в друзья</title>
+</head>
+<body>
+
+<p>Входящие заявки</p>
+<div th:each="incomingRequest : ${incomingRequests}">
+    <form th:action="@{/accept_friend}" method="post">
+        <label th:text="${incomingRequest.username}"></label>
+        <input type="hidden" name="firstUserId" th:value="${incomingRequest.userId}">
+        <input type="hidden" name="secondUserId" th:value="${thisUser.userId}">
+        <button>Принять заявку</button>
+    </form>
+</div>
+
+<p>Исходящие заявки</p>
+<div th:each="outgoingRequest : ${outgoingRequests}">
+    <p th:text="${outgoingRequest.username}"></p>
+</div>
+
+</body>
+</html>
