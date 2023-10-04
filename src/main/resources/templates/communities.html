@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Сообщества</title>
+</head>
+<body>
+
+<form th:action="@{/add_community}" method="post">
+    <label for="name">Название сообщества</label><br>
+    <input type="text" id="name" name="name" placeholder="Название сообщества" required>
+    <button>Создать сообщество</button>
+</form>
+
+<p>Мои сообщества</p>
+<div th:each="community : ${communities}">
+    <p th:text="${community.name}"></p>
+</div>
+
+<th:block th:if="${condition}">
+    <h2 style="color: red">Введите название сообщества</h2>
+</th:block>
+
+</body>
+</html>

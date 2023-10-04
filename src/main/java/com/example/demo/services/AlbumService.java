@@ -24,10 +24,10 @@ public class AlbumService {
         this.photoRepository = photoRepository;
     }
 
-    public boolean addAlbum(Album album, List<MultipartFile> files) throws IOException {
+    public boolean addAlbum(Album album, String userUsername, List<MultipartFile> files) throws IOException {
         if (album.getName() == null)
             return false;
-        albumRepository.save(album);
+        albumRepository.save(album, userUsername);
         if (!files.isEmpty()) {
             List<Photo> photos = new ArrayList<>();
             for (int i = 0; i < files.size(); i++) {
@@ -49,8 +49,8 @@ public class AlbumService {
         return photo;
     }
 
-    public List<Album> showAlbums(String username) {
-        return albumRepository.findAllByUserId(username);
+    public List<Album> showAlbums(String userUsername) {
+        return albumRepository.findAllByUserId(userUsername);
     }
 
 }

@@ -18,18 +18,18 @@ public class AlbumRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save(Album album) {
-        jdbcTemplate.update("INSERT INTO albums(name, user_id) VALUES(?, ?)",
+    public void save(Album album, String userUsername) {
+        jdbcTemplate.update("INSERT INTO albums(name, user_id) VALUES(?, (SELECT id FROM users WHERE username=))",
                 album.getName(),
-                album.getUserId());
+                userUsername);
     }
 
     public int findLastId() {
         return jdbcTemplate.queryForObject("SELECT id FROM albums ORDER BY id DESC LIMIT 1", Integer.class);
     }
 
-    public List<Album> findAllByUserId(String username) {
-        return jdbcTemplate.query("SELECT * FROM albums WHERE user_id=(SELECT id FROM users WHERE username=?)", new BeanPropertyRowMapper<>(Album.class), username);
+    public List<Album> findAllByUserId(String userUsername) {
+        return jdbcTemplate.query("SELECT * FROM albums WHERE user_id=(SELECT id FROM users WHERE username=?)", new BeanPropertyRowMapper<>(Album.class), userUsername);
     }
 
 }

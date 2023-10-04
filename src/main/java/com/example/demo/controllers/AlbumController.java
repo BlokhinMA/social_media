@@ -29,8 +29,8 @@ public class AlbumController {
     }
 
     @PostMapping("/add_album")
-    public String addAlbum(Album album, List<MultipartFile> files, Model model) throws IOException {
-        if (!albumService.addAlbum(album, files)) {
+    public String addAlbum(Album album, Principal principal, List<MultipartFile> files, Model model) throws IOException {
+        if (!albumService.addAlbum(album, principal.getName(), files)) {
             model.addAttribute("condition", true);
             return "/albums";
         }
