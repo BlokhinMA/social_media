@@ -19,11 +19,6 @@ public class PhotoService {
         this.photoRepository = photoRepository;
     }
 
-    public boolean addPhotos(List<File> files) {
-        List<Photo> photos = new ArrayList<>();
 
-        photoRepository.save(photos);
-        return true;
-    }
 
 }

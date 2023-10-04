@@ -20,23 +20,22 @@ public class PhotoRepository {
 
     public void save(List<Photo> photos) {
         for (Photo photo : photos) {
-            jdbcTemplate.update("INSERT INTO photos(name, original_file_name, size, content_type, bytes, creation_date, user_id) VALUES(?, ?, ?, ?, ?, ?, ?)",
+            jdbcTemplate.update("INSERT INTO photos(name, original_file_name, size, content_type, bytes, album_id) VALUES(?, ?, ?, ?, ?, ?)",
                     photo.getName(),
                     photo.getOriginalFileName(),
                     photo.getSize(),
                     photo.getContentType(),
                     photo.getBytes(),
-                    photo.getCreationDate(),
-                    photo.getUserId());
+                    photo.getAlbumId());
         }
     }
 
-    public List<Photo> findAllByUserId(int userId) {
-        return jdbcTemplate.query("SELECT * FROM photos WHERE user_id=?", new BeanPropertyRowMapper<>(Photo.class), userId);
+    public List<Photo> findAllByAlbumId(int albumId) {
+        return jdbcTemplate.query("SELECT * FROM photos WHERE album_id=?", new BeanPropertyRowMapper<>(Photo.class), albumId);
     }
 
-    public Photo findById(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM photos WHERE photo_id=?", new BeanPropertyRowMapper<>(Photo.class), photoId).stream().findAny().orElse(null);
+    public Photo findById(int id) {
+        return jdbcTemplate.query("SELECT * FROM photos WHERE photo_id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
     }
 
 }

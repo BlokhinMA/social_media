@@ -25,13 +25,13 @@ public class PhotoController {
         return "photos";
     }
 
-    @PostMapping("/create_photos")
+    /*@PostMapping("/create_photos")
     public String createPhotos(List<File> files, Model model) {
         if (!photoService.addPhotos(files)) {
             model.addAttribute("condition", true);
             return "/photos";
         }
         return "redirect:/photos";
-    }
+    }*/
 
 }

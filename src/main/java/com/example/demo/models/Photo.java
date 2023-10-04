@@ -2,21 +2,21 @@ package com.example.demo.models;
 
 public class Photo {
 
-    private int photoId;
+    private int id;
     private String name;
     private String originalFileName;
     private long size;
     private String contentType;
     private byte[] bytes;
     private String creationDate;
-    private String userId;
+    private int albumId;
 
-    public int getPhotoId() {
-        return photoId;
+    public int getId() {
+        return id;
     }
 
-    public void setPhotoId(int photoId) {
-        this.photoId = photoId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -67,11 +67,11 @@ public class Photo {
         this.creationDate = creationDate;
     }
 
-    public String getUserId() {
-        return userId;
+    public int getAlbumId() {
+        return albumId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setAlbumId(int albumId) {
+        this.albumId = albumId;
     }
 }

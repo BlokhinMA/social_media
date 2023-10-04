@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class User implements UserDetails {
 
-    private int userId;
+    private int id;
     private String username;
     private String email;
     private String firstName;
@@ -19,12 +19,12 @@ public class User implements UserDetails {
     private String password;
     private Set<Role> roles = new HashSet<>();
 
-    public int getUserId() {
-        return userId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setId(int userId) {
+        this.id = userId;
     }
 
     public void setUsername(String username) {

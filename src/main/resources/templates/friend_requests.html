@@ -10,8 +10,8 @@
 <div th:each="incomingRequest : ${incomingRequests}">
     <form th:action="@{/accept_friend}" method="post">
         <label th:text="${incomingRequest.username}"></label>
-        <input type="hidden" name="firstUserId" th:value="${incomingRequest.userId}">
-        <input type="hidden" name="secondUserId" th:value="${thisUser.userId}">
+        <input type="hidden" name="firstUserId" th:value="${incomingRequest.id}">
+        <input type="hidden" name="secondUserId" th:value="${thisUser.id}">
         <button>Принять заявку</button>
     </form>
 </div>

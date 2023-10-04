@@ -18,7 +18,7 @@ public class UserRepository {
     }
 
     public User findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE user_id=?", new BeanPropertyRowMapper<>(User.class), id)
+        return jdbcTemplate.query("SELECT * FROM users WHERE id=?", new BeanPropertyRowMapper<>(User.class), id)
                 .stream().findAny().orElse(null);
     }
 
@@ -41,7 +41,7 @@ public class UserRepository {
                 user.getBirthDate(),
                 user.getEmail());
 
-        int lastUserId = jdbcTemplate.queryForObject("SELECT user_id FROM users ORDER BY user_id DESC LIMIT 1", Integer.class);
+        int lastUserId = jdbcTemplate.queryForObject("SELECT id FROM users ORDER BY id DESC LIMIT 1", Integer.class);
         for (Role role : user.getRoles()) {
             jdbcTemplate.update("INSERT INTO roles(user_id, role) VALUES(?, ?)",
                     lastUserId,

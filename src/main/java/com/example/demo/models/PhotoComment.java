@@ -2,17 +2,17 @@ package com.example.demo.models;
 
 public class PhotoComment {
 
-    private int photoCommentId;
+    private int id;
     private String comment;
     private String commentingUser;
     private int photoId;
 
-    public int getPhotoCommentId() {
-        return photoCommentId;
+    public int getId() {
+        return id;
     }
 
-    public void setPhotoCommentId(int photoCommentId) {
-        this.photoCommentId = photoCommentId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getComment() {

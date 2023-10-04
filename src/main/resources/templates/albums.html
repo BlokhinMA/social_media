@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Альбомы</title>
+</head>
+<body>
+
+<p>Мои альбомы</p>
+
+<div th:each="album : ${albums}">
+    <p th:text="${album.name}"></p>
+</div>
+
+<p>Создать альбом</p>
+<form th:action="@{/add_album}" method="post" enctype="multipart/form-data">
+    <label for="name">Название альбома</label><br>
+    <input type="text" id="name" name="name" placeholder="Название альбома" required><br>
+    <label for="files">Фотографии</label><br>
+    <input type="file" id="files" name="files" accept="image/*" multiple required>
+    <input type="hidden" name="userId" th:value="${albums.get(0).userId}">
+    <button>создать</button>
+</form>
+
+</body>
+</html>

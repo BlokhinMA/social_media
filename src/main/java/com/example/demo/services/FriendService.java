@@ -28,11 +28,11 @@ public class FriendService {
         if (friendUsername == null ||
                 userRepository.findByUsername(friendUsername) == null || // такого пользователя нет
                 Objects.equals(friendUsername, principal.getName()) || // логины потенциального друга и пользователя совпадают
-                !friendRepository.findAllByUserId(userRepository.findByUsername(friendUsername).getUserId()).isEmpty()) // в таблице друзей уже есть пользователь с таким логином
+                !friendRepository.findAllByUserId(userRepository.findByUsername(friendUsername).getId()).isEmpty()) // в таблице друзей уже есть пользователь с таким логином
             return false;
         Friend friend = new Friend();
-        friend.setFirstUserId(userRepository.findByUsername(principal.getName()).getUserId());
-        friend.setSecondUserId(userRepository.findByUsername(friendUsername).getUserId());
+        friend.setFirstUserId(userRepository.findByUsername(principal.getName()).getId());
+        friend.setSecondUserId(userRepository.findByUsername(friendUsername).getId());
         friendRepository.save(friend);
         return true;
     }
@@ -56,7 +56,7 @@ public class FriendService {
     }
 
     public List<User> showFriends(String username) {
-        int userId = userRepository.findByUsername(username).getUserId();
+        int userId = userRepository.findByUsername(username).getId();
         List<Friend> possibleFriends = friendRepository.findAllAcceptedByUserId(userId);
         List<User> friends = new ArrayList<>();
         for (Friend possibleFriend : possibleFriends)

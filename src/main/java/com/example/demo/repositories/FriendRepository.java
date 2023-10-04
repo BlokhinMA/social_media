@@ -54,11 +54,11 @@ public class FriendRepository {
     }*/
 
     public List<User> findIncomingRequestsByUsername(String username) {
-        return jdbcTemplate.query("SELECT user_id, username, first_name, last_name FROM users WHERE user_id=(SELECT first_user_id FROM friends WHERE second_user_id=(SELECT user_id FROM users WHERE username=?) AND accepted=0)", new BeanPropertyRowMapper<>(User.class), username);
+        return jdbcTemplate.query("SELECT id, username, first_name, last_name FROM users WHERE id=(SELECT first_user_id FROM friends WHERE second_user_id=(SELECT id FROM users WHERE username=?) AND accepted=0)", new BeanPropertyRowMapper<>(User.class), username);
     }
 
     public List<User> findOutgoingRequestsByUsername(String username) {
-        return jdbcTemplate.query("SELECT user_id, username, first_name, last_name FROM users WHERE user_id=(SELECT second_user_id FROM friends WHERE first_user_id=(SELECT user_id FROM users WHERE username=?) AND accepted=0)", new BeanPropertyRowMapper<>(User.class), username);
+        return jdbcTemplate.query("SELECT id, username, first_name, last_name FROM users WHERE id=(SELECT second_user_id FROM friends WHERE first_user_id=(SELECT id FROM users WHERE username=?) AND accepted=0)", new BeanPropertyRowMapper<>(User.class), username);
     }
 
     public void accept(Friend friend) {
