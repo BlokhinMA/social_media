@@ -24,8 +24,16 @@ public class CommunityRepository {
                 creatorUsername);
     }
 
+    public int findLastId() {
+        return jdbcTemplate.queryForObject("SELECT id FROM communities ORDER BY id DESC LIMIT 1", Integer.class);
+    }
+
     public List<Community> findAllByCreatorUsername(String creatorUsername) {
         return jdbcTemplate.query("SELECT * FROM communities WHERE creator_id=(SELECT id FROM users WHERE username=?)", new BeanPropertyRowMapper<>(Community.class), creatorUsername);
+    }
+
+    public Community findById(int id) {
+        return jdbcTemplate.query("SELECT * FROM communities WHERE id=?", new BeanPropertyRowMapper<>(Community.class), id).stream().findAny().orElse(null);
     }
 
 }

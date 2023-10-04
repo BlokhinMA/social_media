@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${community.name}"></title>
+</head>
+<body>
+
+<p>Участники</p>
+<div th:each="members : ${community.members}">
+    <p th:text="${members.username}"></p>
+</div>
+
+<p>Посты</p>
+<div th:each="post : ${community.posts}">
+    <p th:text="${post.postText}"></p>
+    <p th:text="${post.creationDate}"></p>
+    <p th:text="${post.creatorId}"></p>
+    <hr/>
+</div>
+
+</body>
+</html>

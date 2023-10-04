@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
@@ -33,6 +34,12 @@ public class CommunityController {
     public String communities(Principal principal, Model model) {
         model.addAttribute("communities", communityService.showCommunities(principal.getName()));
         return "communities";
+    }
+
+    @GetMapping("/communities/{id}")
+    public String community(@PathVariable int id, Model model) {
+        model.addAttribute("community", communityService.showCommunity(id));
+        return "community";
     }
 
 }

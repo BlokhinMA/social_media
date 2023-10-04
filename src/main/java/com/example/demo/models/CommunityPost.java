@@ -2,10 +2,11 @@ package com.example.demo.models;
 
 public class CommunityPost {
 
-    int id;
-    String postText;
-    String creationDate;
-    int communityId;
+    private int id;
+    private String postText;
+    private String creationDate;
+    private int creatorId;
+    private int communityId;
 
     public int getId() {
         return id;
@@ -29,6 +30,14 @@ public class CommunityPost {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public int getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(int creatorId) {
+        this.creatorId = creatorId;
     }
 
     public int getCommunityId() {

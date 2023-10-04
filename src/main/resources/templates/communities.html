@@ -14,7 +14,7 @@
 
 <p>Мои сообщества</p>
 <div th:each="community : ${communities}">
-    <p th:text="${community.name}"></p>
+    <a th:href="@{/communities/{id}(id=${community.id})}" th:text="${community.name}"></a>
 </div>
 
 <th:block th:if="${condition}">

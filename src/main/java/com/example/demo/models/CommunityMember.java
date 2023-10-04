@@ -1,6 +1,6 @@
 package com.example.demo.models;
 
-public class Member {
+public class CommunityMember {
 
     private int memberId;
     private int communityId;
