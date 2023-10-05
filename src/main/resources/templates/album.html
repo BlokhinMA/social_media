@@ -2,7 +2,7 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Фотографии</title>
+    <title>Альбом</title>
 </head>
 <body>
 
@@ -11,9 +11,9 @@
     <button>Добавить фотографию(и)</button>
 </form>
 
-<!--<div th:each="photo : ${photos}">
-    <img th:src="@{/photo/{id}(id=${photo.id})}">
-</div>-->
+<div th:each="photo : ${photos}">
+    <a th:href="@{/}"><img th:src="@{/photo/{id}(id=${photo.id})}"></a>
+</div>
 
 </body>
 </html>

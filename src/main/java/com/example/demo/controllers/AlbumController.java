@@ -37,4 +37,10 @@ public class AlbumController {
         return "redirect:/albums";
     }
 
+    @GetMapping("/albums/{id}")
+    public String album(@PathVariable int id, Model model) {
+        model.addAttribute("photos", albumService.showAlbum(id));
+        return "album";
+    }
+
 }

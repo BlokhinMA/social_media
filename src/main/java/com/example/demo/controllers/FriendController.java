@@ -29,16 +29,11 @@ public class FriendController {
         return "friends";
     }
 
-    @GetMapping("/add_friend")
-    public String addFriend() {
-        return "add_friend";
-    }
-
     @PostMapping("/add_friend")
     public String addFriend(String friendUsername, Principal principal, Model model) {
         if (!friendService.addFriend(friendUsername, principal)) {
             model.addAttribute("condition", true);
-            return "add_friend";
+            return "friends";
         }
         return "redirect:/friends";
     }

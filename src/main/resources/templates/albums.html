@@ -9,7 +9,7 @@
 <p>Мои альбомы</p>
 
 <div th:each="album : ${albums}">
-    <p th:text="${album.name}"></p>
+    <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}"></a>
 </div>
 
 <p>Создать альбом</p>

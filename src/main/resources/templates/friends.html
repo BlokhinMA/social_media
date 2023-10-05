@@ -6,6 +6,18 @@
 </head>
 <body>
 
+<form th:action="@{/add_friend}" method="post">
+    <label for="friendUsername">Имя пользователя</label><br>
+    <input type="text" id="friendUsername" name="friendUsername" placeholder="Имя пользователя" required><br>
+
+    <th:block th:if="${condition}">
+        <h2 style="color: red">Вы не ввели имя пользователя, или пользователя с таким логином не существует, или Вы
+            хотите добавить себя в друзья, или этот пользователь уже есть в друзьях/заявках</h2>
+    </th:block>
+
+    <button>Добавить друга</button>
+</form>
+
 <a th:href="@{/friends/requests}">Заявки в друзья</a>
 
 <p>Мои друзья</p>

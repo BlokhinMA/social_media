@@ -35,7 +35,7 @@ public class PhotoRepository {
     }
 
     public Photo findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM photos WHERE photo_id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM photos WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
     }
 
 }

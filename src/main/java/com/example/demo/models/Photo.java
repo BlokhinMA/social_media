@@ -1,5 +1,7 @@
 package com.example.demo.models;
 
+import java.util.List;
+
 public class Photo {
 
     private int id;
@@ -10,6 +12,9 @@ public class Photo {
     private byte[] bytes;
     private String creationDate;
     private int albumId;
+    private List<PhotoTag> tags;
+    private List<PhotoRating> ratings;
+    private List<PhotoComment> comments;
 
     public int getId() {
         return id;
@@ -73,5 +78,29 @@ public class Photo {
 
     public void setAlbumId(int albumId) {
         this.albumId = albumId;
+    }
+
+    public List<PhotoTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<PhotoTag> tags) {
+        this.tags = tags;
+    }
+
+    public List<PhotoRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<PhotoRating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public List<PhotoComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<PhotoComment> comments) {
+        this.comments = comments;
     }
 }
