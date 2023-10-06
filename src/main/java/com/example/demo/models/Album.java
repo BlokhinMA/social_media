@@ -7,6 +7,7 @@ public class Album {
     private int id;
     private String name;
     private int userId;
+    private List<Photo> photos;
 
     public int getId() {
         return id;
@@ -30,5 +31,13 @@ public class Album {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 }

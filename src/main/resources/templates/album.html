@@ -11,8 +11,8 @@
     <button>Добавить фотографию(и)</button>
 </form>
 
-<div th:each="photo : ${photos}">
-    <a th:href="@{/}"><img th:src="@{/photo/{id}(id=${photo.id})}"></a>
+<div th:each="photo : ${album.photos}">
+    <a th:href="@{/photos/{id}(id=${photo.id})}"><img th:src="@{/photo/{id}(id=${photo.id})}"></a>
 </div>
 
 </body>

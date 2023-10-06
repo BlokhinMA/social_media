@@ -39,7 +39,7 @@ public class AlbumController {
 
     @GetMapping("/albums/{id}")
     public String album(@PathVariable int id, Model model) {
-        model.addAttribute("photos", albumService.showAlbum(id));
+        model.addAttribute("album", albumService.showAlbum(id));
         return "album";
     }
 

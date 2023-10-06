@@ -9,16 +9,16 @@
 <img th:src="@{/photo/{id}(id=${photo.id})}">
 
 <div th:each="tag : ${photo.tags}">
-    <p th:text="tag.tag"></p>
+    <p th:text="${tag.tag}"></p>
 </div>
 
 <div th:each="rating : ${photo.ratings}">
-    <p th:text="rating.rating"></p>
+    <p th:text="${rating.rating}"></p>
 </div>
 
 <div th:each="comment : ${photo.comments}">
-    <p th:text="comment.comment"></p>
-    <p th:text="comment.commentingUser"></p>
+    <p th:text="${comment.comment}"></p>
+    <p th:text="${comment.commentingUser}"></p>
 </div>
 
 </body>

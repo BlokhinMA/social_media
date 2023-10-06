@@ -53,8 +53,10 @@ public class AlbumService {
         return albumRepository.findAllByUserId(userUsername);
     }
 
-    public List<Photo> showAlbum(int albumId) {
-        return photoRepository.findAllByAlbumId(albumId);
+    public Album showAlbum(int id) {
+        Album album = albumRepository.findById(id);
+        album.setPhotos(photoRepository.findAllByAlbumId(id));
+        return album;
     }
 
 }

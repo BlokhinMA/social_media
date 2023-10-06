@@ -32,4 +32,8 @@ public class AlbumRepository {
         return jdbcTemplate.query("SELECT * FROM albums WHERE user_id=(SELECT id FROM users WHERE username=?)", new BeanPropertyRowMapper<>(Album.class), userUsername);
     }
 
+    public Album findById(int id) {
+        return jdbcTemplate.query("SELECT * FROM albums WHERE id=?", new BeanPropertyRowMapper<>(Album.class), id).stream().findAny().orElse(null);
+    }
+
 }
