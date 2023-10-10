@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class FriendController {
@@ -42,7 +43,7 @@ public class FriendController {
     public String friendRequests(Model model, Principal principal) {
         model.addAttribute("incomingRequests", friendService.showIncomingRequests(principal.getName()));
         model.addAttribute("outgoingRequests", friendService.showOutgoingRequests(principal.getName()));
-        model.addAttribute("thisUser", userService.getUserByPrincipal(principal));
+        model.addAttribute("thisUser", userService.getUserByPrincipal(principal)); // контроллер должен быть тонким!
         return "friend_requests";
     }
 
@@ -50,6 +51,12 @@ public class FriendController {
     public String acceptFriend(Friend friend) {
         friendService.accept(friend);
         return "redirect:/friends";
+    }
+
+    @GetMapping("/find_friends")
+    public String findFriends(List<String> strings) {
+        friendService.findFriends(strings);
+        return "find_friends";
     }
 
 }

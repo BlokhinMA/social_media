@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class UserRepository {
 
@@ -47,6 +49,10 @@ public class UserRepository {
                     lastUserId,
                     role.toString());
         }
+    }
+
+    public List<User> findByFirstNameAndLastName(String firstName, String lastName) {
+        return jdbcTemplate.query("SELECT * FROM users WHERE first_name LIKE ? OR LIKE ?", new BeanPropertyRowMapper<>(User.class), firstName, lastName);
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,6 +65,25 @@ public class FriendService {
                 friends.add(userRepository.findById(possibleFriend.getSecondUserId()));
             else friends.add(userRepository.findById(possibleFriend.getFirstUserId()));
         return friends;
+    }
+
+    public List<User> findFriends(List<String> strings) {
+        String type = strings.get(0),
+                word = strings.get(1);
+        List<User> users = new ArrayList<>();
+        if (Objects.equals(type, "username")) {
+            users.add(userRepository.findByUsername(word));
+            return users;
+        }
+        if (Objects.equals(type, "name")) {
+            String[] names = word.split(" ");
+            String firstName = names[0],
+                    lastName = names[1];
+            firstName = "%".concat(firstName).concat("%");
+            lastName = "%".concat(lastName).concat("%");
+            return userRepository.findByFirstNameAndLastName(firstName, lastName);
+        }
+        return null;
     }
 
     /*public List<User> showNotAcceptedFriends(int userId) {
