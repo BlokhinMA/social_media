@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
@@ -31,12 +32,12 @@ public class FriendController {
     }
 
     @PostMapping("/add_friend")
-    public String addFriend(String friendUsername, Principal principal, Model model) {
-        if (!friendService.addFriend(friendUsername, principal)) {
+    public String addFriend(int friendId, Principal principal, Model model) {
+        if (!friendService.addFriend(friendId, principal)) {
             model.addAttribute("condition", true);
-            return "friends";
+            return "find_friends";
         }
-        return "redirect:/friends";
+        return "redirect:/find_friends";
     }
 
     @GetMapping("friends/requests")
@@ -54,8 +55,8 @@ public class FriendController {
     }
 
     @GetMapping("/find_friends")
-    public String findFriends(List<String> strings) {
-        friendService.findFriends(strings);
+    public String findFriends(Principal principal, String word, Model model) {
+        model.addAttribute("possibleFriends", friendService.findFriends(principal.getName(), word));
         return "find_friends";
     }
 

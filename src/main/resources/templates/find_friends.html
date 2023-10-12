@@ -6,9 +6,22 @@
 </head>
 <body>
 
-<form th:action="@{}">
-
+<p>Найти друзей</p>
+<form th:action="@{/find_friends}" method="get">
+    <label for="name">Введите имя пользователя или имя или фамилию</label>
+    <input type="text" id="name" name="word" placeholder="Например, ivan_ivanov или Иван Иванов" required>
 </form>
+
+<div th:each="possibleFriend : ${possibleFriends}">
+    <form th:action="@{/add_friend}" method="post">
+        <label th:text="${possibleFriend.username}"></label>
+        <input type="hidden" id="friendUsername" name="friendUsername" th:value="${possibleFriend.id}">
+        <button>добавить</button>
+    </form>
+    <th:block th:if="${condition}">
+        <h2 style="color: red">Пользователя с таким логином не существует</h2>
+    </th:block>
+</div>
 
 </body>
 </html>

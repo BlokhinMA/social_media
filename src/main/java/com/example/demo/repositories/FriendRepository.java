@@ -19,6 +19,14 @@ public class FriendRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public List<User> findByUsernameOrFirstNameOrLastNameExceptThisUser(String thisUserUsername, String word) {
+        return jdbcTemplate.query("SELECT * FROM users WHERE username!=? AND (username LIKE ? OR first_name LIKE ? OR last_name LIKE ?)", new BeanPropertyRowMapper<>(User.class),
+                thisUserUsername,
+                word,
+                word,
+                word);
+    }
+
     public void save(Friend friend) {
         jdbcTemplate.update("INSERT INTO friends(first_user_id, second_user_id) VALUES(?, ?)",
                 friend.getFirstUserId(),

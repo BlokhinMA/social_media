@@ -51,8 +51,4 @@ public class UserRepository {
         }
     }
 
-    public List<User> findByFirstNameAndLastName(String firstName, String lastName) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE first_name LIKE ? OR LIKE ?", new BeanPropertyRowMapper<>(User.class), firstName, lastName);
-    }
-
 }

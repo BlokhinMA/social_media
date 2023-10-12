@@ -25,15 +25,12 @@ public class FriendService {
         this.friendRepository = friendRepository;
     }
 
-    public boolean addFriend(String friendUsername, Principal principal) {
-        if (friendUsername == null ||
-                userRepository.findByUsername(friendUsername) == null || // такого пользователя нет
-                Objects.equals(friendUsername, principal.getName()) || // логины потенциального друга и пользователя совпадают
-                !friendRepository.findAllByUserId(userRepository.findByUsername(friendUsername).getId()).isEmpty()) // в таблице друзей уже есть пользователь с таким логином
+    public boolean addFriend(int friendId, Principal principal) {
+        if (userRepository.findById(friendId) == null) // такого пользователя нет
             return false;
         Friend friend = new Friend();
         friend.setFirstUserId(userRepository.findByUsername(principal.getName()).getId());
-        friend.setSecondUserId(userRepository.findByUsername(friendUsername).getId());
+        friend.setSecondUserId(userRepository.findById(friendId).getId());
         friendRepository.save(friend);
         return true;
     }
@@ -67,8 +64,8 @@ public class FriendService {
         return friends;
     }
 
-    public List<User> findFriends(List<String> strings) {
-        String type = strings.get(0),
+    public List<User> findFriends(String thisUserUsername, String word) {
+        /*String type = strings.get(0),
                 word = strings.get(1);
         List<User> users = new ArrayList<>();
         if (Objects.equals(type, "username")) {
@@ -82,6 +79,10 @@ public class FriendService {
             firstName = "%".concat(firstName).concat("%");
             lastName = "%".concat(lastName).concat("%");
             return userRepository.findByFirstNameAndLastName(firstName, lastName);
+        }*/
+        if (word != null) {
+            word = "%".concat(word).concat("%");
+            List<User> possibleFriends = friendRepository.findByUsernameOrFirstNameOrLastNameExceptThisUser(thisUserUsername, word);
         }
         return null;
     }
