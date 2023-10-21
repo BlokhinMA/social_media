@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PhotoController {
@@ -17,10 +18,19 @@ public class PhotoController {
         this.photoService = photoService;
     }
 
-    @GetMapping("/photos/{id}")
+    @GetMapping("/photo/{id}")
     public String photo(@PathVariable int id, Model model) {
         model.addAttribute("photo", photoService.show(id));
         return "photo";
+    }
+
+    @PostMapping("/add_photo_tags")
+    public String addTags(String string, int photoId, Model model) {
+        if (!photoService.addTags(string, photoId)) {
+            model.addAttribute("condition", true);
+            return "photo";
+        }
+        return "redirect:/photo/" + photoId;
     }
 
 }

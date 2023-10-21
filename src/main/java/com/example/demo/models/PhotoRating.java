@@ -2,9 +2,18 @@ package com.example.demo.models;
 
 public class PhotoRating {
 
+    private int id;
     private boolean rating;
     private String ratingUserLogin;
     private int photoId;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public boolean isRating() {
         return rating;

@@ -18,17 +18,16 @@ public class PhotoRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Photo> save(List<Photo> photos) {
-        for (Photo photo : photos) {
-            jdbcTemplate.update("INSERT INTO photos(name, original_file_name, size, content_type, bytes, album_id) VALUES(?, ?, ?, ?, ?, ?)",
-                    photo.getName(),
-                    photo.getOriginalFileName(),
-                    photo.getSize(),
-                    photo.getContentType(),
-                    photo.getBytes(),
-                    photo.getAlbumId());
-        }
-        return jdbcTemplate.query("SELECT * FROM community_members ORDER BY id DESC LIMIT ?", new BeanPropertyRowMapper<>(Photo.class), photos.size());
+    public Photo save(Photo photo) {
+        jdbcTemplate.update("INSERT INTO photos(name, original_file_name, size, content_type, bytes, album_id) VALUES(?, ?, ?, ?, ?, ?)",
+                photo.getName(),
+                photo.getOriginalFileName(),
+                photo.getSize(),
+                photo.getContentType(),
+                photo.getBytes(),
+                photo.getAlbumId());
+
+        return jdbcTemplate.query("SELECT * FROM photos ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Photo.class)).stream().findAny().orElse(null);
     }
 
     public List<Photo> findAllByAlbumId(int albumId) {

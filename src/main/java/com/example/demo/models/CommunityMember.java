@@ -2,8 +2,17 @@ package com.example.demo.models;
 
 public class CommunityMember {
 
+    private int id;
     private String memberLogin;
     private int communityId;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getMemberLogin() {
         return memberLogin;

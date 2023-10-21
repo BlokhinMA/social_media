@@ -2,9 +2,19 @@ package com.example.demo.models;
 
 public class Friend {
 
+    private int id;
+
     private String firstUserLogin;
     private String secondUserLogin;
     private boolean accepted;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstUserLogin() {
         return firstUserLogin;

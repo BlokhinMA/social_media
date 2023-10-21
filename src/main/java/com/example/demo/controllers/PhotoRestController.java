@@ -22,7 +22,7 @@ public class PhotoRestController {
         this.photoService = photoService;
     }
 
-    @GetMapping("/photo/{id}")
+    @GetMapping("/photos/{id}")
     public ResponseEntity<?> photo(@PathVariable int id) {
         Photo photo = photoService.showEntity(id);
         return ResponseEntity.ok()

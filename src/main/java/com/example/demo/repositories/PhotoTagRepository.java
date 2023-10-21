@@ -18,6 +18,11 @@ public class PhotoTagRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public PhotoTag save(PhotoTag photoTag) {
+        jdbcTemplate.update("INSERT INTO photo_tags(tag, photo_id) VALUES(?, ?)", photoTag.getTag(), photoTag.getPhotoId());
+        return jdbcTemplate.query("SELECT * FROM photo_tags ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoTag.class)).stream().findAny().orElse(null);
+    }
+
     public List<PhotoTag> findAllByPhotoId(int photoId) {
         return jdbcTemplate.query("SELECT * FROM photo_tags WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class), photoId);
     }

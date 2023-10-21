@@ -6,11 +6,16 @@
 </head>
 <body>
 
-<img th:src="@{/photo/{id}(id=${photo.id})}">
+<img th:src="@{/photos/{id}(id=${photo.id})}">
 
 <div th:each="tag : ${photo.tags}">
     <p th:text="${tag.tag}"></p>
 </div>
+
+<form th:action="@{/add_photo_tags}" method="post">
+    <input type="text" id="string" name="string" required>
+    <input type="hidden" name="photoId" th:value="${photo.id}">
+</form>
 
 <div th:each="rating : ${photo.ratings}">
     <p th:text="${rating.rating}"></p>

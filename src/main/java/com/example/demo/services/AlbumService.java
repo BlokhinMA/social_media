@@ -31,12 +31,12 @@ public class AlbumService {
         album.setUserLogin(principal.getName());
         Album newAlbum = albumRepository.save(album);
         if (!files.isEmpty()) {
-            List<Photo> photos = new ArrayList<>();
-            for (int i = 0; i < files.size(); i++) {
-                photos.add(toPhotoEntity(files.get(i)));
-                photos.get(i).setAlbumId(newAlbum.getId());
+            Photo photo;
+            for (MultipartFile file : files) {
+                photo = toPhotoEntity(file);
+                photo.setAlbumId(newAlbum.getId());
+                photoRepository.save(photo);
             }
-            photoRepository.save(photos);
         }
         return true;
     }
@@ -68,8 +68,8 @@ public class AlbumService {
         for (int i = 0; i < files.size(); i++) {
             photos.add(toPhotoEntity(files.get(i)));
             photos.get(i).setAlbumId(albumId);
+            photoRepository.save(photos.get(i));
         }
-        photoRepository.save(photos);
         return true;
     }
 

@@ -13,7 +13,7 @@
 </form>
 
 <div th:each="photo : ${album.photos}">
-    <a th:href="@{/photos/{id}(id=${photo.id})}"><img th:src="@{/photo/{id}(id=${photo.id})}"></a>
+    <a th:href="@{/photo/{id}(id=${photo.id})}"><img th:src="@{/photos/{id}(id=${photo.id})}"></a>
 </div>
 
 </body>
