@@ -2,24 +2,24 @@ package com.example.demo.models;
 
 public class Friend {
 
-    private int firstUserId;
-    private int secondUserId;
+    private String firstUserLogin;
+    private String secondUserLogin;
     private boolean accepted;
 
-    public int getFirstUserId() {
-        return firstUserId;
+    public String getFirstUserLogin() {
+        return firstUserLogin;
     }
 
-    public void setFirstUserId(int firstUserId) {
-        this.firstUserId = firstUserId;
+    public void setFirstUserLogin(String firstUserLogin) {
+        this.firstUserLogin = firstUserLogin;
     }
 
-    public int getSecondUserId() {
-        return secondUserId;
+    public String getSecondUserLogin() {
+        return secondUserLogin;
     }
 
-    public void setSecondUserId(int secondUserId) {
-        this.secondUserId = secondUserId;
+    public void setSecondUserLogin(String secondUserLogin) {
+        this.secondUserLogin = secondUserLogin;
     }
 
     public boolean isAccepted() {

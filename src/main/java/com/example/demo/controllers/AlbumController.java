@@ -24,13 +24,13 @@ public class AlbumController {
 
     @GetMapping("/albums")
     public String albums(Principal principal, Model model) {
-        model.addAttribute("albums", albumService.showAlbums(principal.getName()));
+        model.addAttribute("albums", albumService.showAll(principal));
         return "albums";
     }
 
     @PostMapping("/add_album")
-    public String addAlbum(Album album, Principal principal, List<MultipartFile> files, Model model) throws IOException {
-        if (!albumService.addAlbum(album, principal.getName(), files)) {
+    public String addAlbum(Album album, List<MultipartFile> files, Principal principal, Model model) throws IOException {
+        if (!albumService.add(album, files, principal)) { // если фотографии не добавлены, то добавляется пустая фотография
             model.addAttribute("condition", true);
             return "/albums";
         }
@@ -39,8 +39,17 @@ public class AlbumController {
 
     @GetMapping("/albums/{id}")
     public String album(@PathVariable int id, Model model) {
-        model.addAttribute("album", albumService.showAlbum(id));
+        model.addAttribute("album", albumService.show(id));
         return "album";
+    }
+
+    @PostMapping("/create_photos")
+    public String addPhotos(List<MultipartFile> files, int albumId, Model model) throws IOException {
+        if (!albumService.addPhotos(files, albumId)) {
+            model.addAttribute("condition", true);
+            return "album";
+        }
+        return "redirect:/albums/" + albumId;
     }
 
 }

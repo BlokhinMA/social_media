@@ -6,7 +6,7 @@ public class Album {
 
     private int id;
     private String name;
-    private int userId;
+    private String userLogin;
     private List<Photo> photos;
 
     public int getId() {
@@ -25,12 +25,12 @@ public class Album {
         this.name = name;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getUserLogin() {
+        return userLogin;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public List<Photo> getPhotos() {

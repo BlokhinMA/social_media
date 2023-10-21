@@ -18,22 +18,20 @@ public class CommunityRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save(Community community, String creatorUsername) {
-        jdbcTemplate.update("INSERT INTO communities(name, creator_id) VALUES(?, (SELECT id FROM users WHERE username=?))",
+    public Community save(Community community) {
+        jdbcTemplate.update("INSERT INTO communities(name, creator_login) VALUES(?, ?)",
                 community.getName(),
-                creatorUsername);
+                community.getCreatorLogin());
+        return jdbcTemplate.query("SELECT * FROM communities ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Community.class)).stream().findAny().orElse(null);
     }
 
-    public int findLastId() {
-        return jdbcTemplate.queryForObject("SELECT id FROM communities ORDER BY id DESC LIMIT 1", Integer.class);
-    }
-
-    public List<Community> findAllByCreatorUsername(String creatorUsername) {
-        return jdbcTemplate.query("SELECT * FROM communities WHERE creator_id=(SELECT id FROM users WHERE username=?)", new BeanPropertyRowMapper<>(Community.class), creatorUsername);
+    public List<Community> findAllByCreatorLogin(String creatorLogin) {
+        return jdbcTemplate.query("SELECT * FROM communities WHERE creator_login=?", new BeanPropertyRowMapper<>(Community.class), creatorLogin);
     }
 
     public Community findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM communities WHERE id=?", new BeanPropertyRowMapper<>(Community.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM communities WHERE id=?", new BeanPropertyRowMapper<>(Community.class), id)
+                .stream().findAny().orElse(null);
     }
 
 }

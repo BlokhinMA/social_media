@@ -8,6 +8,7 @@ import com.example.demo.repositories.CommunityMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -24,25 +25,31 @@ public class CommunityService {
         this.communityPostRepository = communityPostRepository;
     }
 
-    public boolean addCommunity(Community community, String creatorUsername) {
+    public List<Community> showAll(Principal principal) {
+        return communityRepository.findAllByCreatorLogin(principal.getName());
+    }
+
+    public boolean add(Community community, Principal principal) {
         if (community.getName() == null)
             return false;
-        communityRepository.save(community, creatorUsername);
-        CommunityMember communityMember = new CommunityMember();
-        communityMember.setCommunityId(communityRepository.findLastId());
-        communityMemberRepository.save(creatorUsername, communityMember);
+        community.setCreatorLogin(principal.getName());
+        Community newCommunity = communityRepository.save(community);
+        join(principal.getName(), newCommunity.getId());
         return true;
     }
 
-    public List<Community> showCommunities(String creatorUsername) {
-        return communityRepository.findAllByCreatorUsername(creatorUsername);
-    }
-
-    public Community showCommunity(int id) {
+    public Community show(int id) {
         Community community = communityRepository.findById(id);
         community.setMembers(communityMemberRepository.findAllByCommunityId(id));
         community.setPosts(communityPostRepository.findAllByCommunityId(id));
         return community;
+    }
+
+    public void join(String memberLogin, int communityId) {
+        CommunityMember communityMember = new CommunityMember();
+        communityMember.setMemberLogin(memberLogin);
+        communityMember.setCommunityId(communityId);
+        communityMemberRepository.save(communityMember);
     }
 
 }

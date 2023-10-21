@@ -19,12 +19,15 @@ public class CommunityMemberRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save(String userUsername, CommunityMember communityMember) {
-        jdbcTemplate.update("INSERT INTO community_members(member_id, community_id) VALUES((SELECT id FROM users WHERE username=?), ?)", userUsername, communityMember.getCommunityId());
+    public CommunityMember save(CommunityMember communityMember) {
+        jdbcTemplate.update("INSERT INTO community_members(member_login, community_id) VALUES(?, ?)",
+                communityMember.getMemberLogin(),
+                communityMember.getCommunityId());
+        return jdbcTemplate.query("SELECT * FROM community_members ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityMember.class)).stream().findAny().orElse(null);
     }
 
     public List<User> findAllByCommunityId(int communityId) {
-        return jdbcTemplate.query("SELECT id, username, first_name, last_name FROM users JOIN (SELECT member_id FROM community_members WHERE community_id=?) AS M ON users.id = M.member_id", new BeanPropertyRowMapper<>(User.class), communityId);
+        return jdbcTemplate.query("SELECT users.* FROM users JOIN community_members ON login=member_login WHERE community_id=?", new BeanPropertyRowMapper<>(User.class), communityId);
     }
 
 }

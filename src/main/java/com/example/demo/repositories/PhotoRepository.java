@@ -18,7 +18,7 @@ public class PhotoRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void save(List<Photo> photos) {
+    public List<Photo> save(List<Photo> photos) {
         for (Photo photo : photos) {
             jdbcTemplate.update("INSERT INTO photos(name, original_file_name, size, content_type, bytes, album_id) VALUES(?, ?, ?, ?, ?, ?)",
                     photo.getName(),
@@ -28,6 +28,7 @@ public class PhotoRepository {
                     photo.getBytes(),
                     photo.getAlbumId());
         }
+        return jdbcTemplate.query("SELECT * FROM community_members ORDER BY id DESC LIMIT ?", new BeanPropertyRowMapper<>(Photo.class), photos.size());
     }
 
     public List<Photo> findAllByAlbumId(int albumId) {
@@ -35,7 +36,8 @@ public class PhotoRepository {
     }
 
     public Photo findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM photos WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM photos WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id)
+                .stream().findAny().orElse(null);
     }
 
 }

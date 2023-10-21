@@ -4,7 +4,7 @@ public class PhotoComment {
 
     private int id;
     private String comment;
-    private String commentingUser;
+    private String commentingUserLogin;
     private int photoId;
 
     public int getId() {
@@ -23,12 +23,12 @@ public class PhotoComment {
         this.comment = comment;
     }
 
-    public String getCommentingUser() {
-        return commentingUser;
+    public String getCommentingUserLogin() {
+        return commentingUserLogin;
     }
 
-    public void setCommentingUser(String commentingUser) {
-        this.commentingUser = commentingUser;
+    public void setCommentingUserLogin(String commentingUserLogin) {
+        this.commentingUserLogin = commentingUserLogin;
     }
 
     public int getPhotoId() {

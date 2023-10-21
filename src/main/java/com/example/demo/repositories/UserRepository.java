@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class UserRepository {
 
@@ -24,8 +22,8 @@ public class UserRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public User findByUsername(String username) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE username=?", new BeanPropertyRowMapper<>(User.class), username)
+    public User findByLogin(String login) {
+        return jdbcTemplate.query("SELECT * FROM users WHERE login=?", new BeanPropertyRowMapper<>(User.class), login)
                 .stream().findAny().orElse(null);
     }
 
@@ -35,18 +33,17 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        jdbcTemplate.update("INSERT INTO users(username, first_name, last_name, password, birth_date, email) VALUES(?, ?, ?, ?, ?, ?)",
-                user.getUsername(),
+        jdbcTemplate.update("INSERT INTO users(login, first_name, last_name, password, birth_date, email) VALUES(?, ?, ?, ?, ?, ?)",
+                user.getLogin(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getPassword(),
                 user.getBirthDate(),
                 user.getEmail());
 
-        int lastUserId = jdbcTemplate.queryForObject("SELECT id FROM users ORDER BY id DESC LIMIT 1", Integer.class);
         for (Role role : user.getRoles()) {
-            jdbcTemplate.update("INSERT INTO roles(user_id, role) VALUES(?, ?)",
-                    lastUserId,
+            jdbcTemplate.update("INSERT INTO roles(user_login, role) VALUES(?, ?)",
+                    user.getLogin(),
                     role.toString());
         }
     }

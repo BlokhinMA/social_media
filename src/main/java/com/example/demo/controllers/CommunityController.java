@@ -21,24 +21,24 @@ public class CommunityController {
         this.communityService = communityService;
     }
 
+    @GetMapping("/my_communities")
+    public String myCommunities(Principal principal, Model model) {
+        model.addAttribute("communities", communityService.showAll(principal));
+        return "my_communities";
+    }
+
     @PostMapping("/add_community")
     public String addCommunity(Community community, Principal principal, Model model) {
-        if (!communityService.addCommunity(community, principal.getName())) {
+        if (!communityService.add(community, principal)) {
             model.addAttribute("condition", true);
-            return "/albums";
+            return "/my_communities";
         }
-        return "redirect:/communities";
+        return "redirect:/my_communities";
     }
 
-    @GetMapping("/communities")
-    public String communities(Principal principal, Model model) {
-        model.addAttribute("communities", communityService.showCommunities(principal.getName()));
-        return "communities";
-    }
-
-    @GetMapping("/communities/{id}")
+    @GetMapping("/community/{id}")
     public String community(@PathVariable int id, Model model) {
-        model.addAttribute("community", communityService.showCommunity(id));
+        model.addAttribute("community", communityService.show(id));
         return "community";
     }
 

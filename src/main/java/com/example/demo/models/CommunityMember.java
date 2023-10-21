@@ -2,15 +2,15 @@ package com.example.demo.models;
 
 public class CommunityMember {
 
-    private int memberId;
+    private String memberLogin;
     private int communityId;
 
-    public int getMemberId() {
-        return memberId;
+    public String getMemberLogin() {
+        return memberLogin;
     }
 
-    public void setMemberId(int memberId) {
-        this.memberId = memberId;
+    public void setMemberLogin(String memberLogin) {
+        this.memberLogin = memberLogin;
     }
 
     public int getCommunityId() {

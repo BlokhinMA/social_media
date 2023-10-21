@@ -8,10 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 public class FriendController {
@@ -27,13 +25,13 @@ public class FriendController {
 
     @GetMapping("/friends")
     public String friends(Model model, Principal principal) {
-        model.addAttribute("friends", friendService.showFriends(principal.getName()));
+        model.addAttribute("friends", friendService.show(principal));
         return "friends";
     }
 
     @PostMapping("/add_friend")
-    public String addFriend(int friendId, Principal principal, Model model) {
-        if (!friendService.addFriend(friendId, principal)) {
+    public String addFriend(String friendLogin, Principal principal, Model model) {
+        if (!friendService.add(friendLogin, principal)) {
             model.addAttribute("condition", true);
             return "find_friends";
         }
@@ -42,8 +40,8 @@ public class FriendController {
 
     @GetMapping("friends/requests")
     public String friendRequests(Model model, Principal principal) {
-        model.addAttribute("incomingRequests", friendService.showIncomingRequests(principal.getName()));
-        model.addAttribute("outgoingRequests", friendService.showOutgoingRequests(principal.getName()));
+        model.addAttribute("incomingRequests", friendService.showIncomingRequests(principal));
+        model.addAttribute("outgoingRequests", friendService.showOutgoingRequests(principal));
         model.addAttribute("thisUser", userService.getUserByPrincipal(principal)); // контроллер должен быть тонким!
         return "friend_requests";
     }
@@ -56,7 +54,7 @@ public class FriendController {
 
     @GetMapping("/find_friends")
     public String findFriends(Principal principal, String word, Model model) {
-        model.addAttribute("possibleFriends", friendService.findFriends(principal.getName(), word));
+        model.addAttribute("possibleFriends", friendService.find(principal, word)); // исключить пользователей, которые уже есть в друзьях/заявках
         return "find_friends";
     }
 

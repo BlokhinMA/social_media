@@ -3,7 +3,7 @@ package com.example.demo.models;
 public class PhotoRating {
 
     private boolean rating;
-    private String ratingUserId;
+    private String ratingUserLogin;
     private int photoId;
 
     public boolean isRating() {
@@ -14,12 +14,12 @@ public class PhotoRating {
         this.rating = rating;
     }
 
-    public String getRatingUserId() {
-        return ratingUserId;
+    public String getRatingUserLogin() {
+        return ratingUserLogin;
     }
 
-    public void setRatingUserId(String ratingUserId) {
-        this.ratingUserId = ratingUserId;
+    public void setRatingUserLogin(String ratingUserLogin) {
+        this.ratingUserLogin = ratingUserLogin;
     }
 
     public int getPhotoId() {

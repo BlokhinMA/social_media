@@ -5,7 +5,7 @@ public class CommunityPost {
     private int id;
     private String postText;
     private String creationDate;
-    private int creatorId;
+    private String creatorLogin;
     private int communityId;
 
     public int getId() {
@@ -32,12 +32,12 @@ public class CommunityPost {
         this.creationDate = creationDate;
     }
 
-    public int getCreatorId() {
-        return creatorId;
+    public String getCreatorLogin() {
+        return creatorLogin;
     }
 
-    public void setCreatorId(int creatorId) {
-        this.creatorId = creatorId;
+    public void setCreatorLogin(String creatorLogin) {
+        this.creatorLogin = creatorLogin;
     }
 
     public int getCommunityId() {

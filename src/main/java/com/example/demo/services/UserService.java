@@ -21,14 +21,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean createUser(User user) {
+    public boolean create(User user) {
         if (user.getUsername() == null ||
                 user.getEmail() == null ||
                 user.getFirstName() == null ||
                 user.getLastName() == null ||
                 user.getBirthDate() == null ||
                 user.getPassword() == null ||
-                userRepository.findByUsername(user.getUsername()) != null || userRepository.findByEmail(user.getEmail()) != null)
+                userRepository.findByLogin(user.getLogin()) != null || userRepository.findByEmail(user.getEmail()) != null)
             return false;
         user.getRoles().add(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -38,7 +38,7 @@ public class UserService {
 
     public User getUserByPrincipal(Principal principal) {
         //if (principal == null) return new User();
-        return userRepository.findByUsername(principal.getName());
+        return userRepository.findByLogin(principal.getName());
     }
 
 }

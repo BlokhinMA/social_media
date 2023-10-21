@@ -6,7 +6,7 @@ public class Community {
 
     private int id;
     private String name;
-    private int creator_id;
+    private String creatorLogin;
     private List<User> members;
     private List<CommunityPost> posts;
 
@@ -26,12 +26,12 @@ public class Community {
         this.name = name;
     }
 
-    public int getCreator_id() {
-        return creator_id;
+    public String getCreatorLogin() {
+        return creatorLogin;
     }
 
-    public void setCreator_id(int creator_id) {
-        this.creator_id = creator_id;
+    public void setCreatorLogin(String creatorLogin) {
+        this.creatorLogin = creatorLogin;
     }
 
     public List<User> getMembers() {

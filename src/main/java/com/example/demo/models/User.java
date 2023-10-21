@@ -11,7 +11,7 @@ import java.util.Set;
 public class User implements UserDetails {
 
     private int id;
-    private String username;
+    private String login;
     private String email;
     private String firstName;
     private String lastName;
@@ -23,12 +23,16 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(int userId) {
-        this.id = userId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getEmail() {
@@ -55,16 +59,16 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getBirthDate() {
         return birthDate;
     }
 
     public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Role> getRoles() {
@@ -87,7 +91,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return login;
     }
 
     @Override

@@ -39,7 +39,7 @@ public class UserController {
 
     @PostMapping("/sign_up")
     public String signUp(User user, Model model) {
-        if (!userService.createUser(user)) {
+        if (!userService.create(user)) {
             model.addAttribute("condition", true);
             return "/sign_up";
         }

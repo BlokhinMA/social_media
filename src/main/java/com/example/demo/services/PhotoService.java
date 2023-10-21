@@ -1,10 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.models.Photo;
-import com.example.demo.repositories.PhotoCommentRepository;
-import com.example.demo.repositories.PhotoRatingRepository;
-import com.example.demo.repositories.PhotoRepository;
-import com.example.demo.repositories.PhotoTagRepository;
+import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
