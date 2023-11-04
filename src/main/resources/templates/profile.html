@@ -10,7 +10,7 @@
 
 <!--<p><a th:href="@{/friends}">Мои друзья</a></p>-->
 <p><a th:href="@{/album/{login}(login=${user.login})}" th:text="'Альбомы пользователя ' + ${user.login}"></a></p>
-<!--<p><a th:href="@{/my_communities}">Мои сообщества</a></p>-->
+<p><a th:href="@{/communities/{memberLogin}(memberLogin=${user.login})}" th:text="'Сообщества пользователя ' + ${user.login}"></a></p>
 
 </body>
 </html>

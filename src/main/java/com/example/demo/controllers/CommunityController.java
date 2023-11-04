@@ -48,7 +48,9 @@ public class CommunityController {
     }
 
     @GetMapping("/communities/{memberLogin}")
-    public String communities(@PathVariable String memberLogin, Model model) {
+    public String communities(@PathVariable String memberLogin, Principal principal, Model model) {
+        if (Objects.equals(memberLogin, principal.getName()))
+            return "redirect:/my_communities";
         model.addAttribute("memberLogin", memberLogin);
         model.addAttribute("communities", communityService.showAll(memberLogin));
         return "communities";
