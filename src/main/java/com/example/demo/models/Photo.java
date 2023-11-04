@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Photo {
@@ -10,7 +11,7 @@ public class Photo {
     private long size;
     private String contentType;
     private byte[] bytes;
-    private String creationDate;
+    private LocalDateTime creationTimeStamp;
     private int albumId;
     private List<PhotoTag> tags;
     private List<PhotoRating> ratings;
@@ -64,12 +65,12 @@ public class Photo {
         this.bytes = bytes;
     }
 
-    public String getCreationDate() {
-        return creationDate;
+    public LocalDateTime getCreationTimeStamp() {
+        return creationTimeStamp;
     }
 
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
+    public void setCreationTimeStamp(LocalDateTime creationTimeStamp) {
+        this.creationTimeStamp = creationTimeStamp;
     }
 
     public int getAlbumId() {

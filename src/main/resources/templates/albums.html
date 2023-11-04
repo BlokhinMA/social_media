@@ -9,21 +9,8 @@
 <p>Мои альбомы</p>
 
 <div th:each="album : ${albums}">
-    <a th:href="@{/albums/{id}(id=${album.id})}" th:text="${album.name}"></a>
+    <a th:href="@{/album/{id}(id=${album.id})}" th:text="${album.name}"></a>
 </div>
-
-<p>Создать альбом</p>
-<form th:action="@{/add_album}" method="post" enctype="multipart/form-data">
-    <label for="name">Название альбома</label><br>
-    <input type="text" id="name" name="name" placeholder="Название альбома" required><br>
-    <label for="files">Фотографии</label><br>
-    <input type="file" id="files" name="files" accept="image/*" multiple>
-    <button>Создать альбом</button>
-</form>
-
-<th:block th:if="${condition}">
-    <h2 style="color: red">Введите название альбома</h2>
-</th:block>
 
 </body>
 </html>

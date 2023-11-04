@@ -19,12 +19,14 @@ public class PhotoTagRepository {
     }
 
     public PhotoTag save(PhotoTag photoTag) {
-        jdbcTemplate.update("INSERT INTO photo_tags(tag, photo_id) VALUES(?, ?)", photoTag.getTag(), photoTag.getPhotoId());
-        return jdbcTemplate.query("SELECT * FROM photo_tags ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoTag.class)).stream().findAny().orElse(null);
+        jdbcTemplate.update("INSERT INTO Photo_tag(tag, photo_id) VALUES(?, ?)",
+                photoTag.getTag(),
+                photoTag.getPhotoId());
+        return jdbcTemplate.query("SELECT * FROM Photo_tag ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoTag.class)).stream().findAny().orElse(null);
     }
 
     public List<PhotoTag> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM photo_tags WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class), photoId);
+        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class), photoId);
     }
 
 }

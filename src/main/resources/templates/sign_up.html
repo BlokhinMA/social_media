@@ -8,24 +8,30 @@
 
 <p><span>Регистрация</span></p>
 
-<form th:action="@{/sign_up}" method="post">
+<form th:action="@{/sign_up}" method="post" th:object="${user}">
     <label for="login">Логин</label><br>
-    <input type="text" id="login" name="login" placeholder="Например, ivan_ivanov" required><br>
+    <input type="text" id="login" th:field="*{login}" placeholder="Например, ivan_ivanov"><br>
+    <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>
     <br>
     <label for="email">E-mail</label><br>
-    <input type="email" id="email" name="email" placeholder="Например, ivan_ivanov@gmail.com" required><br>
+    <input type="email" id="email" th:field="*{email}" placeholder="Например, ivan_ivanov@gmail.com" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
     <br>
     <label for="firstName">Имя</label><br>
-    <input type="text" id="firstName" name="firstName" placeholder="Например, Иван" required><br>
+    <input type="text" id="firstName" th:field="*{firstName}" placeholder="Например, Иван" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">FirstName Error</div>
     <br>
     <label for="lastName">Фамилия</label><br>
-    <input type="text" id="lastName" name="lastName" placeholder="Например, Иванов" required><br>
+    <input type="text" id="lastName" th:field="*{lastName}" placeholder="Например, Иванов" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">LastName Error</div>
     <br>
     <label for="birthDate">Дата рождения</label><br>
-    <input type="date" id="birthDate" name="birthDate"><br>
+    <input type="date" id="birthDate" th:field="*{birthDate}" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">BirthDate Error</div>
     <br>
     <label for="password">Пароль</label><br>
-    <input type="password" id="password" name="password" required><br>
+    <input type="password" id="password" th:field="*{password}" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
     <br>
     <label for="password_again">Пароль еще раз</label><br>
     <input type="password" id="password_again" required>
@@ -34,7 +40,7 @@
     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
     <th:block th:if="${condition}">
-        <h2 style="color: red">Вы оставили пустым какое-либо поле, или пользователь с таким логином или e-amil уже существует</h2>
+        <h2 style="color: red">Пользователь с таким логином или e-amil уже существует</h2>
     </th:block>
 
     <button>Зарегистрироваться</button>

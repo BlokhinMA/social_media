@@ -25,9 +25,7 @@ public class AlbumService {
         this.photoRepository = photoRepository;
     }
 
-    public boolean add(Album album, List<MultipartFile> files, Principal principal) throws IOException {
-        if (album.getName() == null)
-            return false;
+    public void create(Album album, List<MultipartFile> files, Principal principal) throws IOException {
         album.setUserLogin(principal.getName());
         Album newAlbum = albumRepository.save(album);
         if (!files.isEmpty()) {
@@ -38,7 +36,6 @@ public class AlbumService {
                 photoRepository.save(photo);
             }
         }
-        return true;
     }
 
     private Photo toPhotoEntity(MultipartFile file) throws IOException {
@@ -55,13 +52,23 @@ public class AlbumService {
         return albumRepository.findAllByUserLogin(principal.getName());
     }
 
+    public List<Album> showAll(String userLogin) {
+        return albumRepository.findAllByUserLogin(userLogin);
+    }
+
     public Album show(int id) {
         Album album = albumRepository.findById(id);
         album.setPhotos(photoRepository.findAllByAlbumId(id));
         return album;
     }
 
-    public boolean addPhotos(List<MultipartFile> files, int albumId) throws IOException {
+    public void delete(int id) {
+        if (albumRepository.findById(id) == null)
+            return;
+        albumRepository.deleteById(id);
+    }
+
+    public boolean createPhotos(List<MultipartFile> files, int albumId) throws IOException {
         if (files.isEmpty())
             return false;
         List<Photo> photos = new ArrayList<>();

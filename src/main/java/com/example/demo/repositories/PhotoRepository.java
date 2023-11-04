@@ -19,7 +19,7 @@ public class PhotoRepository {
     }
 
     public Photo save(Photo photo) {
-        jdbcTemplate.update("INSERT INTO photos(name, original_file_name, size, content_type, bytes, album_id) VALUES(?, ?, ?, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO Photo(name, original_file_name, size, content_type, bytes, album_id) VALUES(?, ?, ?, ?, ?, ?)",
                 photo.getName(),
                 photo.getOriginalFileName(),
                 photo.getSize(),
@@ -27,16 +27,15 @@ public class PhotoRepository {
                 photo.getBytes(),
                 photo.getAlbumId());
 
-        return jdbcTemplate.query("SELECT * FROM photos ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Photo.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Photo.class)).stream().findAny().orElse(null);
     }
 
     public List<Photo> findAllByAlbumId(int albumId) {
-        return jdbcTemplate.query("SELECT * FROM photos WHERE album_id=?", new BeanPropertyRowMapper<>(Photo.class), albumId);
+        return jdbcTemplate.query("SELECT * FROM Photo WHERE album_id=?", new BeanPropertyRowMapper<>(Photo.class), albumId);
     }
 
     public Photo findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM photos WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id)
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
     }
 
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Сообщества</title>
+</head>
+<body>
+
+<form th:action="@{/add_community}" method="post" th:object="${community}">
+    <label for="name">Название сообщества</label><br>
+    <input type="text" id="name" th:field="*{name}" placeholder="Название сообщества" required>
+    <button>Создать сообщество</button>
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+</form>
+
+<p>Мои сообщества</p>
+<div th:each="community : ${communities}">
+    <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
+</div>
+
+</body>
+</html>

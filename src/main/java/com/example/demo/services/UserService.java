@@ -22,13 +22,7 @@ public class UserService {
     }
 
     public boolean create(User user) {
-        if (user.getUsername() == null ||
-                user.getEmail() == null ||
-                user.getFirstName() == null ||
-                user.getLastName() == null ||
-                user.getBirthDate() == null ||
-                user.getPassword() == null ||
-                userRepository.findByLogin(user.getLogin()) != null || userRepository.findByEmail(user.getEmail()) != null)
+        if (userRepository.findByLogin(user.getLogin()) != null || userRepository.findByEmail(user.getEmail()) != null)
             return false;
         user.getRoles().add(Role.ROLE_USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -37,8 +31,11 @@ public class UserService {
     }
 
     public User getUserByPrincipal(Principal principal) {
-        //if (principal == null) return new User();
         return userRepository.findByLogin(principal.getName());
+    }
+
+    public User getUserByLogin(String login) {
+        return userRepository.findByLogin(login);
     }
 
 }

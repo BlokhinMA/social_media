@@ -22,8 +22,8 @@ public class PhotoRestController {
         this.photoService = photoService;
     }
 
-    @GetMapping("/photos/{id}")
-    public ResponseEntity<?> photo(@PathVariable int id) {
+    @GetMapping("/photo_entity/{id}")
+    public ResponseEntity<?> photoEntity(@PathVariable int id) {
         Photo photo = photoService.showEntity(id);
         return ResponseEntity.ok()
                 .header("fileName", photo.getOriginalFileName())

@@ -1,9 +1,11 @@
 package com.example.demo.models;
 
 import com.example.demo.models.enums.Role;
+import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,11 +13,23 @@ import java.util.Set;
 public class User implements UserDetails {
 
     private int id;
+    @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
+    @NotBlank(message = "Поле не должно состоять только из пробелов")
     private String login;
+    @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
+    @NotBlank(message = "Поле не должно состоять только из пробелов")
+    @Email
     private String email;
+    @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
+    @NotBlank(message = "Поле не должно состоять только из пробелов")
     private String firstName;
+    @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
+    @NotBlank(message = "Поле не должно состоять только из пробелов")
     private String lastName;
-    private String birthDate;
+    @NotNull(message = "Заполните поле \"Дата рождения\"")
+    @PastOrPresent(message = "Указанная дата должна быть либо в прошлом, либо в настоящем (сегодняшняя)")
+    private LocalDate birthDate;
+    @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
     private String password;
     private Set<Role> roles = new HashSet<>();
 
@@ -59,11 +73,11 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

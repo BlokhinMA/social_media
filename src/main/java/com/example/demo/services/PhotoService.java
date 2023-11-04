@@ -1,10 +1,13 @@
 package com.example.demo.services;
 
 import com.example.demo.models.Photo;
+import com.example.demo.models.PhotoComment;
 import com.example.demo.models.PhotoTag;
 import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 public class PhotoService {
@@ -34,18 +37,27 @@ public class PhotoService {
         return photo;
     }
 
-    public boolean addTags(String string, int photoId) {
+    public boolean createTags(String string, int photoId) {
         if (string == null) {
             return false;
         }
         String[] tags = string.split(", ");
         PhotoTag photoTag = new PhotoTag();
         for (String tag : tags) {
+            if (tag.length() > 255 || tag.isBlank())
+                return false;
             photoTag.setTag(tag);
             photoTag.setPhotoId(photoId);
             photoTagRepository.save(photoTag);
         }
         return true;
+    }
+
+    public void createComment(PhotoComment photoComment, Principal principal) {
+        photoComment.setComment(photoComment.getComment());
+        photoComment.setCommentingUserLogin(principal.getName());
+        photoComment.setPhotoId(photoComment.getPhotoId());
+        photoCommentRepository.save(photoComment);
     }
 
 }

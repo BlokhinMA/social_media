@@ -7,6 +7,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Repository
 public class UserRepository {
 
@@ -18,34 +21,36 @@ public class UserRepository {
     }
 
     public User findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE id=?", new BeanPropertyRowMapper<>(User.class), id)
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM User WHERE id=?", new BeanPropertyRowMapper<>(User.class), id).stream().findAny().orElse(null);
     }
 
     public User findByLogin(String login) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE login=?", new BeanPropertyRowMapper<>(User.class), login)
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM User WHERE login=?", new BeanPropertyRowMapper<>(User.class), login).stream().findAny().orElse(null);
     }
 
     public User findByEmail(String email) {
-        return jdbcTemplate.query("SELECT * FROM users WHERE email=?", new BeanPropertyRowMapper<>(User.class), email)
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM User WHERE email=?", new BeanPropertyRowMapper<>(User.class), email).stream().findAny().orElse(null);
     }
 
-    public void save(User user) {
-        jdbcTemplate.update("INSERT INTO users(login, first_name, last_name, password, birth_date, email) VALUES(?, ?, ?, ?, ?, ?)",
+    public User save(User user) {
+        jdbcTemplate.update("INSERT INTO User(login, email, first_name, last_name, birth_date, password) VALUES(?, ?, ?, ?, ?, ?)",
                 user.getLogin(),
+                user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getPassword(),
                 user.getBirthDate(),
-                user.getEmail());
+                user.getPassword());
 
         for (Role role : user.getRoles()) {
-            jdbcTemplate.update("INSERT INTO roles(user_login, role) VALUES(?, ?)",
+            jdbcTemplate.update("INSERT INTO Role(user_login, role) VALUES(?, ?)",
                     user.getLogin(),
                     role.toString());
         }
+
+        User user1 = jdbcTemplate.query("SELECT * FROM User ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(User.class)).stream().findAny().orElse(null);
+        //assert user1 != null;
+        //user1.setRoles(new HashSet<>(jdbcTemplate.query("SELECT role FROM Role WHERE user_login=?", new BeanPropertyRowMapper<>(Role.class), user1.getLogin())));
+        return user1;
     }
 
 }

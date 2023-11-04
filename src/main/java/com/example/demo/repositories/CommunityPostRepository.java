@@ -18,14 +18,27 @@ public class CommunityPostRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /*public void save(String userUsername, CommunityMember member) {
-        jdbcTemplate.update("INSERT INTO members(member_id, community_id) VALUES((SELECT id FROM users WHERE username=?), ?)", userUsername, member.getCommunityId());
-    }*/
-
-    public List<CommunityPost> findAllByCommunityId(int communityId) {
-        return jdbcTemplate.query("SELECT * FROM community_posts WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityPost.class), communityId);
+    public CommunityPost save(CommunityPost communityPost) {
+        jdbcTemplate.update("INSERT INTO Community_post(post_text, author_login, community_id) VALUES(?, ?, ?)",
+                communityPost.getPostText(),
+                communityPost.getAuthorLogin(),
+                communityPost.getCommunityId());
+        return jdbcTemplate.query("SELECT * FROM Community_post ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityPost.class)).stream().findAny().orElse(null);
     }
 
-    //public List<>
+    public List<CommunityPost> findAllByCommunityId(int communityId) {
+        return jdbcTemplate.query("SELECT * FROM Community_post WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityPost.class), communityId);
+    }
+
+    public CommunityPost findById(int id) {
+        return jdbcTemplate.query("SELECT * FROM Community_post WHERE id=?", new BeanPropertyRowMapper<>(CommunityPost.class), id).stream().findAny().orElse(null);
+    }
+
+    public CommunityPost deleteById(CommunityPost communityPost) {
+        CommunityPost deletedCommunityPost = findById(communityPost.getId());
+        jdbcTemplate.update("DELETE FROM Community_post WHERE id=?",
+                communityPost.getId());
+        return deletedCommunityPost;
+    }
 
 }

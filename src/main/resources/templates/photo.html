@@ -6,24 +6,42 @@
 </head>
 <body>
 
-<img th:src="@{/photos/{id}(id=${photo.id})}">
+<img th:src="@{/photo_entity/{id}(id=${photo.id})}">
 
-<div th:each="tag : ${photo.tags}">
-    <p th:text="${tag.tag}"></p>
+<!--<p th:text="${photo.creationDateTime}"></p>-->
+
+<div>
+    Теги:
+    <span th:each="tag, iterStat : ${photo.tags}">
+        <span th:text="${tag.tag}"></span><span th:if="${!iterStat.last}">, </span>
+    </span>
 </div>
 
 <form th:action="@{/add_photo_tags}" method="post">
+    <label for="string">Добавить теги (через запятую)</label>
     <input type="text" id="string" name="string" required>
     <input type="hidden" name="photoId" th:value="${photo.id}">
+    <button>добавить</button>
+    <th:block th:if="${condition}">
+        <h2 style="color: red">Поле пустое, или количество символов в введенном теге превышает 255, или тег содержит только пробелы</h2>
+    </th:block>
 </form>
 
 <div th:each="rating : ${photo.ratings}">
     <p th:text="${rating.rating}"></p>
 </div>
 
+<form th:action="@{/add_photo_comment}" method="post" th:object="${photoComment}">
+    <label for="comment">Добавить комментарий</label><br>
+    <textarea id="comment" th:field="*{comment}" required></textarea>
+    <div style="color: red" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">Comment Error</div>
+    <input type="hidden" name="photoId" th:value="${photo.id}">
+    <button>добавить</button>
+</form>
+
 <div th:each="comment : ${photo.comments}">
     <p th:text="${comment.comment}"></p>
-    <p th:text="${comment.commentingUser}"></p>
+    <p th:text="${comment.commentingUserLogin}"></p>
 </div>
 
 </body>

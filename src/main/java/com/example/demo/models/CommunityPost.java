@@ -1,11 +1,18 @@
 package com.example.demo.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
+
 public class CommunityPost {
 
     private int id;
+    @Size(min = 1, message = "Количество символов должно быть больше 0")
+    @NotBlank(message = "Поле не должно состоять только из пробелов")
     private String postText;
-    private String creationDate;
-    private String creatorLogin;
+    private LocalDateTime creationTimeStamp;
+    private String authorLogin;
     private int communityId;
 
     public int getId() {
@@ -24,20 +31,20 @@ public class CommunityPost {
         this.postText = postText;
     }
 
-    public String getCreationDate() {
-        return creationDate;
+    public LocalDateTime getCreationTimeStamp() {
+        return creationTimeStamp;
     }
 
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
+    public void setCreationTimeStamp(LocalDateTime creationTimeStamp) {
+        this.creationTimeStamp = creationTimeStamp;
     }
 
-    public String getCreatorLogin() {
-        return creatorLogin;
+    public String getAuthorLogin() {
+        return authorLogin;
     }
 
-    public void setCreatorLogin(String creatorLogin) {
-        this.creatorLogin = creatorLogin;
+    public void setAuthorLogin(String authorLogin) {
+        this.authorLogin = authorLogin;
     }
 
     public int getCommunityId() {

@@ -1,13 +1,18 @@
 package com.example.demo.models;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 public class Community {
 
     private int id;
+    @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
+    @NotBlank(message = "Поле не должно состоять только из пробелов")
     private String name;
     private String creatorLogin;
-    private List<User> members;
+    private List<CommunityMember> members;
     private List<CommunityPost> posts;
 
     public int getId() {
@@ -34,11 +39,11 @@ public class Community {
         this.creatorLogin = creatorLogin;
     }
 
-    public List<User> getMembers() {
+    public List<CommunityMember> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(List<CommunityMember> members) {
         this.members = members;
     }
 

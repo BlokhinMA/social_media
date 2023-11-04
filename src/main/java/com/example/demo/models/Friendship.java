@@ -1,9 +1,8 @@
 package com.example.demo.models;
 
-public class Friend {
+public class Friendship {
 
     private int id;
-
     private String firstUserLogin;
     private String secondUserLogin;
     private boolean accepted;

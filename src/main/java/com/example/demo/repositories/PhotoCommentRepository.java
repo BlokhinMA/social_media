@@ -18,8 +18,16 @@ public class PhotoCommentRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public PhotoComment save(PhotoComment photoComment) {
+        jdbcTemplate.update("INSERT INTO Photo_comment(comment, commenting_user_login, photo_id) VALUES(?, ?, ?)",
+                photoComment.getComment(),
+                photoComment.getCommentingUserLogin(),
+                photoComment.getPhotoId());
+        return jdbcTemplate.query("SELECT * FROM Photo_comment ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoComment.class)).stream().findAny().orElse(null);
+    }
+
     public List<PhotoComment> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM photo_comments WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoComment.class), photoId);
+        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoComment.class), photoId);
     }
 
 }

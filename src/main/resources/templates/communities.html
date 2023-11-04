@@ -6,9 +6,7 @@
 </head>
 <body>
 
-<a th:href="@{/my_own_communities}">Управление сообществами</a>
-
-<p>Мои сообщества</p>
+<p th:text="'Сообщества пользователя ' + ${memberLogin}"></p>
 <div th:each="community : ${communities}">
     <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
 </div>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Альбомы</title>
+</head>
+<body>
+
+<p>Мои альбомы</p>
+
+<div th:each="album : ${albums}">
+    <form th:action="@{/delete_album}" method="post">
+        <a th:href="@{/album/{id}(id=${album.id})}" th:text="${album.name}"></a>
+        <input type="hidden" name="id" th:value="${album.id}">
+        <button>удалить альбом</button>
+    </form>
+</div>
+
+<p>Создать альбом</p>
+<form th:action="@{/add_album}" method="post" enctype="multipart/form-data" th:object="${album}">
+    <label for="name">Название альбома</label><br>
+    <input type="text" id="name" th:field="*{name}" placeholder="Название альбома" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Login Error</div>
+    <label for="files">Фотографии</label><br>
+    <input type="file" id="files" name="files" accept="image/*" multiple>
+    <button>Создать альбом</button>
+</form>
+
+</body>
+</html>

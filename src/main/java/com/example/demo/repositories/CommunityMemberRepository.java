@@ -20,14 +20,26 @@ public class CommunityMemberRepository {
     }
 
     public CommunityMember save(CommunityMember communityMember) {
-        jdbcTemplate.update("INSERT INTO community_members(member_login, community_id) VALUES(?, ?)",
+        jdbcTemplate.update("INSERT INTO Community_member(member_login, community_id) VALUES(?, ?)",
                 communityMember.getMemberLogin(),
                 communityMember.getCommunityId());
-        return jdbcTemplate.query("SELECT * FROM community_members ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityMember.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Community_member ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityMember.class)).stream().findAny().orElse(null);
     }
 
-    public List<User> findAllByCommunityId(int communityId) {
-        return jdbcTemplate.query("SELECT users.* FROM users JOIN community_members ON login=member_login WHERE community_id=?", new BeanPropertyRowMapper<>(User.class), communityId);
+    public List<CommunityMember> findAllByCommunityId(int communityId) {
+        return jdbcTemplate.query("SELECT * FROM Community_member WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class), communityId);
+    }
+
+    public CommunityMember findByMemberLoginAndCommunityId(String memberLogin, int communityId) {
+        return jdbcTemplate.query("SELECT * FROM Community_member WHERE member_login=? AND community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class), memberLogin, communityId).stream().findAny().orElse(null);
+    }
+
+    public CommunityMember deleteById(CommunityMember communityMember) {
+        CommunityMember deletedCommunityMember = findByMemberLoginAndCommunityId(communityMember.getMemberLogin(), communityMember.getCommunityId());
+        jdbcTemplate.update("DELETE FROM Community_member WHERE member_login=? AND community_id=?",
+                communityMember.getMemberLogin(),
+                communityMember.getCommunityId());
+        return deletedCommunityMember;
     }
 
 }

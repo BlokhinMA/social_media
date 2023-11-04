@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+</head>
+<body>
+
+<div>Мой профиль</div>
+
+<p>Вы вошли под логином <i th:text="${user.username}"></i></p>
+<form action="/sign_out" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    <button>выйти</button>
+</form>
+
+<p><a th:href="@{/friends}">Мои друзья</a></p>
+<p><a th:href="@{/my_albums}">Мои альбомы</a></p>
+<p><a th:href="@{/my_communities}">Мои сообщества</a></p>
+
+</body>
+</html>

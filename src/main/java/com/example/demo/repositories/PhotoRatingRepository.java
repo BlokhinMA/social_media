@@ -19,7 +19,7 @@ public class PhotoRatingRepository {
     }
 
     public List<PhotoRating> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM photo_ratings WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoRating.class), photoId);
+        return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoRating.class), photoId);
     }
 
 }

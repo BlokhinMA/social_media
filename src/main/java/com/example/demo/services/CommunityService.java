@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.models.Community;
 import com.example.demo.models.CommunityMember;
+import com.example.demo.models.CommunityPost;
 import com.example.demo.repositories.CommunityPostRepository;
 import com.example.demo.repositories.CommunityRepository;
 import com.example.demo.repositories.CommunityMemberRepository;
@@ -25,16 +26,21 @@ public class CommunityService {
         this.communityPostRepository = communityPostRepository;
     }
 
-    public List<Community> showAll(Principal principal) {
+    public List<Community> showAllOwn(Principal principal) {
         return communityRepository.findAllByCreatorLogin(principal.getName());
     }
 
-    public boolean add(Community community, Principal principal) {
-        if (community.getName() == null)
-            return false;
+    public List<Community> showAll(Principal principal) {
+        return communityRepository.findAllByMemberLogin(principal.getName());
+    }
+
+    public List<Community> showAll(String memberLogin) {
+        return communityRepository.findAllByMemberLogin(memberLogin);
+    }
+
+    public boolean create(Community community, Principal principal) {
         community.setCreatorLogin(principal.getName());
-        Community newCommunity = communityRepository.save(community);
-        join(principal.getName(), newCommunity.getId());
+        communityRepository.save(community);
         return true;
     }
 
@@ -45,11 +51,38 @@ public class CommunityService {
         return community;
     }
 
-    public void join(String memberLogin, int communityId) {
+    public boolean join(Principal principal, int communityId) {
+        if (communityRepository.findById(communityId) == null)
+            return false;
         CommunityMember communityMember = new CommunityMember();
-        communityMember.setMemberLogin(memberLogin);
+        communityMember.setMemberLogin(principal.getName());
         communityMember.setCommunityId(communityId);
         communityMemberRepository.save(communityMember);
+        return true;
+    }
+
+    public boolean isMember(Principal principal, int communityId) {
+        return communityMemberRepository.findByMemberLoginAndCommunityId(principal.getName(), communityId) != null;
+    }
+
+    public boolean leave(Principal principal, CommunityMember communityMember) {
+        if (communityRepository.findById(communityMember.getCommunityId()) == null)
+            return false;
+        communityMember.setMemberLogin(principal.getName());
+        communityMemberRepository.deleteById(communityMember);
+        return true;
+    }
+
+    public void createPost(CommunityPost communityPost, Principal principal) {
+        communityPost.setAuthorLogin(principal.getName());
+        communityPostRepository.save(communityPost);
+    }
+
+    public boolean deletePost(CommunityPost communityPost) {
+        if (communityRepository.findById(communityPost.getCommunityId()) == null)
+            return false;
+        communityPostRepository.deleteById(communityPost);
+        return true;
     }
 
 }
