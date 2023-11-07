@@ -22,20 +22,25 @@ public class PhotoTagRepository {
         jdbcTemplate.update("INSERT INTO Photo_tag(tag, photo_id) VALUES(?, ?)",
                 photoTag.getTag(),
                 photoTag.getPhotoId());
-        return jdbcTemplate.query("SELECT * FROM Photo_tag ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoTag.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo_tag ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoTag.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<PhotoTag> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class), photoId);
+        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class),
+                photoId);
     }
 
     public PhotoTag findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE id=?", new BeanPropertyRowMapper<>(PhotoTag.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE id=?", new BeanPropertyRowMapper<>(PhotoTag.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
     public PhotoTag delete(PhotoTag photoTag) {
         PhotoTag deletedPhotoTag = findById(photoTag.getId());
-        jdbcTemplate.update("DELETE FROM Photo_tag WHERE id=?", photoTag.getId());
+        jdbcTemplate.update("DELETE FROM Photo_tag WHERE id=?",
+                photoTag.getId());
         return deletedPhotoTag;
     }
 

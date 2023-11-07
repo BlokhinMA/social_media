@@ -24,20 +24,25 @@ public class PhotoCommentRepository {
                 photoComment.getComment(),
                 photoComment.getCommentingUserLogin(),
                 photoComment.getPhotoId());
-        return jdbcTemplate.query("SELECT * FROM Photo_comment ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoComment.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo_comment ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoComment.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<PhotoComment> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoComment.class), photoId);
+        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoComment.class),
+                photoId);
     }
 
     public PhotoComment findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE id=?", new BeanPropertyRowMapper<>(PhotoComment.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE id=?", new BeanPropertyRowMapper<>(PhotoComment.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
     public PhotoComment delete(PhotoComment photoComment) {
         PhotoComment deletedPhotoComment = findById(photoComment.getId());
-        jdbcTemplate.update("DELETE FROM Photo_comment WHERE id=?", photoComment.getId());
+        jdbcTemplate.update("DELETE FROM Photo_comment WHERE id=?",
+                photoComment.getId());
         return deletedPhotoComment;
     }
 

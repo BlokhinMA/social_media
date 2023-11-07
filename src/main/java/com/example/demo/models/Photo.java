@@ -14,7 +14,8 @@ public class Photo {
     private LocalDateTime creationTimeStamp;
     private int albumId;
     private List<PhotoTag> tags;
-    private List<PhotoRating> ratings;
+    private PhotoRating userRating;
+    private Double rating;
     private List<PhotoComment> comments;
     private Album album;
 
@@ -90,12 +91,20 @@ public class Photo {
         this.tags = tags;
     }
 
-    public List<PhotoRating> getRatings() {
-        return ratings;
+    public PhotoRating getUserRating() {
+        return userRating;
     }
 
-    public void setRatings(List<PhotoRating> ratings) {
-        this.ratings = ratings;
+    public void setUserRating(PhotoRating userRating) {
+        this.userRating = userRating;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     public List<PhotoComment> getComments() {

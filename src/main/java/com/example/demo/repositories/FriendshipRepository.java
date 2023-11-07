@@ -33,7 +33,8 @@ public class FriendshipRepository {
         jdbcTemplate.update("INSERT INTO Friendship(first_user_login, second_user_login) VALUES(?, ?)",
                 friendship.getFirstUserLogin(),
                 friendship.getSecondUserLogin());
-        return jdbcTemplate.query("SELECT * FROM Friendship ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Friendship.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Friendship ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Friendship.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<User> findAllAcceptedByFirstUserLoginOrSecondUserLogin(String userLogin) {
@@ -43,11 +44,13 @@ public class FriendshipRepository {
     }
 
     public List<User> findIncomingRequestsByUserLogin(String userLogin) {
-        return jdbcTemplate.query("SELECT User.* FROM User JOIN Friendship ON login = first_user_login WHERE second_user_login=? AND accepted=0", new BeanPropertyRowMapper<>(User.class), userLogin);
+        return jdbcTemplate.query("SELECT User.* FROM User JOIN Friendship ON login = first_user_login WHERE second_user_login=? AND accepted=0", new BeanPropertyRowMapper<>(User.class),
+                userLogin);
     }
 
     public List<User> findOutgoingRequestsByUserLogin(String userLogin) {
-        return jdbcTemplate.query("SELECT User.* FROM User JOIN Friendship ON login = second_user_login WHERE first_user_login=? AND accepted=0", new BeanPropertyRowMapper<>(User.class), userLogin);
+        return jdbcTemplate.query("SELECT User.* FROM User JOIN Friendship ON login = second_user_login WHERE first_user_login=? AND accepted=0", new BeanPropertyRowMapper<>(User.class),
+                userLogin);
     }
 
     public void accept(Friendship friendship) {
@@ -57,13 +60,19 @@ public class FriendshipRepository {
     }
 
     public Friendship findByFriendLoginAndLogin(String friendLogin, String login) {
-        return jdbcTemplate.query("SELECT * FROM Friendship WHERE first_user_login IN (?, ?) AND second_user_login IN (?, ?)", new BeanPropertyRowMapper<>(Friendship.class), friendLogin, login, friendLogin, login).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Friendship WHERE first_user_login IN (?, ?) AND second_user_login IN (?, ?)", new BeanPropertyRowMapper<>(Friendship.class),
+                        friendLogin,
+                        login,
+                        friendLogin,
+                        login)
+                .stream().findAny().orElse(null);
     }
 
     public Friendship deleteByFriendLoginAndLogin(String friendLogin, String login) {
         Friendship friendship = findByFriendLoginAndLogin(friendLogin, login);
         if (friendship != null)
-            jdbcTemplate.update("DELETE FROM Friendship WHERE id=?", friendship.getId());
+            jdbcTemplate.update("DELETE FROM Friendship WHERE id=?",
+                    friendship.getId());
         return friendship;
     }
 

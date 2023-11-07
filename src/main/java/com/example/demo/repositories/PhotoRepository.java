@@ -27,20 +27,25 @@ public class PhotoRepository {
                 photo.getBytes(),
                 photo.getAlbumId());
 
-        return jdbcTemplate.query("SELECT * FROM Photo ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Photo.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Photo.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<Photo> findAllByAlbumId(int albumId) {
-        return jdbcTemplate.query("SELECT * FROM Photo WHERE album_id=?", new BeanPropertyRowMapper<>(Photo.class), albumId);
+        return jdbcTemplate.query("SELECT * FROM Photo WHERE album_id=?", new BeanPropertyRowMapper<>(Photo.class),
+                albumId);
     }
 
     public Photo findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Photo WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Photo WHERE id=?", new BeanPropertyRowMapper<>(Photo.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
     public Photo delete(Photo photo) {
         Photo deletedPhoto = findById(photo.getId());
-        jdbcTemplate.update("DELETE FROM Photo WHERE id=?", photo.getId());
+        jdbcTemplate.update("DELETE FROM Photo WHERE id=?",
+                photo.getId());
         return deletedPhoto;
     }
 

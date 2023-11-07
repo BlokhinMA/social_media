@@ -22,7 +22,8 @@ public class AlbumRepository {
         jdbcTemplate.update("INSERT INTO Album(name, user_login) VALUES(?, ?)",
                 album.getName(),
                 album.getUserLogin());
-        return jdbcTemplate.query("SELECT * FROM Album ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Album.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Album ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Album.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<Album> findAllByUserLogin(String userLogin) {
@@ -30,7 +31,8 @@ public class AlbumRepository {
     }
 
     public Album findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Album WHERE id=?", new BeanPropertyRowMapper<>(Album.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Album WHERE id=?", new BeanPropertyRowMapper<>(Album.class), id).
+                stream().findAny().orElse(null);
     }
 
     public Album deleteById(int id) {

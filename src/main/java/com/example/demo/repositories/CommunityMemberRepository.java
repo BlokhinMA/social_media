@@ -23,15 +23,20 @@ public class CommunityMemberRepository {
         jdbcTemplate.update("INSERT INTO Community_member(member_login, community_id) VALUES(?, ?)",
                 communityMember.getMemberLogin(),
                 communityMember.getCommunityId());
-        return jdbcTemplate.query("SELECT * FROM Community_member ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityMember.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Community_member ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityMember.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<CommunityMember> findAllByCommunityId(int communityId) {
-        return jdbcTemplate.query("SELECT * FROM Community_member WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class), communityId);
+        return jdbcTemplate.query("SELECT * FROM Community_member WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class),
+                communityId);
     }
 
     public CommunityMember findByMemberLoginAndCommunityId(String memberLogin, int communityId) {
-        return jdbcTemplate.query("SELECT * FROM Community_member WHERE member_login=? AND community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class), memberLogin, communityId).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Community_member WHERE member_login=? AND community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class),
+                        memberLogin,
+                        communityId)
+                .stream().findAny().orElse(null);
     }
 
     public CommunityMember delete(CommunityMember communityMember) {

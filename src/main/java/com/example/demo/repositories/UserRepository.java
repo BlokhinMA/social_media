@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
-import java.util.Set;
 
 @Repository
 public class UserRepository {
@@ -21,15 +20,21 @@ public class UserRepository {
     }
 
     public User findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE id=?", new BeanPropertyRowMapper<>(User.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM User WHERE id=?", new BeanPropertyRowMapper<>(User.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
     public User findByLogin(String login) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE login=?", new BeanPropertyRowMapper<>(User.class), login).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM User WHERE login=?", new BeanPropertyRowMapper<>(User.class),
+                        login)
+                .stream().findAny().orElse(null);
     }
 
     public User findByEmail(String email) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE email=?", new BeanPropertyRowMapper<>(User.class), email).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM User WHERE email=?", new BeanPropertyRowMapper<>(User.class),
+                        email)
+                .stream().findAny().orElse(null);
     }
 
     public User save(User user) {
@@ -47,9 +52,11 @@ public class UserRepository {
                     role.toString());
         }
 
-        User user1 = jdbcTemplate.query("SELECT * FROM User ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(User.class)).stream().findAny().orElse(null);
-        //assert user1 != null;
-        //user1.setRoles(new HashSet<>(jdbcTemplate.query("SELECT role FROM Role WHERE user_login=?", new BeanPropertyRowMapper<>(Role.class), user1.getLogin())));
+        User user1 = jdbcTemplate.query("SELECT * FROM User ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(User.class))
+                .stream().findAny().orElse(null);
+        /*assert user1 != null;
+        user1.setRoles(new HashSet<>(jdbcTemplate.query("SELECT role FROM Role WHERE user_login=?", new BeanPropertyRowMapper<>(Role.class),
+                user1.getLogin())));*/
         return user1;
     }
 

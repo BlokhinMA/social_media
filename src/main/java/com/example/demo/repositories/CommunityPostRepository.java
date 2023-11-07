@@ -23,15 +23,18 @@ public class CommunityPostRepository {
                 communityPost.getPostText(),
                 communityPost.getAuthorLogin(),
                 communityPost.getCommunityId());
-        return jdbcTemplate.query("SELECT * FROM Community_post ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityPost.class)).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Community_post ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(CommunityPost.class))
+                .stream().findAny().orElse(null);
     }
 
     public List<CommunityPost> findAllByCommunityId(int communityId) {
-        return jdbcTemplate.query("SELECT * FROM Community_post WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityPost.class), communityId);
+        return jdbcTemplate.query("SELECT * FROM Community_post WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityPost.class),
+                communityId);
     }
 
     public CommunityPost findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Community_post WHERE id=?", new BeanPropertyRowMapper<>(CommunityPost.class), id).stream().findAny().orElse(null);
+        return jdbcTemplate.query("SELECT * FROM Community_post WHERE id=?", new BeanPropertyRowMapper<>(CommunityPost.class), id)
+                .stream().findAny().orElse(null);
     }
 
     public CommunityPost delete(CommunityPost communityPost) {

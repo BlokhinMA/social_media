@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.models.Photo;
 import com.example.demo.models.PhotoComment;
+import com.example.demo.models.PhotoRating;
 import com.example.demo.models.PhotoTag;
 import com.example.demo.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,24 +32,16 @@ public class PhotoService {
         return photoRepository.findById(id);
     }
 
-    public Photo show(int id) {
+    public Photo show(int id, Principal principal) {
         Photo photo = photoRepository.findById(id);
         photo.setTags(photoTagRepository.findAllByPhotoId(id));
-        photo.setRatings(photoRatingRepository.findAllByPhotoId(id));
+        photo.setUserRating(photoRatingRepository.findByRatingUserLoginAndPhotoId(principal.getName(), id));
+        Double rating = photoRatingRepository.rating(id);
+        if (rating != null)
+            photo.setRating(rating * 100);
         photo.setComments(photoCommentRepository.findAllByPhotoId(id));
         photo.setAlbum(albumRepository.findById(photo.getAlbumId()));
         return photo;
-    }
-
-    public void createTag(PhotoTag photoTag) {
-        photoTagRepository.save(photoTag);
-    }
-
-    public void createComment(PhotoComment photoComment, Principal principal) {
-        photoComment.setComment(photoComment.getComment());
-        photoComment.setCommentingUserLogin(principal.getName());
-        photoComment.setPhotoId(photoComment.getPhotoId());
-        photoCommentRepository.save(photoComment);
     }
 
     public boolean delete(Photo photo) {
@@ -58,11 +51,44 @@ public class PhotoService {
         return true;
     }
 
+    public void createTag(PhotoTag photoTag) {
+        photoTagRepository.save(photoTag);
+    }
+
     public boolean deleteTag(PhotoTag photoTag) {
         if (photoRepository.findById(photoTag.getPhotoId()) == null)
             return false;
         photoTagRepository.delete(photoTag);
         return true;
+    }
+
+    public boolean createRating(PhotoRating photoRating, Principal principal) {
+        if (photoRepository.findById(photoRating.getPhotoId()) == null)
+            return false;
+        photoRating.setRatingUserLogin(principal.getName());
+        photoRatingRepository.save(photoRating);
+        return true;
+    }
+
+    public boolean updateRating(PhotoRating photoRating) {
+        if (photoRepository.findById(photoRating.getPhotoId()) == null)
+            return false;
+        photoRatingRepository.update(photoRating);
+        return true;
+    }
+
+    public boolean deleteRating(PhotoRating photoRating) {
+        if (photoRepository.findById(photoRating.getPhotoId()) == null)
+            return false;
+        photoRatingRepository.delete(photoRating);
+        return true;
+    }
+
+    public void createComment(PhotoComment photoComment, Principal principal) {
+        photoComment.setComment(photoComment.getComment());
+        photoComment.setCommentingUserLogin(principal.getName());
+        photoComment.setPhotoId(photoComment.getPhotoId());
+        photoCommentRepository.save(photoComment);
     }
 
     public boolean deleteComment(PhotoComment photoComment) {

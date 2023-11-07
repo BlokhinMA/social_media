@@ -19,7 +19,7 @@
 <p th:text="${photo.creationTimeStamp}"></p>
 
 <span>Теги: </span>
-<form th:action="@{/delete_photo_tag}" method="post" style="display: inline;" th:each="tag : ${photo.tags}">
+<form th:action="@{/delete_photo_tag}" method="post" th:each="tag : ${photo.tags}" style="display: inline">
     <label th:text="${tag.tag}"></label>
     <input type="hidden" name="id" th:value="${tag.id}">
     <input type="hidden" name="photoId" th:value="${tag.photoId}">
@@ -38,9 +38,47 @@
     </form>
 </th:block>
 
-<div th:each="rating : ${photo.ratings}">
-    <p th:text="${rating.rating}"></p>
-</div>
+<th:block th:switch="${photo.rating}">
+    <p th:case="null">Фотография еще не оценивалась</p>
+    <p th:case="*" th:text="'Рейтинг фотографии: ' + ${photo.rating} + ' %'"></p>
+</th:block>
+
+<th:block th:if="${photo.userRating} != null">
+    <th:block th:if="${photo.userRating.rating} == false">
+        <form th:action="@{/update_photo_rating}" method="post" style="display: inline">
+            <input type="hidden" name="rating" value="true">
+            <input type="hidden" name="id" th:value="${photo.userRating.id}">
+            <input type="hidden" name="photoId" th:value="${photo.userRating.photoId}">
+            <button>+</button>
+        </form>
+        <form th:action="@{/delete_photo_rating}" method="post">
+            <input type="hidden" name="id" th:value="${photo.userRating.id}">
+            <input type="hidden" name="photoId" th:value="${photo.userRating.photoId}">
+            <button style="background: red">-</button>
+        </form>
+    </th:block>
+    <th:block th:if="${photo.userRating.rating} == true">
+        <form th:action="@{/delete_photo_rating}" method="post" style="display: inline">
+            <input type="hidden" name="id" th:value="${photo.userRating.id}">
+            <input type="hidden" name="photoId" th:value="${photo.userRating.photoId}">
+            <button style="background: green">+</button>
+        </form>
+        <form th:action="@{/update_photo_rating}" method="post">
+            <input type="hidden" name="rating" value="false">
+            <input type="hidden" name="id" th:value="${photo.userRating.id}">
+            <input type="hidden" name="photoId" th:value="${photo.userRating.photoId}">
+            <button>-</button>
+        </form>
+    </th:block>
+</th:block>
+
+<th:block th:if="${photo.userRating} == null">
+    <form th:action="@{/add_photo_rating}" method="post">
+        <input type="hidden" name="photoId" th:value="${photo.id}">
+        <button name="rating" value="true">+</button>
+        <button name="rating" value="false">-</button>
+    </form>
+</th:block>
 
 <form th:action="@{/add_photo_comment}" method="post" th:object="${photoComment}">
     <label for="comment">Добавить комментарий</label><br>
