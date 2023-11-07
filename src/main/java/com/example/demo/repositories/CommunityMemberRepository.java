@@ -34,7 +34,7 @@ public class CommunityMemberRepository {
         return jdbcTemplate.query("SELECT * FROM Community_member WHERE member_login=? AND community_id=?", new BeanPropertyRowMapper<>(CommunityMember.class), memberLogin, communityId).stream().findAny().orElse(null);
     }
 
-    public CommunityMember deleteById(CommunityMember communityMember) {
+    public CommunityMember delete(CommunityMember communityMember) {
         CommunityMember deletedCommunityMember = findByMemberLoginAndCommunityId(communityMember.getMemberLogin(), communityMember.getCommunityId());
         jdbcTemplate.update("DELETE FROM Community_member WHERE member_login=? AND community_id=?",
                 communityMember.getMemberLogin(),

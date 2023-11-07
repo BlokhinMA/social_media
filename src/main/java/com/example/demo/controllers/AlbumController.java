@@ -59,12 +59,6 @@ public class AlbumController {
         return "album";
     }
 
-    @PostMapping("/delete_album")
-    public String deleteAlbum(int id) {
-        albumService.delete(id);
-        return "redirect:/my_albums";
-    }
-
     @PostMapping("/create_photos")
     public String addPhotos(List<MultipartFile> files, int albumId, Principal principal, Model model) throws IOException {
         if (!albumService.createPhotos(files, albumId)) {
@@ -72,7 +66,13 @@ public class AlbumController {
             model.addAttribute("thisUser", principal);
             return "album";
         }
-        return "redirect:/my_albums" + albumId;
+        return "redirect:/album/" + albumId;
+    }
+
+    @PostMapping("/delete_album")
+    public String deleteAlbum(int id) {
+        albumService.delete(id);
+        return "redirect:/my_albums";
     }
 
 }

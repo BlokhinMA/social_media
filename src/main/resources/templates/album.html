@@ -25,6 +25,11 @@
 
 <div th:each="photo : ${album.photos}">
     <a th:href="@{/photo/{id}(id=${photo.id})}"><img th:src="@{/photo_entity/{id}(id=${photo.id})}"></a>
+    <form th:action="@{/delete_photo}" method="post">
+        <input type="hidden" name="id" th:value="${photo.id}">
+        <input type="hidden" name="albumId" th:value="${photo.albumId}">
+        <button>удалить фотографию</button>
+    </form>
 </div>
 
 </body>

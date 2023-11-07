@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.Objects;
 
 @Controller
 public class FriendshipController {
@@ -23,15 +25,24 @@ public class FriendshipController {
         this.userService = userService;
     }
 
-    @GetMapping("/friends")
-    public String friends(Model model, Principal principal) {
+    @GetMapping("/my_friends")
+    public String myFriends(Model model, Principal principal) {
         model.addAttribute("friends", friendshipService.show(principal));
+        return "my_friends";
+    }
+
+    @GetMapping("/friends/{userLogin}")
+    public String friends(@PathVariable String userLogin, Principal principal, Model model) {
+        if (Objects.equals(userLogin, principal.getName()))
+            return "redirect:/my_friends";
+        model.addAttribute("friends", friendshipService.show(userLogin));
+        model.addAttribute("userLogin", userLogin);
         return "friends";
     }
 
     @GetMapping("/find_friends")
-    public String findFriends(Principal principal, String word, Model model) {
-        model.addAttribute("possibleFriends", friendshipService.find(principal, word)); // исключить пользователей, которые уже есть в друзьях/заявках
+    public String findFriends(String word, Principal principal, Model model) {
+        model.addAttribute("possibleFriends", friendshipService.find(word, principal));
         return "find_friends";
     }
 
@@ -48,14 +59,20 @@ public class FriendshipController {
     public String friendRequests(Model model, Principal principal) {
         model.addAttribute("incomingRequests", friendshipService.showIncomingRequests(principal));
         model.addAttribute("outgoingRequests", friendshipService.showOutgoingRequests(principal));
-        model.addAttribute("thisUser", userService.getUserByPrincipal(principal)); // контроллер должен быть тонким!
+        model.addAttribute("thisUser", userService.getUserByPrincipal(principal));
         return "friend_requests";
     }
 
     @PostMapping("/accept_friend")
     public String acceptFriend(Friendship friendship) {
         friendshipService.accept(friendship);
-        return "redirect:/friends";
+        return "redirect:/my_friends";
+    }
+
+    @PostMapping("/delete_friend")
+    public String deleteFriend(String friendLogin, Principal principal) {
+        friendshipService.delete(friendLogin, principal);
+        return "redirect:/my_friends";
     }
 
 }

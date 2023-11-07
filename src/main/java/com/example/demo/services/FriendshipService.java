@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class FriendshipService {
@@ -22,6 +20,14 @@ public class FriendshipService {
     public FriendshipService(UserRepository userRepository, FriendshipRepository friendshipRepository) {
         this.userRepository = userRepository;
         this.friendshipRepository = friendshipRepository;
+    }
+
+    public List<User> find(String word, Principal principal) {
+        if (word != null && !word.isEmpty()) {
+            word = "%".concat(word).concat("%");
+            return friendshipRepository.findLikeLoginOrFirstNameOrLastNameExceptThisUser(principal.getName(), word);
+        }
+        return null;
     }
 
     public boolean create(String friendLogin, Principal principal) {
@@ -47,23 +53,15 @@ public class FriendshipService {
     }
 
     public List<User> show(Principal principal) {
-        /*List<Friendship> possibleFriendships = friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(principal.getName());
-        List<User> friends = new ArrayList<>();
-        for (Friendship possibleFriendship : possibleFriendships)
-            if (Objects.equals(possibleFriendship.getFirstUserLogin(), principal.getName()))
-                friends.add(userRepository.findByLogin(possibleFriendship.getSecondUserLogin()));
-            else friends.add(userRepository.findByLogin(possibleFriendship.getFirstUserLogin()));
-        return friends;*/
         return friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(principal.getName());
     }
 
-    public List<User> find(Principal principal, String word) {
-        if (word != null) {
-            word = "%".concat(word).concat("%");
-            List<User> possibleFriends = friendshipRepository.findByLoginOrFirstNameOrLastNameExceptThisUser(principal.getName(), word);
-            return possibleFriends;
-        }
-        return null;
+    public List<User> show(String userLogin) {
+        return friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(userLogin);
+    }
+
+    public void delete(String friendLogin, Principal principal) {
+        friendshipRepository.deleteByFriendLoginAndLogin(friendLogin, principal.getName());
     }
 
 }

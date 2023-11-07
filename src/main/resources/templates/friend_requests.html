@@ -9,7 +9,7 @@
 <p>Входящие заявки</p>
 <div th:each="incomingRequest : ${incomingRequests}">
     <form th:action="@{/accept_friend}" method="post">
-        <label th:text="${incomingRequest.login}"></label>
+        <a th:href="@{/profile/{login}(login=${incomingRequest.login})}" th:text="${incomingRequest.login}"></a>
         <input type="hidden" name="firstUserLogin" th:value="${incomingRequest.login}">
         <input type="hidden" name="secondUserLogin" th:value="${thisUser.login}">
         <button>Принять заявку</button>
@@ -18,7 +18,7 @@
 
 <p>Исходящие заявки</p>
 <div th:each="outgoingRequest : ${outgoingRequests}">
-    <p th:text="${outgoingRequest.username}"></p>
+    <a th:href="@{/profile/{login}(login=${outgoingRequest.login})}" th:text="${outgoingRequest.login}"></a>
 </div>
 
 </body>

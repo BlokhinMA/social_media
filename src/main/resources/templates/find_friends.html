@@ -7,7 +7,7 @@
 <body>
 
 <p>Найти друзей</p>
-<form th:action="@{/find_friends}" method="get">
+<form th:action="@{/find_friends}">
     <label for="name">Введите имя пользователя или имя или фамилию</label>
     <input type="text" id="name" name="word" placeholder="Например, ivan_ivanov или Иван Иванов" required>
     <button>искать</button>
@@ -15,8 +15,8 @@
 
 <div th:each="possibleFriend : ${possibleFriends}">
     <form th:action="@{/add_friend}" method="post">
-        <label th:text="${possibleFriend.login}"></label>
-        <input type="hidden" id="friendLogin" name="friendLogin" th:value="${possibleFriend.login}">
+        <a th:href="@{/profile/{login}(login=${possibleFriend.login})}" th:text="${possibleFriend.login}"></a>
+        <input type="hidden" name="friendLogin" th:value="${possibleFriend.login}">
         <button>добавить</button>
     </form>
     <th:block th:if="${condition}">

@@ -8,24 +8,35 @@
 
 <img th:src="@{/photo_entity/{id}(id=${photo.id})}">
 
-<!--<p th:text="${photo.creationDateTime}"></p>-->
+<th:block th:if="${thisUser.getName()} == ${photo.album.userLogin}">
+    <form th:action="@{/delete_photo}" method="post">
+        <input type="hidden" name="id" th:value="${photo.id}">
+        <input type="hidden" name="albumId" th:value="${photo.albumId}">
+        <button>удалить фотографию</button>
+    </form>
+</th:block>
 
-<div>
-    Теги:
-    <span th:each="tag, iterStat : ${photo.tags}">
-        <span th:text="${tag.tag}"></span><span th:if="${!iterStat.last}">, </span>
-    </span>
-</div>
+<p th:text="${photo.creationTimeStamp}"></p>
 
-<form th:action="@{/add_photo_tags}" method="post">
-    <label for="string">Добавить теги (через запятую)</label>
-    <input type="text" id="string" name="string" required>
-    <input type="hidden" name="photoId" th:value="${photo.id}">
-    <button>добавить</button>
-    <th:block th:if="${condition}">
-        <h2 style="color: red">Поле пустое, или количество символов в введенном теге превышает 255, или тег содержит только пробелы</h2>
+<span>Теги: </span>
+<form th:action="@{/delete_photo_tag}" method="post" style="display: inline;" th:each="tag : ${photo.tags}">
+    <label th:text="${tag.tag}"></label>
+    <input type="hidden" name="id" th:value="${tag.id}">
+    <input type="hidden" name="photoId" th:value="${tag.photoId}">
+    <th:block th:if="${thisUser.getName()} == ${photo.album.userLogin}">
+        <button>x</button>
     </th:block>
 </form>
+
+<th:block th:if="${thisUser.getName()} == ${photo.album.userLogin}">
+    <form th:action="@{/add_photo_tag}" method="post" th:object="${photoTag}">
+        <label for="tag">Добавить тег</label>
+        <input type="text" id="tag" name="tag" th:field="*{tag}" required>
+        <div style="color: red" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}">Tag Error</div>
+        <input type="hidden" name="photoId" th:value="${photo.id}">
+        <button>добавить</button>
+    </form>
+</th:block>
 
 <div th:each="rating : ${photo.ratings}">
     <p th:text="${rating.rating}"></p>
@@ -33,7 +44,7 @@
 
 <form th:action="@{/add_photo_comment}" method="post" th:object="${photoComment}">
     <label for="comment">Добавить комментарий</label><br>
-    <textarea id="comment" th:field="*{comment}" required></textarea>
+    <textarea id="comment" name="comment" th:field="*{comment}" required></textarea>
     <div style="color: red" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">Comment Error</div>
     <input type="hidden" name="photoId" th:value="${photo.id}">
     <button>добавить</button>
@@ -42,6 +53,14 @@
 <div th:each="comment : ${photo.comments}">
     <p th:text="${comment.comment}"></p>
     <p th:text="${comment.commentingUserLogin}"></p>
+    <p th:text="${comment.commentingTimeStamp}"></p>
+    <th:block th:if="${thisUser.getName()} == ${photo.album.userLogin} or ${thisUser.getName()} == ${comment.commentingUserLogin}">
+        <form th:action="@{/delete_photo_comment}" method="post">
+            <input type="hidden" name="id" th:value="${comment.id}">
+            <input type="hidden" name="photoId" th:value="${comment.photoId}">
+            <button>удалить</button>
+        </form>
+    </th:block>
 </div>
 
 </body>

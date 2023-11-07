@@ -6,13 +6,9 @@
 </head>
 <body>
 
-<a th:href="@{/find_friends}">Найти друзей</a>
-<br>
-<a th:href="@{/friends/requests}">Заявки в друзья</a>
-
-<p>Мои друзья</p>
+<p th:text="'Друзья пользователя ' + ${userLogin}"></p>
 <div th:each="friend : ${friends}">
-    <p th:text="${friend.username}"></p>
+    <a th:href="@{/profile/{login}(login=${friend.login})}" th:text="${friend.login}"></a>
 </div>
 
 </body>

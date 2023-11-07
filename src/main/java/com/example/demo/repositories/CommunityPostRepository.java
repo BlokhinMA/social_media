@@ -34,7 +34,7 @@ public class CommunityPostRepository {
         return jdbcTemplate.query("SELECT * FROM Community_post WHERE id=?", new BeanPropertyRowMapper<>(CommunityPost.class), id).stream().findAny().orElse(null);
     }
 
-    public CommunityPost deleteById(CommunityPost communityPost) {
+    public CommunityPost delete(CommunityPost communityPost) {
         CommunityPost deletedCommunityPost = findById(communityPost.getId());
         jdbcTemplate.update("DELETE FROM Community_post WHERE id=?",
                 communityPost.getId());

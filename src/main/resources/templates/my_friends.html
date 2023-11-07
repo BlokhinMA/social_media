@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Друзья</title>
+</head>
+<body>
+
+<a th:href="@{/find_friends}">Найти друзей</a>
+<br>
+<a th:href="@{/friends/requests}">Заявки в друзья</a>
+
+<p>Мои друзья</p>
+<div th:each="friend : ${friends}">
+    <form th:action="@{/delete_friend}" method="post">
+        <a th:href="@{/profile/{login}(login=${friend.login})}" th:text="${friend.login}"></a>
+        <input type="hidden" name="friendLogin" th:value="${friend.login}">
+        <button>удалить</button>
+    </form>
+</div>
+
+</body>
+</html>

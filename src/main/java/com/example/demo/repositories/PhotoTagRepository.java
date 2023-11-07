@@ -29,4 +29,14 @@ public class PhotoTagRepository {
         return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class), photoId);
     }
 
+    public PhotoTag findById(int id) {
+        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE id=?", new BeanPropertyRowMapper<>(PhotoTag.class), id).stream().findAny().orElse(null);
+    }
+
+    public PhotoTag delete(PhotoTag photoTag) {
+        PhotoTag deletedPhotoTag = findById(photoTag.getId());
+        jdbcTemplate.update("DELETE FROM Photo_tag WHERE id=?", photoTag.getId());
+        return deletedPhotoTag;
+    }
+
 }

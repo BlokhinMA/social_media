@@ -12,13 +12,15 @@ import java.security.Principal;
 @Service
 public class PhotoService {
 
+    private final AlbumRepository albumRepository;
     private final PhotoRepository photoRepository;
     private final PhotoTagRepository photoTagRepository;
     private final PhotoRatingRepository photoRatingRepository;
     private final PhotoCommentRepository photoCommentRepository;
 
     @Autowired
-    public PhotoService(PhotoRepository photoRepository, PhotoTagRepository photoTagRepository, PhotoRatingRepository photoRatingRepository, PhotoCommentRepository photoCommentRepository) {
+    public PhotoService(AlbumRepository albumRepository, PhotoRepository photoRepository, PhotoTagRepository photoTagRepository, PhotoRatingRepository photoRatingRepository, PhotoCommentRepository photoCommentRepository) {
+        this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
         this.photoTagRepository = photoTagRepository;
         this.photoRatingRepository = photoRatingRepository;
@@ -34,23 +36,12 @@ public class PhotoService {
         photo.setTags(photoTagRepository.findAllByPhotoId(id));
         photo.setRatings(photoRatingRepository.findAllByPhotoId(id));
         photo.setComments(photoCommentRepository.findAllByPhotoId(id));
+        photo.setAlbum(albumRepository.findById(photo.getAlbumId()));
         return photo;
     }
 
-    public boolean createTags(String string, int photoId) {
-        if (string == null) {
-            return false;
-        }
-        String[] tags = string.split(", ");
-        PhotoTag photoTag = new PhotoTag();
-        for (String tag : tags) {
-            if (tag.length() > 255 || tag.isBlank())
-                return false;
-            photoTag.setTag(tag);
-            photoTag.setPhotoId(photoId);
-            photoTagRepository.save(photoTag);
-        }
-        return true;
+    public void createTag(PhotoTag photoTag) {
+        photoTagRepository.save(photoTag);
     }
 
     public void createComment(PhotoComment photoComment, Principal principal) {
@@ -58,6 +49,27 @@ public class PhotoService {
         photoComment.setCommentingUserLogin(principal.getName());
         photoComment.setPhotoId(photoComment.getPhotoId());
         photoCommentRepository.save(photoComment);
+    }
+
+    public boolean delete(Photo photo) {
+        if (albumRepository.findById(photo.getAlbumId()) == null)
+            return false;
+        photoRepository.delete(photo);
+        return true;
+    }
+
+    public boolean deleteTag(PhotoTag photoTag) {
+        if (photoRepository.findById(photoTag.getPhotoId()) == null)
+            return false;
+        photoTagRepository.delete(photoTag);
+        return true;
+    }
+
+    public boolean deleteComment(PhotoComment photoComment) {
+        if (photoRepository.findById(photoComment.getPhotoId()) == null)
+            return false;
+        photoCommentRepository.delete(photoComment);
+        return true;
     }
 
 }

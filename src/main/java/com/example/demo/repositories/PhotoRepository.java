@@ -38,4 +38,10 @@ public class PhotoRepository {
         return jdbcTemplate.query("SELECT * FROM Photo WHERE id=?", new BeanPropertyRowMapper<>(Photo.class), id).stream().findAny().orElse(null);
     }
 
+    public Photo delete(Photo photo) {
+        Photo deletedPhoto = findById(photo.getId());
+        jdbcTemplate.update("DELETE FROM Photo WHERE id=?", photo.getId());
+        return deletedPhoto;
+    }
+
 }

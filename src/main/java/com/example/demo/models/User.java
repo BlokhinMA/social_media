@@ -14,17 +14,17 @@ public class User implements UserDetails {
 
     private int id;
     @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
-    @NotBlank(message = "Поле не должно состоять только из пробелов")
+    @Pattern(regexp="\\S+", message="Поле не должно содержать пробелы")
     private String login;
     @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
-    @NotBlank(message = "Поле не должно состоять только из пробелов")
+    @Pattern(regexp="\\S+", message="Поле не должно содержать пробелы")
     @Email
     private String email;
     @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
-    @NotBlank(message = "Поле не должно состоять только из пробелов")
+    @Pattern(regexp="\\S+", message="Поле не должно содержать пробелы")
     private String firstName;
     @Size(min = 1, max = 255, message = "Количество символов должно быть больше 0 и меньше 256")
-    @NotBlank(message = "Поле не должно состоять только из пробелов")
+    @Pattern(regexp="\\S+", message="Поле не должно содержать пробелы")
     private String lastName;
     @NotNull(message = "Заполните поле \"Дата рождения\"")
     @PastOrPresent(message = "Указанная дата должна быть либо в прошлом, либо в настоящем (сегодняшняя)")

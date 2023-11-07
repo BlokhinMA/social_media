@@ -69,7 +69,7 @@ public class CommunityService {
         if (communityRepository.findById(communityMember.getCommunityId()) == null)
             return false;
         communityMember.setMemberLogin(principal.getName());
-        communityMemberRepository.deleteById(communityMember);
+        communityMemberRepository.delete(communityMember);
         return true;
     }
 
@@ -81,7 +81,7 @@ public class CommunityService {
     public boolean deletePost(CommunityPost communityPost) {
         if (communityRepository.findById(communityPost.getCommunityId()) == null)
             return false;
-        communityPostRepository.deleteById(communityPost);
+        communityPostRepository.delete(communityPost);
         return true;
     }
 

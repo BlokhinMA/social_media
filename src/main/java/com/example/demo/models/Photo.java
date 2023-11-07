@@ -16,6 +16,7 @@ public class Photo {
     private List<PhotoTag> tags;
     private List<PhotoRating> ratings;
     private List<PhotoComment> comments;
+    private Album album;
 
     public int getId() {
         return id;
@@ -103,5 +104,13 @@ public class Photo {
 
     public void setComments(List<PhotoComment> comments) {
         this.comments = comments;
+    }
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
     }
 }
