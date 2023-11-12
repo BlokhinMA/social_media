@@ -8,8 +8,8 @@
 
 <p>Найти друзей</p>
 <form th:action="@{/find_friends}">
-    <label for="name">Введите имя пользователя или имя или фамилию</label>
-    <input type="text" id="name" name="word" placeholder="Например, ivan_ivanov или Иван Иванов" required>
+    <label for="word">Введите имя пользователя или имя или фамилию</label>
+    <input type="search" id="word" name="word" placeholder="Например, ivan_ivanov или Иван Иванов" required th:value="${word}">
     <button>искать</button>
 </form>
 

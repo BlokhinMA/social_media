@@ -44,6 +44,10 @@ public class CommunityService {
         return true;
     }
 
+    public void delete(int id) {
+        communityRepository.deleteById(id);
+    }
+
     public Community show(int id) {
         Community community = communityRepository.findById(id);
         community.setMembers(communityMemberRepository.findAllByCommunityId(id));

@@ -42,4 +42,10 @@ public class CommunityRepository {
                 .stream().findAny().orElse(null);
     }
 
+    public Community deleteById(int id) {
+        Community deletedCommunity = findById(id);
+        jdbcTemplate.update("DELETE FROM Community WHERE id=?", id);
+        return deletedCommunity;
+    }
+
 }

@@ -63,8 +63,6 @@ public class AlbumService {
     }
 
     public void delete(int id) {
-        if (albumRepository.findById(id) == null)
-            return;
         albumRepository.deleteById(id);
     }
 
@@ -78,6 +76,14 @@ public class AlbumService {
             photoRepository.save(photos.get(i));
         }
         return true;
+    }
+
+    public List<Album> find(String word) {
+        if (word != null && !word.isEmpty()) {
+            word = "%".concat(word).concat("%");
+            return albumRepository.findLikeName(word);
+        }
+        return null;
     }
 
 }

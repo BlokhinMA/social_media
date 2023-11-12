@@ -49,4 +49,16 @@ public class PhotoRepository {
         return deletedPhoto;
     }
 
+    public List<Photo> findLikeCreationTimeStamp(String word) {
+        return jdbcTemplate.query("SELECT * FROM Photo WHERE creation_time_stamp LIKE ?", new BeanPropertyRowMapper<>(Photo.class), word);
+    }
+
+    public List<Photo> findLikeTags(String word) {
+        return jdbcTemplate.query("SELECT Photo.* FROM Photo JOIN Photo_tag ON Photo.id = photo_id WHERE tag LIKE ?", new BeanPropertyRowMapper<>(Photo.class), word);
+    }
+
+    public List<Photo> findLikeComments(String word) {
+        return jdbcTemplate.query("SELECT Photo.* FROM Photo JOIN Photo_comment ON Photo.id = photo_id WHERE comment LIKE ?", new BeanPropertyRowMapper<>(Photo.class), word);
+    }
+
 }

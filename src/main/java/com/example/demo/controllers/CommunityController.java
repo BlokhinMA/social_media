@@ -28,22 +28,33 @@ public class CommunityController {
 
     @GetMapping("/my_own_communities")
     public String myOwnCommunities(Principal principal, Model model, Community community) {
-        model.addAttribute("communities", communityService.showAllOwn(principal));
+        model
+                .addAttribute("communities", communityService.showAllOwn(principal))
+                .addAttribute("thisUser", principal);
         return "my_own_communities";
     }
 
     @GetMapping("/my_communities")
     public String myCommunities(Principal principal, Model model) {
-        model.addAttribute("communities", communityService.showAll(principal));
+        model
+                .addAttribute("communities", communityService.showAll(principal));
         return "my_communities";
     }
 
     @PostMapping("/add_community")
     public String addCommunity(@Valid Community community, BindingResult bindingResult, Principal principal, Model model) {
         if (bindingResult.hasErrors() || !communityService.create(community, principal)) {
-            model.addAttribute("communities", communityService.showAll(principal));
+            model
+                    .addAttribute("communities", communityService.showAll(principal))
+                    .addAttribute("thisUser", principal);
             return "my_own_communities";
         }
+        return "redirect:/my_own_communities";
+    }
+
+    @PostMapping("/delete_community")
+    public String deleteCommunity(int id) {
+        communityService.delete(id);
         return "redirect:/my_own_communities";
     }
 
@@ -51,16 +62,18 @@ public class CommunityController {
     public String communities(@PathVariable String memberLogin, Principal principal, Model model) {
         if (Objects.equals(memberLogin, principal.getName()))
             return "redirect:/my_communities";
-        model.addAttribute("memberLogin", memberLogin);
-        model.addAttribute("communities", communityService.showAll(memberLogin));
+        model
+                .addAttribute("memberLogin", memberLogin)
+                .addAttribute("communities", communityService.showAll(memberLogin));
         return "communities";
     }
 
     @GetMapping("/community/{id}")
     public String community(@PathVariable int id, Principal principal, Model model, CommunityPost communityPost) {
-        model.addAttribute("community", communityService.show(id));
-        model.addAttribute("isMember", communityService.isMember(principal, id));
-        model.addAttribute("thisUser", principal);
+        model
+                .addAttribute("community", communityService.show(id))
+                .addAttribute("isMember", communityService.isMember(principal, id))
+                .addAttribute("thisUser", principal);
         return "community";
     }
 
@@ -83,9 +96,10 @@ public class CommunityController {
     @PostMapping("/add_community_post")
     public String addCommunityPost(@Valid CommunityPost communityPost, BindingResult bindingResult, Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("community", communityService.show(communityPost.getCommunityId()));
-            model.addAttribute("isMember", communityService.isMember(principal, communityPost.getCommunityId()));
-            model.addAttribute("thisUser", principal);
+            model
+                    .addAttribute("community", communityService.show(communityPost.getCommunityId()))
+                    .addAttribute("isMember", communityService.isMember(principal, communityPost.getCommunityId()))
+                    .addAttribute("thisUser", principal);
             return "community";
         }
         communityService.createPost(communityPost, principal);

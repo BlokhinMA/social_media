@@ -2,11 +2,11 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Альбомы</title>
+    <title th:text="'Альбомы пользователя ' + ${userLogin}">Альбомы</title>
 </head>
 <body>
 
-<p>Мои альбомы</p>
+<p th:text="'Альбомы пользователя ' + ${userLogin}"></p>
 
 <div th:each="album : ${albums}">
     <a th:href="@{/album/{id}(id=${album.id})}" th:text="${album.name}"></a>

@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -29,8 +26,9 @@ public class PhotoController {
 
     @GetMapping("/photo/{id}")
     public String photo(@PathVariable int id, Principal principal, Model model) {
-        model.addAttribute("photo", photoService.show(id, principal));
-        model.addAttribute("thisUser", principal);
+        model
+                .addAttribute("photo", photoService.show(id, principal))
+                .addAttribute("thisUser", principal);
         return "photo";
     }
 
@@ -54,8 +52,9 @@ public class PhotoController {
     @PostMapping("/add_photo_tag")
     public String addPhotoTag(@Valid PhotoTag photoTag, BindingResult bindingResult, Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("photo", photoService.show(photoTag.getPhotoId(), principal));
-            model.addAttribute("thisUser", principal);
+            model
+                    .addAttribute("photo", photoService.show(photoTag.getPhotoId(), principal))
+                    .addAttribute("thisUser", principal);
             return "photo";
         }
         photoService.createTag(photoTag);
@@ -93,8 +92,9 @@ public class PhotoController {
     @PostMapping("/add_photo_comment")
     public String addPhotoComment(@Valid PhotoComment photoComment, BindingResult bindingResult, Principal principal, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("photo", photoService.show(photoComment.getPhotoId(), principal));
-            model.addAttribute("thisUser", principal);
+            model
+                    .addAttribute("photo", photoService.show(photoComment.getPhotoId(), principal))
+                    .addAttribute("thisUser", principal);
             return "photo";
         }
         photoService.createComment(photoComment, principal);
@@ -106,6 +106,15 @@ public class PhotoController {
         if (!photoService.deleteComment(photoComment))
             return "redirect:/my_albums";
         return "redirect:/photo/" + photoComment.getPhotoId();
+    }
+
+    @GetMapping("/find_photos")
+    public String findPhotos(String searchTerm, String word, Model model) {
+        model
+                .addAttribute("photos", photoService.find(searchTerm, word))
+                .addAttribute("searchTerm", searchTerm)
+                .addAttribute("word", word);
+        return "find_photos";
     }
 
 }

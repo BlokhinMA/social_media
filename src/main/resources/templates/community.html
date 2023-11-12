@@ -2,13 +2,20 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${community.name}"></title>
+    <title th:text="'Сообщество ' + ${community.name}"></title>
 </head>
 <body>
 
+<th:block th:if="${thisUser.getName()} == ${community.creatorLogin}">
+    <form th:action="@{/delete_community}" method="post">
+        <input type="hidden" name="id" th:value="${community.id}">
+        <button>удалить сообщество</button>
+    </form>
+</th:block>
+
 <p>Участники</p>
 <div th:each="member : ${community.members}">
-    <p th:text="${member.memberLogin}"></p>
+    <a th:href="@{/profile/{login}(login=${member.memberLogin})}" th:text="${member.memberLogin}"></a>
 </div>
 
 <th:block th:if="!${isMember} and ${thisUser.getName()} != ${community.creatorLogin}">

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Найти фотографии</title>
+</head>
+<body>
+
+<p>Найти фотографии</p>
+<form th:action="@{/find_photos}">
+    <span>Введите параметр поиска</span>
+    <th:block th:switch="${searchTerm}">
+        <th:block th:case="creationTimeStamp">
+            <input type="radio" th:id="creationTimeStamp" name="searchTerm" value="creationTimeStamp" checked>
+            <label th:for="creationTimeStamp">по дате</label>
+            <input type="radio" th:id="tags" name="searchTerm" value="tags">
+            <label th:for="tags">по тегам</label>
+            <input type="radio" th:id="comments" name="searchTerm" value="comments">
+            <label th:for="comments">по комментариям</label>
+        </th:block>
+        <th:block th:case="tags">
+            <input type="radio" th:id="creationTimeStamp" name="searchTerm" value="creationTimeStamp">
+            <label th:for="creationTimeStamp">по дате</label>
+            <input type="radio" th:id="tags" name="searchTerm" value="tags" checked>
+            <label th:for="tags2">по тегам</label>
+            <input type="radio" th:id="comments" name="searchTerm" value="comments">
+            <label th:for="comments">по комментариям</label>
+        </th:block>
+        <th:block th:case="comments">
+            <input type="radio" th:id="creationTimeStamp" name="searchTerm" value="creationTimeStamp">
+            <label th:for="creationTimeStamp">по дате</label>
+            <input type="radio" th:id="tags" name="searchTerm" value="tags">
+            <label th:for="tags">по тегам</label>
+            <input type="radio" th:id="comments" name="searchTerm" value="comments" checked>
+            <label th:for="comments">по комментариям</label>
+        </th:block>
+        <th:block th:case="*">
+            <input type="radio" id="creationTimeStamp" name="searchTerm" value="creationTimeStamp">
+            <label for="creationTimeStamp">по дате</label>
+            <input type="radio" id="tags" name="searchTerm" value="tags">
+            <label for="tags">по тегам</label>
+            <input type="radio" id="comments" name="searchTerm" value="comments">
+            <label for="comments">по комментариям</label>
+        </th:block>
+    </th:block>
+    <br>
+    <label for="word">Введите ключевые слова</label>
+    <input type="search" id="word" name="word" required th:value="${word}">
+    <br>
+    <button>искать</button>
+</form>
+
+<div th:each="photo : ${photos}">
+    <a th:href="@{/photo/{id}(id=${photo.id})}"><img th:src="@{/photo_entity/{id}(id=${photo.id})}"></a>
+</div>
+
+</body>
+</html>

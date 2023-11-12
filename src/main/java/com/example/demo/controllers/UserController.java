@@ -50,7 +50,8 @@ public class UserController {
         if (bindingResult.hasErrors())
             return "sign_up";
         if (!userService.create(user)) {
-            model.addAttribute("condition", true);
+            model
+                    .addAttribute("condition", true);
             return "sign_up";
         }
         return "redirect:/sign_in";
@@ -58,7 +59,8 @@ public class UserController {
 
     @GetMapping("/my_profile")
     public String myProfile(Principal principal, Model model) {
-        model.addAttribute("user", userService.getUserByPrincipal(principal));
+        model
+                .addAttribute("user", userService.getUserByPrincipal(principal));
         return "my_profile";
     }
 
@@ -67,7 +69,8 @@ public class UserController {
         if (Objects.equals(login, principal.getName())) {
             return "redirect:/my_profile";
         }
-        model.addAttribute("user", userService.getUserByLogin(login));
+        model
+                .addAttribute("user", userService.getUserByLogin(login));
         return "profile";
     }
 

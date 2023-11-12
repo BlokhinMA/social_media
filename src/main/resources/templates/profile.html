@@ -2,14 +2,14 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль</title>
+    <title th:text="'Профиль пользователя ' + ${user.login}"></title>
 </head>
 <body>
 
 <div th:text="'Профиль пользователя ' + ${user.login}"></div>
 
 <p><a th:href="@{/friends/{userLogin}(userLogin=${user.login})}" th:text="'Друзья пользователя ' + ${user.login}"></a></p>
-<p><a th:href="@{/album/{userLogin}(userLogin=${user.login})}" th:text="'Альбомы пользователя ' + ${user.login}"></a></p>
+<p><a th:href="@{/albums/{userLogin}(userLogin=${user.login})}" th:text="'Альбомы пользователя ' + ${user.login}"></a></p>
 <p><a th:href="@{/communities/{memberLogin}(memberLogin=${user.login})}" th:text="'Сообщества пользователя ' + ${user.login}"></a></p>
 
 </body>

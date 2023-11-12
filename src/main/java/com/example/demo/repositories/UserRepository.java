@@ -7,7 +7,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashSet;
+import java.util.List;
+import java.util.logging.Logger;
 
 @Repository
 public class UserRepository {
@@ -26,9 +27,16 @@ public class UserRepository {
     }
 
     public User findByLogin(String login) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE login=?", new BeanPropertyRowMapper<>(User.class),
+        User user = jdbcTemplate.query("SELECT * FROM User WHERE login=?", new BeanPropertyRowMapper<>(User.class),
                         login)
                 .stream().findAny().orElse(null);
+
+        String role = jdbcTemplate.queryForObject("SELECT role FROM Role WHERE role='ROLE_ADMIN' AND user_login=?", String.class, login);
+
+        if (user != null)
+            user.getRoles().add(Role.valueOf(role));
+
+        return user;
     }
 
     public User findByEmail(String email) {
@@ -47,17 +55,17 @@ public class UserRepository {
                 user.getPassword());
 
         for (Role role : user.getRoles()) {
-            jdbcTemplate.update("INSERT INTO Role(user_login, role) VALUES(?, ?)",
-                    user.getLogin(),
-                    role.toString());
+            jdbcTemplate.update("INSERT INTO Role(role, user_login) VALUES(?, ?)",
+                    role.toString(),
+                    user.getLogin());
         }
 
-        User user1 = jdbcTemplate.query("SELECT * FROM User ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(User.class))
+        return jdbcTemplate.query("SELECT * FROM User ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(User.class))
                 .stream().findAny().orElse(null);
-        /*assert user1 != null;
-        user1.setRoles(new HashSet<>(jdbcTemplate.query("SELECT role FROM Role WHERE user_login=?", new BeanPropertyRowMapper<>(Role.class),
-                user1.getLogin())));*/
-        return user1;
+    }
+
+    public List<User> findAll() {
+        return jdbcTemplate.query("SELECT * FROM User", new BeanPropertyRowMapper<>(User.class));
     }
 
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+
+<h1>Пользователи</h1>
+
+<table>
+    <tr>
+        <td>id</td>
+        <td>login</td>
+        <td>email</td>
+        <td>first_name</td>
+        <td>last_name</td>
+        <td>birth_date</td>
+        <td>password</td>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.login}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.firstName}"></td>
+        <td th:text="${user.lastName}"></td>
+        <td th:text="${user.birthDate}"></td>
+        <td th:text="${user.password}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

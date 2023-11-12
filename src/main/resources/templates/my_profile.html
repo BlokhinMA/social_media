@@ -2,14 +2,14 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль</title>
+    <title>Мой профиль</title>
 </head>
 <body>
 
 <div>Мой профиль</div>
 
 <p>Вы вошли под логином <i th:text="${user.username}"></i></p>
-<form action="/sign_out" method="post">
+<form th:action="@{/sign_out}" method="post">
     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
     <button>выйти</button>
 </form>

@@ -2,9 +2,23 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Альбомы</title>
+    <title>Мои альбомы</title>
 </head>
 <body>
+
+<a th:href="@{/find_albums}">Искать альбомы</a>
+<br>
+<a th:href="@{/find_photos}">Искать фотографии</a>
+
+<p>Создать альбом</p>
+<form th:action="@{/add_album}" method="post" enctype="multipart/form-data" th:object="${album}">
+    <label for="name">Название альбома</label><br>
+    <input type="text" id="name" th:field="*{name}" placeholder="Название альбома" required><br>
+    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    <label for="files">Фотографии</label><br>
+    <input type="file" id="files" name="files" accept="image/*" multiple>
+    <button>Создать альбом</button>
+</form>
 
 <p>Мои альбомы</p>
 
@@ -15,16 +29,6 @@
         <button>удалить альбом</button>
     </form>
 </div>
-
-<p>Создать альбом</p>
-<form th:action="@{/add_album}" method="post" enctype="multipart/form-data" th:object="${album}">
-    <label for="name">Название альбома</label><br>
-    <input type="text" id="name" th:field="*{name}" placeholder="Название альбома" required><br>
-    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Login Error</div>
-    <label for="files">Фотографии</label><br>
-    <input type="file" id="files" name="files" accept="image/*" multiple>
-    <button>Создать альбом</button>
-</form>
 
 </body>
 </html>

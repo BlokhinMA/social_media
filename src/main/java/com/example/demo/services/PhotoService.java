@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 public class PhotoService {
@@ -96,6 +97,24 @@ public class PhotoService {
             return false;
         photoCommentRepository.delete(photoComment);
         return true;
+    }
+
+    public List<Photo> find(String searchTerm, String word) {
+        if (searchTerm != null && !searchTerm.isEmpty() && word != null && !word.isEmpty()) {
+            word = "%".concat(word).concat("%");
+            switch (searchTerm) {
+                case "creationTimeStamp" -> {
+                    return photoRepository.findLikeCreationTimeStamp(word);
+                }
+                case "tags" -> {
+                    return photoRepository.findLikeTags(word);
+                }
+                case "comments" -> {
+                    return photoRepository.findLikeComments(word);
+                }
+            }
+        }
+        return null;
     }
 
 }

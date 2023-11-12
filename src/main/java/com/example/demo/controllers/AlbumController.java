@@ -28,8 +28,9 @@ public class AlbumController {
 
     @GetMapping("/my_albums")
     public String myAlbums(Principal principal, Model model, Album album) {
-        model.addAttribute("albums", albumService.showAll(principal));
-        model.addAttribute("thisUser", principal);
+        model
+                .addAttribute("albums", albumService.showAll(principal))
+                .addAttribute("thisUser", principal);
         return "my_albums";
     }
 
@@ -38,14 +39,17 @@ public class AlbumController {
         if (Objects.equals(userLogin, principal.getName())) {
             return "redirect:/my_albums";
         }
-        model.addAttribute("albums", albumService.showAll(userLogin));
+        model
+                .addAttribute("albums", albumService.showAll(userLogin))
+                .addAttribute("userLogin", userLogin);
         return "albums";
     }
 
     @PostMapping("/add_album")
     public String addAlbum(@Valid Album album, BindingResult bindingResult, List<MultipartFile> files, Principal principal, Model model) throws IOException {
         if (bindingResult.hasErrors()) { // если фотографии не добавлены, то добавляется пустая фотография
-            model.addAttribute("albums", albumService.showAll(principal));
+            model
+                    .addAttribute("albums", albumService.showAll(principal));
             return "my_albums";
         }
         albumService.create(album, files, principal);
@@ -54,16 +58,18 @@ public class AlbumController {
 
     @GetMapping("/album/{id}")
     public String album(@PathVariable int id, Principal principal, Model model) {
-        model.addAttribute("album", albumService.show(id));
-        model.addAttribute("thisUser", principal);
+        model
+                .addAttribute("album", albumService.show(id))
+                .addAttribute("thisUser", principal);
         return "album";
     }
 
     @PostMapping("/create_photos")
     public String addPhotos(List<MultipartFile> files, int albumId, Principal principal, Model model) throws IOException {
         if (!albumService.createPhotos(files, albumId)) {
-            model.addAttribute("condition", true);
-            model.addAttribute("thisUser", principal);
+            model
+                    .addAttribute("condition", true)
+                    .addAttribute("thisUser", principal);
             return "album";
         }
         return "redirect:/album/" + albumId;
@@ -73,6 +79,14 @@ public class AlbumController {
     public String deleteAlbum(int id) {
         albumService.delete(id);
         return "redirect:/my_albums";
+    }
+
+    @GetMapping("/find_albums")
+    public String findAlbums(String word, Model model) {
+        model
+                .addAttribute("albums", albumService.find(word))
+                .addAttribute("word", word);
+        return "find_albums";
     }
 
 }

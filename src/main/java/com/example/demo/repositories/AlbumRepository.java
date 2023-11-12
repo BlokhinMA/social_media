@@ -41,4 +41,8 @@ public class AlbumRepository {
         return deletedAlbum;
     }
 
+    public List<Album> findLikeName(String word) {
+        return jdbcTemplate.query("SELECT * FROM Album WHERE name LIKE ?", new BeanPropertyRowMapper<>(Album.class), word);
+    }
+
 }
