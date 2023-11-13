@@ -3,6 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Фотография</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        form {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            color: #fff;
+            background-color: black;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: gray;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,7 +62,7 @@
     </form>
 </th:block>
 
-<p th:text="${photo.creationTimeStamp}"></p>
+<p th:text="'Фотография добавлена: ' + ${photo.creationTimeStamp}"></p>
 
 <span>Теги: </span>
 <form th:action="@{/delete_photo_tag}" method="post" th:each="tag : ${photo.tags}" style="display: inline">
@@ -95,7 +141,8 @@
     <p th:text="${comment.comment}"></p>
     <p th:text="${comment.commentingUserLogin}"></p>
     <p th:text="${comment.commentingTimeStamp}"></p>
-    <th:block th:if="${thisUser.getName()} == ${photo.album.userLogin} or ${thisUser.getName()} == ${comment.commentingUserLogin}">
+    <th:block
+            th:if="${thisUser.getName()} == ${photo.album.userLogin} or ${thisUser.getName()} == ${comment.commentingUserLogin}">
         <form th:action="@{/delete_photo_comment}" method="post">
             <input type="hidden" name="id" th:value="${comment.id}">
             <input type="hidden" name="photoId" th:value="${comment.photoId}">

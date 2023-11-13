@@ -31,10 +31,10 @@ public class UserRepository {
                         login)
                 .stream().findAny().orElse(null);
 
-        String role = jdbcTemplate.queryForObject("SELECT role FROM Role WHERE role='ROLE_ADMIN' AND user_login=?", String.class, login);
+       /* String role = jdbcTemplate.queryForObject("SELECT role FROM Role WHERE role='ROLE_ADMIN' AND user_login=?", String.class, login);
 
         if (user != null)
-            user.getRoles().add(Role.valueOf(role));
+            user.getRoles().add(Role.valueOf(role));*/
 
         return user;
     }
