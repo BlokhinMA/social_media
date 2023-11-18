@@ -2,21 +2,17 @@ package com.example.demo.services;
 
 import com.example.demo.models.Message;
 import com.example.demo.repositories.MessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MessageService {
 
     private final MessageRepository messageRepository;
-
-    @Autowired
-    public MessageService(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
-    }
 
     public void create(Message message) {
         messageRepository.save(message);

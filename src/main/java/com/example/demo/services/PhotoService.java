@@ -5,13 +5,14 @@ import com.example.demo.models.PhotoComment;
 import com.example.demo.models.PhotoRating;
 import com.example.demo.models.PhotoTag;
 import com.example.demo.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PhotoService {
 
     private final AlbumRepository albumRepository;
@@ -20,16 +21,6 @@ public class PhotoService {
     private final PhotoRatingRepository photoRatingRepository;
     private final PhotoCommentRepository photoCommentRepository;
     private final FriendshipRepository friendshipRepository;
-
-    @Autowired
-    public PhotoService(AlbumRepository albumRepository, PhotoRepository photoRepository, PhotoTagRepository photoTagRepository, PhotoRatingRepository photoRatingRepository, PhotoCommentRepository photoCommentRepository, FriendshipRepository friendshipRepository) {
-        this.albumRepository = albumRepository;
-        this.photoRepository = photoRepository;
-        this.photoTagRepository = photoTagRepository;
-        this.photoRatingRepository = photoRatingRepository;
-        this.photoCommentRepository = photoCommentRepository;
-        this.friendshipRepository = friendshipRepository;
-    }
 
     public Photo showEntity(int id) {
         return photoRepository.findById(id);

@@ -1,7 +1,7 @@
 package com.example.demo.repositories;
 
 import com.example.demo.models.PhotoTag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,14 +9,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
+
 public class PhotoTagRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public PhotoTagRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public PhotoTag save(PhotoTag photoTag) {
         jdbcTemplate.update("INSERT INTO Photo_tag(tag, photo_id) VALUES(?, ?)",

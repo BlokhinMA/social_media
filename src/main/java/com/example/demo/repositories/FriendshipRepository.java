@@ -2,7 +2,7 @@ package com.example.demo.repositories;
 
 import com.example.demo.models.Friendship;
 import com.example.demo.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,14 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class FriendshipRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public FriendshipRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public List<User> findLikeLoginOrFirstNameOrLastNameExceptThisUser(String thisUserLogin, String word) {
         return jdbcTemplate.query("SELECT * FROM User WHERE login!=? AND (login LIKE CONCAT('%', ?, '%') OR first_name LIKE CONCAT('%', ?, '%') OR last_name LIKE CONCAT('%', ?, '%')) EXCEPT (SELECT User.* FROM User JOIN Friendship ON login = second_user_login WHERE first_user_login=? UNION SELECT User.* FROM User JOIN Friendship ON login = first_user_login WHERE second_user_login=?)", new BeanPropertyRowMapper<>(User.class),

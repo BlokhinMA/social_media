@@ -1,7 +1,7 @@
 package com.example.demo.repositories;
 
 import com.example.demo.models.CommunityPost;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,14 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class CommunityPostRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public CommunityPostRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public CommunityPost save(CommunityPost communityPost) {
         jdbcTemplate.update("INSERT INTO Community_post(post_text, author_login, community_id) VALUES(?, ?, ?)",

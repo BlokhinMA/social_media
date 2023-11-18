@@ -3,7 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.models.Friendship;
 import com.example.demo.services.FriendshipService;
 import com.example.demo.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +14,11 @@ import java.security.Principal;
 import java.util.Objects;
 
 @Controller
+@RequiredArgsConstructor
 public class FriendshipController {
 
     private final UserService userService;
     private final FriendshipService friendshipService;
-
-    @Autowired
-    public FriendshipController(FriendshipService friendshipService, UserService userService) {
-        this.friendshipService = friendshipService;
-        this.userService = userService;
-    }
 
     @GetMapping("/my_friends")
     public String myFriends(Model model, Principal principal) {

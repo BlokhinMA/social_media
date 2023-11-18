@@ -4,23 +4,18 @@ import com.example.demo.models.Friendship;
 import com.example.demo.models.User;
 import com.example.demo.repositories.FriendshipRepository;
 import com.example.demo.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FriendshipService {
 
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
-
-    @Autowired
-    public FriendshipService(UserRepository userRepository, FriendshipRepository friendshipRepository) {
-        this.userRepository = userRepository;
-        this.friendshipRepository = friendshipRepository;
-    }
 
     public List<User> find(String word, Principal principal) {
         if (word != null && !word.isEmpty())

@@ -6,7 +6,7 @@ import com.example.demo.models.PhotoRating;
 import com.example.demo.models.PhotoTag;
 import com.example.demo.services.PhotoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,14 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class PhotoController {
 
-    @Autowired
     private final PhotoService photoService;
-
-    public PhotoController(PhotoService photoService) {
-        this.photoService = photoService;
-    }
 
     @GetMapping("/photo/{id}")
     public String photo(@PathVariable int id, Principal principal, Model model) {

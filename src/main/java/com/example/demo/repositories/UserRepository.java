@@ -2,7 +2,7 @@ package com.example.demo.repositories;
 
 import com.example.demo.models.User;
 import com.example.demo.models.enums.Role;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,14 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public UserRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public User findById(int id) {
         return jdbcTemplate.query("SELECT * FROM User WHERE id=?", new BeanPropertyRowMapper<>(User.class),

@@ -6,25 +6,19 @@ import com.example.demo.models.CommunityPost;
 import com.example.demo.repositories.CommunityPostRepository;
 import com.example.demo.repositories.CommunityRepository;
 import com.example.demo.repositories.CommunityMemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private final CommunityMemberRepository communityMemberRepository;
     private final CommunityPostRepository communityPostRepository;
-
-    @Autowired
-    public CommunityService(CommunityRepository communityRepository, CommunityMemberRepository communityMemberRepository, CommunityPostRepository communityPostRepository) {
-        this.communityRepository = communityRepository;
-        this.communityMemberRepository = communityMemberRepository;
-        this.communityPostRepository = communityPostRepository;
-    }
 
     public List<Community> showAllOwn(Principal principal) {
         return communityRepository.findAllByCreatorLogin(principal.getName());
@@ -38,10 +32,9 @@ public class CommunityService {
         return communityRepository.findAllByMemberLogin(memberLogin);
     }
 
-    public boolean create(Community community, Principal principal) {
+    public void create(Community community, Principal principal) {
         community.setCreatorLogin(principal.getName());
         communityRepository.save(community);
-        return true;
     }
 
     public void delete(int id) {

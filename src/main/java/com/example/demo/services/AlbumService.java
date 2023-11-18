@@ -5,7 +5,9 @@ import com.example.demo.models.Photo;
 import com.example.demo.repositories.AlbumRepository;
 import com.example.demo.repositories.FriendshipRepository;
 import com.example.demo.repositories.PhotoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,22 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
     private final PhotoRepository photoRepository;
     private final FriendshipRepository friendshipRepository;
-
-    @Autowired
-    public AlbumService(AlbumRepository albumRepository, PhotoRepository photoRepository, FriendshipRepository friendshipRepository) {
-        this.albumRepository = albumRepository;
-        this.photoRepository = photoRepository;
-        this.friendshipRepository = friendshipRepository;
-    }
+    private final UserRepository userRepository;
 
     public void create(Album album, List<MultipartFile> files, Principal principal) throws IOException {
         album.setUserLogin(principal.getName());
         Album newAlbum = albumRepository.save(album);
+        log.info("Пользователь {} добавил альбом {}",  newAlbum);
         if (!files.isEmpty()) {
             Photo photo;
             for (MultipartFile file : files) {

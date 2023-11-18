@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.models.Album;
 import com.example.demo.services.AlbumService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,13 +18,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
+@RequiredArgsConstructor
 public class AlbumController {
 
     private final AlbumService albumService;
-
-    public AlbumController(AlbumService albumService) {
-        this.albumService = albumService;
-    }
 
     @GetMapping("/my_albums")
     public String myAlbums(Principal principal, Model model, Album album) {

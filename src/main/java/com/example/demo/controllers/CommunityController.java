@@ -5,7 +5,7 @@ import com.example.demo.models.CommunityMember;
 import com.example.demo.models.CommunityPost;
 import com.example.demo.services.CommunityService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,14 +17,10 @@ import java.security.Principal;
 import java.util.Objects;
 
 @Controller
+@RequiredArgsConstructor
 public class CommunityController {
 
     private final CommunityService communityService;
-
-    @Autowired
-    public CommunityController(CommunityService communityService) {
-        this.communityService = communityService;
-    }
 
     @GetMapping("/my_own_communities")
     public String myOwnCommunities(Principal principal, Model model, Community community) {
@@ -43,12 +39,13 @@ public class CommunityController {
 
     @PostMapping("/add_community")
     public String addCommunity(@Valid Community community, BindingResult bindingResult, Principal principal, Model model) {
-        if (bindingResult.hasErrors() || !communityService.create(community, principal)) {
+        if (bindingResult.hasErrors()) {
             model
                     .addAttribute("communities", communityService.showAll(principal))
                     .addAttribute("thisUser", principal);
             return "my_own_communities";
         }
+        communityService.create(community, principal);
         return "redirect:/my_own_communities";
     }
 

@@ -1,7 +1,7 @@
 package com.example.demo.repositories;
 
 import com.example.demo.models.Album;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,14 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class AlbumRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public AlbumRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public Album save(Album album) {
         jdbcTemplate.update("INSERT INTO Album(name, user_login) VALUES(?, ?)",

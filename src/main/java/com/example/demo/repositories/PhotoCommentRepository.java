@@ -1,8 +1,7 @@
 package com.example.demo.repositories;
 
 import com.example.demo.models.PhotoComment;
-import com.example.demo.models.PhotoTag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -10,14 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class PhotoCommentRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public PhotoCommentRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public PhotoComment save(PhotoComment photoComment) {
         jdbcTemplate.update("INSERT INTO Photo_comment(comment, commenting_user_login, photo_id) VALUES(?, ?, ?)",

@@ -3,7 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.models.Message;
 import com.example.demo.services.MessageService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,14 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class MessageController {
 
     private final MessageService messageService;
-
-    @Autowired
-    public MessageController(MessageService messageService) {
-        this.messageService = messageService;
-    }
 
     @PostMapping("/create_message")
     public String create(@Valid Message message, BindingResult bindingResult, Principal principal, Model model) {
