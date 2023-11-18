@@ -2,9 +2,11 @@ package com.example.demo.models;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class Community {
 
     private int id;
@@ -15,43 +17,4 @@ public class Community {
     private List<CommunityMember> members;
     private List<CommunityPost> posts;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCreatorLogin() {
-        return creatorLogin;
-    }
-
-    public void setCreatorLogin(String creatorLogin) {
-        this.creatorLogin = creatorLogin;
-    }
-
-    public List<CommunityMember> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<CommunityMember> members) {
-        this.members = members;
-    }
-
-    public List<CommunityPost> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<CommunityPost> posts) {
-        this.posts = posts;
-    }
 }

@@ -1,5 +1,8 @@
 package com.example.demo.models;
 
+import lombok.Data;
+
+@Data
 public class PhotoRating {
 
     private int id;
@@ -7,35 +10,4 @@ public class PhotoRating {
     private String ratingUserLogin;
     private int photoId;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isRating() {
-        return rating;
-    }
-
-    public void setRating(boolean rating) {
-        this.rating = rating;
-    }
-
-    public String getRatingUserLogin() {
-        return ratingUserLogin;
-    }
-
-    public void setRatingUserLogin(String ratingUserLogin) {
-        this.ratingUserLogin = ratingUserLogin;
-    }
-
-    public int getPhotoId() {
-        return photoId;
-    }
-
-    public void setPhotoId(int photoId) {
-        this.photoId = photoId;
-    }
 }

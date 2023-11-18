@@ -2,9 +2,11 @@ package com.example.demo.models;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class CommunityPost {
 
     private int id;
@@ -15,43 +17,4 @@ public class CommunityPost {
     private String authorLogin;
     private int communityId;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPostText() {
-        return postText;
-    }
-
-    public void setPostText(String postText) {
-        this.postText = postText;
-    }
-
-    public LocalDateTime getCreationTimeStamp() {
-        return creationTimeStamp;
-    }
-
-    public void setCreationTimeStamp(LocalDateTime creationTimeStamp) {
-        this.creationTimeStamp = creationTimeStamp;
-    }
-
-    public String getAuthorLogin() {
-        return authorLogin;
-    }
-
-    public void setAuthorLogin(String authorLogin) {
-        this.authorLogin = authorLogin;
-    }
-
-    public int getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(int communityId) {
-        this.communityId = communityId;
-    }
 }

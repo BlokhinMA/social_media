@@ -1,8 +1,11 @@
 package com.example.demo.models;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 public class Photo {
 
     private int id;
@@ -19,107 +22,4 @@ public class Photo {
     private List<PhotoComment> comments;
     private Album album;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getOriginalFileName() {
-        return originalFileName;
-    }
-
-    public void setOriginalFileName(String originalFileName) {
-        this.originalFileName = originalFileName;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public byte[] getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
-    }
-
-    public LocalDateTime getCreationTimeStamp() {
-        return creationTimeStamp;
-    }
-
-    public void setCreationTimeStamp(LocalDateTime creationTimeStamp) {
-        this.creationTimeStamp = creationTimeStamp;
-    }
-
-    public int getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(int albumId) {
-        this.albumId = albumId;
-    }
-
-    public List<PhotoTag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<PhotoTag> tags) {
-        this.tags = tags;
-    }
-
-    public PhotoRating getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating(PhotoRating userRating) {
-        this.userRating = userRating;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
-    public List<PhotoComment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<PhotoComment> comments) {
-        this.comments = comments;
-    }
-
-    public Album getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(Album album) {
-        this.album = album;
-    }
 }

@@ -2,7 +2,6 @@ package com.example.demo.services;
 
 import com.example.demo.models.Album;
 import com.example.demo.models.Photo;
-import com.example.demo.models.User;
 import com.example.demo.repositories.AlbumRepository;
 import com.example.demo.repositories.FriendshipRepository;
 import com.example.demo.repositories.PhotoRepository;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class AlbumService {
@@ -97,11 +95,6 @@ public class AlbumService {
     }
 
     public boolean isFriend(Principal principal, String userLogin) {
-        /*List<User> friends = friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(userLogin);
-        for (User friend : friends) {
-            if (Objects.equals(friend.getLogin(), principal.getName()))
-                return true;
-        }*/
         return friendshipRepository.findByFriendLoginAndLogin(principal.getName(), userLogin) != null;
     }
 
