@@ -19,14 +19,16 @@ public class PhotoService {
     private final PhotoTagRepository photoTagRepository;
     private final PhotoRatingRepository photoRatingRepository;
     private final PhotoCommentRepository photoCommentRepository;
+    private final FriendshipRepository friendshipRepository;
 
     @Autowired
-    public PhotoService(AlbumRepository albumRepository, PhotoRepository photoRepository, PhotoTagRepository photoTagRepository, PhotoRatingRepository photoRatingRepository, PhotoCommentRepository photoCommentRepository) {
+    public PhotoService(AlbumRepository albumRepository, PhotoRepository photoRepository, PhotoTagRepository photoTagRepository, PhotoRatingRepository photoRatingRepository, PhotoCommentRepository photoCommentRepository, FriendshipRepository friendshipRepository) {
         this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
         this.photoTagRepository = photoTagRepository;
         this.photoRatingRepository = photoRatingRepository;
         this.photoCommentRepository = photoCommentRepository;
+        this.friendshipRepository = friendshipRepository;
     }
 
     public Photo showEntity(int id) {
@@ -35,11 +37,10 @@ public class PhotoService {
 
     public Photo show(int id, Principal principal) {
         Photo photo = photoRepository.findById(id);
+        //photo.getCreationTimeStamp().
         photo.setTags(photoTagRepository.findAllByPhotoId(id));
         photo.setUserRating(photoRatingRepository.findByRatingUserLoginAndPhotoId(principal.getName(), id));
-        Double rating = photoRatingRepository.rating(id);
-        if (rating != null)
-            photo.setRating(rating * 100);
+        photo.setRating(photoRatingRepository.rating(id));
         photo.setComments(photoCommentRepository.findAllByPhotoId(id));
         photo.setAlbum(albumRepository.findById(photo.getAlbumId()));
         return photo;
@@ -52,8 +53,11 @@ public class PhotoService {
         return true;
     }
 
-    public void createTag(PhotoTag photoTag) {
+    public boolean createTag(PhotoTag photoTag) {
+        if (photoTagRepository.findByTagAndPhotoId(photoTag) != null)
+            return false;
         photoTagRepository.save(photoTag);
+        return true;
     }
 
     public boolean deleteTag(PhotoTag photoTag) {
@@ -100,8 +104,7 @@ public class PhotoService {
     }
 
     public List<Photo> find(String searchTerm, String word) {
-        if (searchTerm != null && !searchTerm.isEmpty() && word != null && !word.isEmpty()) {
-            word = "%".concat(word).concat("%");
+        if (searchTerm != null && !searchTerm.isEmpty() && word != null && !word.isEmpty())
             switch (searchTerm) {
                 case "creationTimeStamp" -> {
                     return photoRepository.findLikeCreationTimeStamp(word);
@@ -113,8 +116,16 @@ public class PhotoService {
                     return photoRepository.findLikeComments(word);
                 }
             }
-        }
         return null;
+    }
+
+    public boolean isFriend(Principal principal, String userLogin) {
+        /*List<User> friends = friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(userLogin);
+        for (User friend : friends) {
+            if (Objects.equals(friend.getLogin(), principal.getName()))
+                return true;
+        }*/
+        return friendshipRepository.findByFriendLoginAndLogin(principal.getName(), userLogin) != null;
     }
 
 }

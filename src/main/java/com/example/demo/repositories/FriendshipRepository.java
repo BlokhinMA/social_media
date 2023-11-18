@@ -20,7 +20,7 @@ public class FriendshipRepository {
     }
 
     public List<User> findLikeLoginOrFirstNameOrLastNameExceptThisUser(String thisUserLogin, String word) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE login!=? AND (login LIKE ? OR first_name LIKE ? OR last_name LIKE ?) EXCEPT (SELECT User.* FROM User JOIN Friendship ON login = second_user_login WHERE first_user_login=? AND accepted=1 UNION SELECT User.* FROM User JOIN Friendship ON login = first_user_login WHERE second_user_login=? AND accepted=1)", new BeanPropertyRowMapper<>(User.class),
+        return jdbcTemplate.query("SELECT * FROM User WHERE login!=? AND (login LIKE CONCAT('%', ?, '%') OR first_name LIKE CONCAT('%', ?, '%') OR last_name LIKE CONCAT('%', ?, '%')) EXCEPT (SELECT User.* FROM User JOIN Friendship ON login = second_user_login WHERE first_user_login=? UNION SELECT User.* FROM User JOIN Friendship ON login = first_user_login WHERE second_user_login=?)", new BeanPropertyRowMapper<>(User.class),
                 thisUserLogin,
                 word,
                 word,
@@ -53,10 +53,14 @@ public class FriendshipRepository {
                 userLogin);
     }
 
-    public void accept(Friendship friendship) {
+    public Friendship accept(Friendship friendship) {
         jdbcTemplate.update("UPDATE Friendship SET accepted=true WHERE first_user_login=? AND second_user_login=?",
                 friendship.getFirstUserLogin(),
                 friendship.getSecondUserLogin());
+        return jdbcTemplate.query("SELECT * FROM Friendship WHERE first_user_login=? AND second_user_login=?", new BeanPropertyRowMapper<>(Friendship.class),
+                        friendship.getFirstUserLogin(),
+                        friendship.getSecondUserLogin())
+                .stream().findAny().orElse(null);
     }
 
     public Friendship findByFriendLoginAndLogin(String friendLogin, String login) {

@@ -24,7 +24,7 @@ public class PhotoRatingRepository {
     }
 
     public Double rating(int photoId) {
-        return jdbcTemplate.queryForObject("SELECT AVG(rating) FROM photo_rating WHERE photo_id=?", Double.class,
+        return jdbcTemplate.queryForObject("SELECT AVG(rating) * 100 FROM photo_rating WHERE photo_id=?", Double.class,
                 photoId);
     }
 

@@ -3,7 +3,6 @@ package com.example.demo.controllers;
 import com.example.demo.models.Album;
 import com.example.demo.services.AlbumService;
 import jakarta.validation.Valid;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,10 +56,11 @@ public class AlbumController {
     }
 
     @GetMapping("/album/{id}")
-    public String album(@PathVariable int id, Principal principal, Model model) {
+    public String album(@PathVariable int id, Principal principal, Model model, Album album) {
         model
                 .addAttribute("album", albumService.show(id))
-                .addAttribute("thisUser", principal);
+                .addAttribute("thisUser", principal)
+                .addAttribute("isFriend", albumService.isFriend(principal, albumService.show(id).getUserLogin()));
         return "album";
     }
 
@@ -87,6 +87,19 @@ public class AlbumController {
                 .addAttribute("albums", albumService.find(word))
                 .addAttribute("word", word);
         return "find_albums";
+    }
+
+    @PostMapping("/change_access_type")
+    public String changeAccessType(@Valid Album album, BindingResult bindingResult, Principal principal, Model model) {
+        if (bindingResult.hasErrors()) {
+            model
+                    .addAttribute("album", albumService.show(album.getId()))
+                    .addAttribute("thisUser", principal);
+            return "album";
+        }
+        if (!albumService.changeAccessType(album))
+            return "redirect:/my_albums";
+        return "redirect:/album/" + album.getId();
     }
 
 }

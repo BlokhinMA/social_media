@@ -2,57 +2,12 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Сообщества пользователя ' + ${memberLogin}">Сообщества</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        img {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            margin: 0 auto;
-        }
-
-        form {
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-        }
-
-        button {
-            color: #fff;
-            background-color: black;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: gray;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-        }
-
-        label {
-            font-weight: bold;
-        }
-    </style>
+    <title th:text="|Сообщества пользователя ${memberLogin}|">Сообщества</title>
+    <link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
 </head>
 <body>
 
-<p th:text="'Сообщества пользователя ' + ${memberLogin}"></p>
+<p th:text="|Сообщества пользователя ${memberLogin}|"></p>
 <div th:each="community : ${communities}">
     <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
 </div>

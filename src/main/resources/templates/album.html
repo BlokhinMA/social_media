@@ -2,81 +2,66 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Альбом ' + ${album.name}"></title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        img {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            margin: 0 auto;
-        }
-
-        form {
-            margin: 20px 0;
-            padding: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-        }
-
-        button {
-            color: #fff;
-            background-color: black;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: gray;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-        }
-
-        label {
-            font-weight: bold;
-        }
-    </style>
+    <title th:text="|Альбом ${album.name}|"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
 </head>
 <body>
 
-<th:block th:if="${thisUser.getName()} == ${album.userLogin}">
-    <form th:action="@{/delete_album}" method="post">
-        <input type="hidden" name="id" th:value="${album.id}">
-        <button>удалить альбом</button>
-    </form>
+<th:block th:if="${isFriend} or ${thisUser.getName()} == ${album.userLogin}">
+    <th:block th:if="${thisUser.getName()} == ${album.userLogin}">
+        <form th:action="@{/delete_album}" method="post">
+            <input type="hidden" name="id" th:value="${album.id}">
+            <button>удалить альбом</button>
+        </form>
 
-    <form th:action="@{/create_photos}" method="post" enctype="multipart/form-data">
-        <input type="file" id="files" name="files" accept="image/*" multiple required>
-        <input type="hidden" name="albumId" th:value="${album.id}">
-        <button>Добавить фотографию(и)</button>
-    </form>
+        <form th:action="@{/change_access_type}" method="post" th:object="${album}">
+            <span>Изменить тип доступа к альбому</span>
+            <input type="hidden" name="id" th:value="${album.id}">
+            <input type="hidden" name="name" th:value="${album.name}">
+            <th:block th:switch="${album.accessType}">
+                <th:block th:case="all">
+                    <input type="radio" th:id="all" th:field="*{accessType}" value="all" checked>
+                    <label th:for="all">для всех</label>
+                    <input type="radio" th:id="friends" th:field="*{accessType}" value="friends">
+                    <label th:for="friends">для друзей</label>
+                </th:block>
+                <th:block th:case="friends">
+                    <input type="radio" th:id="all" th:field="*{accessType}" value="all">
+                    <label th:for="all">для всех</label>
+                    <input type="radio" th:id="friends" th:field="*{accessType}" value="friends" checked>
+                    <label th:for="friends">для друзей</label>
+                </th:block>
+            </th:block>
+            <!--<span style="color: red" th:if="${#fields.hasErrors('accessType')}" th:errors="*{accessType}">AccessType Error</span>-->
+            <button>изменить</button>
+        </form>
 
-    <th:block th:if="${condition}">
-        <h2 style="color: red">Фотографии не были загружены</h2>
+        <form th:action="@{/create_photos}" method="post" enctype="multipart/form-data">
+            <input type="file" id="files" name="files" accept="image/*" multiple required>
+            <input type="hidden" name="albumId" th:value="${album.id}">
+            <button>Добавить фотографию(и)</button>
+        </form>
+
+        <th:block th:if="${condition}">
+            <h2 style="color: red">Фотографии не были загружены</h2>
+        </th:block>
     </th:block>
+
+    <div th:each="photo : ${album.photos}">
+        <a th:href="@{/photo/{id}(id=${photo.id})}"><img th:src="@{/photo_entity/{id}(id=${photo.id})}"></a>
+        <th:block th:if="${thisUser.getName()} == ${album.userLogin}">
+            <form th:action="@{/delete_photo}" method="post">
+                <input type="hidden" name="id" th:value="${photo.id}">
+                <input type="hidden" name="albumId" th:value="${photo.albumId}">
+                <button>удалить фотографию</button>
+            </form>
+        </th:block>
+    </div>
 </th:block>
 
-<div th:each="photo : ${album.photos}">
-    <a th:href="@{/photo/{id}(id=${photo.id})}"><img th:src="@{/photo_entity/{id}(id=${photo.id})}"></a>
-    <form th:action="@{/delete_photo}" method="post">
-        <input type="hidden" name="id" th:value="${photo.id}">
-        <input type="hidden" name="albumId" th:value="${photo.albumId}">
-        <button>удалить фотографию</button>
-    </form>
-</div>
+<th:block th:if="!(${isFriend} or ${thisUser.getName()} == ${album.userLogin})">
+    <h1 th:text="|Данный альбом доступен только друзьям пользователя ${album.userLogin}|"></h1>
+</th:block>
 
 </body>
 </html>

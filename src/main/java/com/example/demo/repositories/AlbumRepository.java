@@ -42,7 +42,14 @@ public class AlbumRepository {
     }
 
     public List<Album> findLikeName(String word) {
-        return jdbcTemplate.query("SELECT * FROM Album WHERE name LIKE ?", new BeanPropertyRowMapper<>(Album.class), word);
+        return jdbcTemplate.query("SELECT * FROM Album WHERE name LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Album.class), word);
+    }
+
+    public Album updateAccessTypeById(Album album) {
+        jdbcTemplate.update("UPDATE Album SET access_type=? WHERE id=?",
+                album.getAccessType(),
+                album.getId());
+        return findById(album.getId());
     }
 
 }

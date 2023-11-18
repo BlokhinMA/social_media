@@ -28,7 +28,7 @@ public class CommunityPostRepository {
     }
 
     public List<CommunityPost> findAllByCommunityId(int communityId) {
-        return jdbcTemplate.query("SELECT * FROM Community_post WHERE community_id=?", new BeanPropertyRowMapper<>(CommunityPost.class),
+        return jdbcTemplate.query("SELECT * FROM Community_post WHERE community_id=? ORDER BY creation_time_stamp DESC", new BeanPropertyRowMapper<>(CommunityPost.class),
                 communityId);
     }
 

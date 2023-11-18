@@ -2,21 +2,21 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Найти альбомы</title>
+    <title>Найти сообщества</title>
     <link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
 </head>
 <body>
 
-<p>Найти альбомы</p>
-<form th:action="@{/find_albums}">
+<p>Найти сообщества</p>
+<form th:action="@{/find_communities}">
     <label for="word">Введите ключевые слова</label>
     <input type="search" id="word" name="word" required th:value="${word}">
     <br>
     <button>искать</button>
 </form>
 
-<div th:each="album : ${albums}">
-    <a th:href="@{/album/{id}(id=${album.id})}" th:text="${album.name}"></a>
+<div th:each="community : ${communities}">
+    <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
 </div>
 
 </body>

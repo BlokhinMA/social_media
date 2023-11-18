@@ -52,6 +52,7 @@ public class CommunityService {
         Community community = communityRepository.findById(id);
         community.setMembers(communityMemberRepository.findAllByCommunityId(id));
         community.setPosts(communityPostRepository.findAllByCommunityId(id));
+        //community.getPosts().get(0).getCreationTimeStamp().
         return community;
     }
 
@@ -87,6 +88,12 @@ public class CommunityService {
             return false;
         communityPostRepository.delete(communityPost);
         return true;
+    }
+
+    public List<Community> find(String word) {
+        if (word != null && !word.isEmpty())
+            return communityRepository.findLikeName(word);
+        return null;
     }
 
 }

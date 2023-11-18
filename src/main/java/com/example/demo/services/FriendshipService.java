@@ -23,15 +23,13 @@ public class FriendshipService {
     }
 
     public List<User> find(String word, Principal principal) {
-        if (word != null && !word.isEmpty()) {
-            word = "%".concat(word).concat("%");
+        if (word != null && !word.isEmpty())
             return friendshipRepository.findLikeLoginOrFirstNameOrLastNameExceptThisUser(principal.getName(), word);
-        }
         return null;
     }
 
     public boolean create(String friendLogin, Principal principal) {
-        if (userRepository.findByLogin(friendLogin) == null)
+        if (userRepository.findByLogin(friendLogin) == null || friendshipRepository.findByFriendLoginAndLogin(friendLogin, principal.getName()) != null)
             return false;
         Friendship friendship = new Friendship();
         friendship.setFirstUserLogin(principal.getName());

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои сообщения</title>
+</head>
+<body>
+
+<h1 th:text="|Диалог с пользователем ${companion}|"></h1>
+
+<form th:action="@{/create_message}" method="post" th:object="${message}">
+    <input type="hidden" name="fromUserLogin" th:value="${thisUser.getName()}">
+    <input type="hidden" name="toUserLogin" th:value="${companion}">
+    <label for="message">Написать сообщение</label>
+    <br>
+    <textarea id="message" th:field="*{message}" required></textarea>
+    <div style="color: red" th:if="${#fields.hasErrors('message')}" th:errors="*{message}">Message Error</div>
+    <button>Отправить</button>
+</form>
+
+<div th:each="message : ${messages}">
+    <a th:href="@{/profile/{login}(login=${message.fromUserLogin})}" th:text="${message.fromUserLogin}"></a><span
+        th:text="| ${message.writingTimeStamp}|"></span>
+    <p th:text="${message.message}"></p>
+    <th:block th:if="${thisUser.getName()} == ${message.fromUserLogin}">
+        <form th:action="@{/delete_message}" method="post">
+            <input type="hidden" name="id" th:value="${message.id}">
+            <input type="hidden" name="toUserLogin" th:value="${message.toUserLogin}">
+            <button>удалить</button>
+        </form>
+    </th:block>
+</div>
+
+</body>
+</html>

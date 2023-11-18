@@ -29,7 +29,7 @@ public class PhotoCommentRepository {
     }
 
     public List<PhotoComment> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoComment.class),
+        return jdbcTemplate.query("SELECT * FROM Photo_comment WHERE photo_id=? ORDER BY commenting_time_stamp DESC", new BeanPropertyRowMapper<>(PhotoComment.class),
                 photoId);
     }
 

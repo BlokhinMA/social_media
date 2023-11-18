@@ -113,4 +113,12 @@ public class CommunityController {
         return "redirect:/community/" + communityPost.getCommunityId();
     }
 
+    @GetMapping("/find_communities")
+    public String findCommunities(String word, Model model) {
+        model
+                .addAttribute("communities", communityService.find(word))
+                .addAttribute("word", word);
+        return "find_communities";
+    }
+
 }

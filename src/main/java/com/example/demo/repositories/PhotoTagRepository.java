@@ -37,6 +37,13 @@ public class PhotoTagRepository {
                 .stream().findAny().orElse(null);
     }
 
+    public PhotoTag findByTagAndPhotoId(PhotoTag photoTag) {
+        return jdbcTemplate.query("SELECT * FROM Photo_tag WHERE tag=? AND photo_id=?", new BeanPropertyRowMapper<>(PhotoTag.class),
+                        photoTag.getTag(),
+                        photoTag.getPhotoId())
+                .stream().findAny().orElse(null);
+    }
+
     public PhotoTag delete(PhotoTag photoTag) {
         PhotoTag deletedPhotoTag = findById(photoTag.getId());
         jdbcTemplate.update("DELETE FROM Photo_tag WHERE id=?",

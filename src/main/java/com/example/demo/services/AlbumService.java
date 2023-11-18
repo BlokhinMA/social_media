@@ -2,7 +2,9 @@ package com.example.demo.services;
 
 import com.example.demo.models.Album;
 import com.example.demo.models.Photo;
+import com.example.demo.models.User;
 import com.example.demo.repositories.AlbumRepository;
+import com.example.demo.repositories.FriendshipRepository;
 import com.example.demo.repositories.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,17 +14,20 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
     private final PhotoRepository photoRepository;
+    private final FriendshipRepository friendshipRepository;
 
     @Autowired
-    public AlbumService(AlbumRepository albumRepository, PhotoRepository photoRepository) {
+    public AlbumService(AlbumRepository albumRepository, PhotoRepository photoRepository, FriendshipRepository friendshipRepository) {
         this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
+        this.friendshipRepository = friendshipRepository;
     }
 
     public void create(Album album, List<MultipartFile> files, Principal principal) throws IOException {
@@ -79,11 +84,25 @@ public class AlbumService {
     }
 
     public List<Album> find(String word) {
-        if (word != null && !word.isEmpty()) {
-            word = "%".concat(word).concat("%");
+        if (word != null && !word.isEmpty())
             return albumRepository.findLikeName(word);
-        }
         return null;
+    }
+
+    public boolean changeAccessType(Album album) {
+        if (albumRepository.findById(album.getId()) == null)
+            return false;
+        albumRepository.updateAccessTypeById(album);
+        return true;
+    }
+
+    public boolean isFriend(Principal principal, String userLogin) {
+        /*List<User> friends = friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(userLogin);
+        for (User friend : friends) {
+            if (Objects.equals(friend.getLogin(), principal.getName()))
+                return true;
+        }*/
+        return friendshipRepository.findByFriendLoginAndLogin(principal.getName(), userLogin) != null;
     }
 
 }

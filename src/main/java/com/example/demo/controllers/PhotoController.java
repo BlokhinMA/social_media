@@ -28,7 +28,8 @@ public class PhotoController {
     public String photo(@PathVariable int id, Principal principal, Model model) {
         model
                 .addAttribute("photo", photoService.show(id, principal))
-                .addAttribute("thisUser", principal);
+                .addAttribute("thisUser", principal)
+                .addAttribute("isFriend", photoService.isFriend(principal, photoService.show(id, principal).getAlbum().getUserLogin()));
         return "photo";
     }
 
@@ -57,7 +58,13 @@ public class PhotoController {
                     .addAttribute("thisUser", principal);
             return "photo";
         }
-        photoService.createTag(photoTag);
+        if (!photoService.createTag(photoTag)) {
+            model
+                    .addAttribute("photo", photoService.show(photoTag.getPhotoId(), principal))
+                    .addAttribute("thisUser", principal)
+                    .addAttribute("condition", true);
+            return "photo";
+        }
         return "redirect:/photo/" + photoTag.getPhotoId();
     }
 
