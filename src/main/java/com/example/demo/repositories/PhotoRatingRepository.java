@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 
@@ -29,6 +31,10 @@ public class PhotoRatingRepository {
         return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE id=?", new BeanPropertyRowMapper<>(PhotoRating.class),
                         id).
                 stream().findAny().orElse(null);
+    }
+
+    public List<PhotoRating> findAllByPhotoId(int photoId) {
+        return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoRating.class), photoId);
     }
 
     public PhotoRating save(PhotoRating photoRating) {

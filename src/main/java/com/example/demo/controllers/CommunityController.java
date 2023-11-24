@@ -25,8 +25,7 @@ public class CommunityController {
     @GetMapping("/my_own_communities")
     public String myOwnCommunities(Principal principal, Model model, Community community) {
         model
-                .addAttribute("communities", communityService.showAllOwn(principal))
-                .addAttribute("thisUser", principal);
+                .addAttribute("communities", communityService.showAllOwn(principal));
         return "my_own_communities";
     }
 
@@ -50,8 +49,8 @@ public class CommunityController {
     }
 
     @PostMapping("/delete_community")
-    public String deleteCommunity(int id) {
-        communityService.delete(id);
+    public String deleteCommunity(int id, Principal principal) {
+        communityService.delete(id, principal);
         return "redirect:/my_own_communities";
     }
 
@@ -76,16 +75,22 @@ public class CommunityController {
 
     @PostMapping("/join_community")
     public String joinCommunity(Principal principal, int communityId) {
-        if (!communityService.join(principal, communityId)) {
+        if (!communityService.join(principal, communityId))
             return "redirect:/communities";
-        }
         return "redirect:/community/" + communityId;
     }
 
     @PostMapping("/leave_community")
     public String leaveCommunity(Principal principal, CommunityMember communityMember) {
-        if (!communityService.leave(principal, communityMember)) {
+        if (!communityService.leave(principal, communityMember))
             return "redirect:/communities";
+        return "redirect:/community/" + communityMember.getCommunityId();
+    }
+
+    @PostMapping("/kick_community_member")
+    public String kickCommunityMember(CommunityMember communityMember, Principal principal) {
+        if (!communityService.kickCommunityMember(communityMember, principal)) {
+            return "redirect:/my_own_communities";
         }
         return "redirect:/community/" + communityMember.getCommunityId();
     }
@@ -104,8 +109,8 @@ public class CommunityController {
     }
 
     @PostMapping("/delete_community_post")
-    public String deleteCommunityPost(CommunityPost communityPost) {
-        if (!communityService.deletePost(communityPost))
+    public String deleteCommunityPost(CommunityPost communityPost, Principal principal) {
+        if (!communityService.deletePost(communityPost, principal))
             return "redirect:/communities";
         return "redirect:/community/" + communityPost.getCommunityId();
     }

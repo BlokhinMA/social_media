@@ -17,13 +17,20 @@
 <p>Участники</p>
 <div th:each="member : ${community.members}">
     <a th:href="@{/profile/{login}(login=${member.memberLogin})}" th:text="${member.memberLogin}"></a>
+    <th:block th:if="${thisUser.getName()} == ${community.creatorLogin}">
+        <form th:action="@{/kick_community_member}" method="post" style="display: inline-block">
+            <input type="hidden" name="id" th:value="${member.id}">
+            <input type="hidden" name="communityId" th:value="${member.communityId}">
+            <button>выгнать</button>
+        </form>
+    </th:block>
 </div>
 
 <th:block th:if="!${isMember} and ${thisUser.getName()} != ${community.creatorLogin}">
-<form th:action="@{/join_community}" method="post">
-    <input type="hidden" name="communityId" th:value="${community.id}">
-    <button>вступить в сообщество</button>
-</form>
+    <form th:action="@{/join_community}" method="post">
+        <input type="hidden" name="communityId" th:value="${community.id}">
+        <button>вступить в сообщество</button>
+    </form>
 </th:block>
 
 <th:block th:if="${isMember} or ${thisUser.getName()} == ${community.creatorLogin}">
@@ -37,7 +44,7 @@
     <form th:action="@{/add_community_post}" method="post" th:object="${communityPost}">
         <label for="postText">Добавить пост</label><br>
         <textarea id="postText" th:field="*{postText}" required></textarea>
-        <div style="color: red" th:if="${#fields.hasErrors('postText')}" th:errors="*{postText}">PostText Error</div>
+        <p style="color: red" th:if="${#fields.hasErrors('postText')}" th:errors="*{postText}">PostText Error</p>
         <input type="hidden" name="communityId" th:value="${community.id}">
         <button>добавить</button>
     </form>
@@ -48,7 +55,8 @@
     <p th:text="${post.postText}"></p>
     <p th:text="${post.creationTimeStamp}"></p>
     <p th:text="${post.authorLogin}"></p>
-    <th:block th:if="${thisUser.getName()} == ${post.authorLogin} or ${thisUser.getName()} == ${community.creatorLogin}">
+    <th:block
+            th:if="${thisUser.getName()} == ${post.authorLogin} or ${thisUser.getName()} == ${community.creatorLogin}">
         <form th:action="@{/delete_community_post}" method="post">
             <input type="hidden" name="id" th:value="${post.id}">
             <input type="hidden" name="communityId" th:value="${post.communityId}">

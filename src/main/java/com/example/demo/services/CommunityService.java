@@ -6,7 +6,9 @@ import com.example.demo.models.CommunityPost;
 import com.example.demo.repositories.CommunityPostRepository;
 import com.example.demo.repositories.CommunityRepository;
 import com.example.demo.repositories.CommunityMemberRepository;
+import com.example.demo.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -14,11 +16,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private final CommunityMemberRepository communityMemberRepository;
     private final CommunityPostRepository communityPostRepository;
+    private final UserRepository userRepository;
 
     public List<Community> showAllOwn(Principal principal) {
         return communityRepository.findAllByCreatorLogin(principal.getName());
@@ -34,11 +38,21 @@ public class CommunityService {
 
     public void create(Community community, Principal principal) {
         community.setCreatorLogin(principal.getName());
-        communityRepository.save(community);
+        Community createdCommunity = communityRepository.save(community);
+        log.info("Пользователь {} добавил сообщество {}",
+                userRepository.findByLogin(principal.getName()),
+                createdCommunity);
     }
 
-    public void delete(int id) {
-        communityRepository.deleteById(id);
+    public void delete(int id, Principal principal) {
+        List<CommunityMember> members = communityMemberRepository.findAllByCommunityId(id);
+        List<CommunityPost> posts = communityPostRepository.findAllByCommunityId(id);
+        Community deletedCommunity = communityRepository.deleteById(id);
+        deletedCommunity.setMembers(members);
+        deletedCommunity.setPosts(posts);
+        log.info("Пользователь {} удалил сообщество {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedCommunity);
     }
 
     public Community show(int id) {
@@ -55,7 +69,11 @@ public class CommunityService {
         CommunityMember communityMember = new CommunityMember();
         communityMember.setMemberLogin(principal.getName());
         communityMember.setCommunityId(communityId);
-        communityMemberRepository.save(communityMember);
+        CommunityMember joinedCommunityMember = communityMemberRepository.save(communityMember);
+        joinedCommunityMember.setCommunity(communityRepository.findById(joinedCommunityMember.getCommunityId()));
+        log.info("Пользователь {} стал участником сообщества {}",
+                userRepository.findByLogin(principal.getName()),
+                joinedCommunityMember);
         return true;
     }
 
@@ -67,19 +85,42 @@ public class CommunityService {
         if (communityRepository.findById(communityMember.getCommunityId()) == null)
             return false;
         communityMember.setMemberLogin(principal.getName());
-        communityMemberRepository.delete(communityMember);
+        CommunityMember leftCommunityMember = communityMemberRepository.delete(communityMember);
+        leftCommunityMember.setCommunity(communityRepository.findById(leftCommunityMember.getCommunityId()));
+        log.info("Пользователь {} перестал быть участником сообщества {}",
+                userRepository.findByLogin(principal.getName()),
+                leftCommunityMember);
+        return true;
+    }
+
+    public boolean kickCommunityMember(CommunityMember communityMember, Principal principal) {
+        if (communityRepository.findById(communityMember.getCommunityId()) == null)
+            return false;
+        CommunityMember kickedCommunityMember = communityMemberRepository.deleteById(communityMember.getId());
+        kickedCommunityMember.setCommunity(communityRepository.findById(kickedCommunityMember.getCommunityId()));
+        log.info("Пользователь {} выгнал участника сообщества {}",
+                userRepository.findByLogin(principal.getName()),
+                kickedCommunityMember);
         return true;
     }
 
     public void createPost(CommunityPost communityPost, Principal principal) {
         communityPost.setAuthorLogin(principal.getName());
-        communityPostRepository.save(communityPost);
+        CommunityPost createdPost = communityPostRepository.save(communityPost);
+        createdPost.setCommunity(communityRepository.findById(createdPost.getCommunityId()));
+        log.info("Пользователь {} добавил пост {}",
+                userRepository.findByLogin(principal.getName()),
+                createdPost);
     }
 
-    public boolean deletePost(CommunityPost communityPost) {
+    public boolean deletePost(CommunityPost communityPost, Principal principal) {
         if (communityRepository.findById(communityPost.getCommunityId()) == null)
             return false;
-        communityPostRepository.delete(communityPost);
+        CommunityPost deletedCommunityPost = communityPostRepository.delete(communityPost);
+        deletedCommunityPost.setCommunity(communityRepository.findById(deletedCommunityPost.getCommunityId()));
+        log.info("Пользователь {} удалил пост {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedCommunityPost);
         return true;
     }
 

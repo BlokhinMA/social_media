@@ -65,8 +65,8 @@ public class FriendshipController {
     }
 
     @PostMapping("/accept_friend")
-    public String acceptFriend(Friendship friendship) {
-        friendshipService.accept(friendship);
+    public String acceptFriend(Friendship friendship, Principal principal) {
+        friendshipService.accept(friendship, principal);
         return "redirect:/my_friends";
     }
 

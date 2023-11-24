@@ -2,42 +2,43 @@ package com.example.demo.services;
 
 import com.example.demo.models.Album;
 import com.example.demo.models.Photo;
-import com.example.demo.repositories.AlbumRepository;
-import com.example.demo.repositories.FriendshipRepository;
-import com.example.demo.repositories.PhotoRepository;
-import com.example.demo.repositories.UserRepository;
+import com.example.demo.repositories.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class AlbumService {
 
     private final AlbumRepository albumRepository;
     private final PhotoRepository photoRepository;
+    private final PhotoTagRepository photoTagRepository;
+    private final PhotoRatingRepository photoRatingRepository;
+    private final PhotoCommentRepository photoCommentRepository;
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
 
+    @Value("${upload.path}")
+    private String uploadPath;
+
     public void create(Album album, List<MultipartFile> files, Principal principal) throws IOException {
         album.setUserLogin(principal.getName());
-        Album newAlbum = albumRepository.save(album);
-        log.info("Пользователь {} добавил альбом {}",  newAlbum);
-        if (!files.isEmpty()) {
-            Photo photo;
-            for (MultipartFile file : files) {
-                photo = toPhotoEntity(file);
-                photo.setAlbumId(newAlbum.getId());
-                photoRepository.save(photo);
-            }
-        }
+        Album createdAlbum = albumRepository.save(album);
+        log.info("Пользователь {} добавил альбом {}",
+                userRepository.findByLogin(principal.getName()),
+                createdAlbum);
+        createPhotos(files, createdAlbum.getId(), principal);
     }
 
     private Photo toPhotoEntity(MultipartFile file) throws IOException {
@@ -64,18 +65,37 @@ public class AlbumService {
         return album;
     }
 
-    public void delete(int id) {
-        albumRepository.deleteById(id);
+    public void delete(int id, Principal principal) {
+        List<Photo> photos = photoRepository.findAllByAlbumId(id);
+        for (Photo photo : photos) {
+            int photoId = photo.getId();
+            photo.setTags(photoTagRepository.findAllByPhotoId(photoId));
+            photo.setRatings(photoRatingRepository.findAllByPhotoId(photoId));
+            photo.setComments(photoCommentRepository.findAllByPhotoId(photoId));
+        }
+        Album deletedAlbum = albumRepository.deleteById(id);
+        deletedAlbum.setPhotos(photos);
+        log.info("Пользователь {} удалил альбом {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedAlbum);
     }
 
-    public boolean createPhotos(List<MultipartFile> files, int albumId) throws IOException {
-        if (files.isEmpty())
+    public boolean createPhotos(List<MultipartFile> files, int albumId, Principal principal) throws IOException {
+        if (Objects.requireNonNull(files.get(0).getOriginalFilename()).isEmpty())
             return false;
         List<Photo> photos = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             photos.add(toPhotoEntity(files.get(i)));
+            //photos.add(new Photo());
             photos.get(i).setAlbumId(albumId);
-            photoRepository.save(photos.get(i));
+            String originalFilename = files.get(i).getOriginalFilename();
+            //photos.get(i).setOriginalFileName(originalFilename);
+            Photo createdPhoto = photoRepository.save(photos.get(i));
+            files.get(i).transferTo(new File(uploadPath + "/" + originalFilename));
+            createdPhoto.setAlbum(albumRepository.findById(createdPhoto.getAlbumId()));
+            log.info("Пользователь {} добавил фотографию {}",
+                    userRepository.findByLogin(principal.getName()),
+                    createdPhoto);
         }
         return true;
     }
@@ -86,10 +106,13 @@ public class AlbumService {
         return null;
     }
 
-    public boolean changeAccessType(Album album) {
+    public boolean changeAccessType(Album album, Principal principal) {
         if (albumRepository.findById(album.getId()) == null)
             return false;
-        albumRepository.updateAccessTypeById(album);
+        Album updatedAlbum = albumRepository.updateAccessTypeById(album);
+        log.info("Пользователь {} обновил альбом {}",
+                userRepository.findByLogin(principal.getName()),
+                updatedAlbum);
         return true;
     }
 

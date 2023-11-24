@@ -13,10 +13,18 @@
 
 <p>Создать альбом</p>
 <form th:action="@{/add_album}" method="post" enctype="multipart/form-data" th:object="${album}">
-    <label for="name">Название альбома</label><br>
-    <input type="text" id="name" th:field="*{name}" placeholder="Название альбома" required><br>
-    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-    <label for="files">Фотографии</label><br>
+    <label for="name">Название альбома</label>
+    <input type="text" id="name" th:field="*{name}" placeholder="Название альбома" required>
+    <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
+    <br>
+    <span>Выбрать тип доступа к альбому</span>
+    <input type="radio" id="all" th:field="*{accessType}" value="all" required>
+    <label for="all">для всех</label>
+    <input type="radio" id="friends" th:field="*{accessType}" value="friends">
+    <label for="friends">для друзей</label>
+    <p style="color: red" th:if="${#fields.hasErrors('accessType')}" th:errors="*{accessType}">AccessType Error</p>
+    <br>
+    <label for="files">Фотографии</label>
     <input type="file" id="files" name="files" accept="image/*" multiple>
     <button>Создать альбом</button>
 </form>

@@ -34,11 +34,24 @@ public class CommunityMemberRepository {
                 .stream().findAny().orElse(null);
     }
 
+    public CommunityMember findById(int id) {
+        return jdbcTemplate.query("SELECT * FROM Community_member WHERE id=?", new BeanPropertyRowMapper<>(CommunityMember.class),
+                        id)
+                .stream().findAny().orElse(null);
+    }
+
     public CommunityMember delete(CommunityMember communityMember) {
         CommunityMember deletedCommunityMember = findByMemberLoginAndCommunityId(communityMember.getMemberLogin(), communityMember.getCommunityId());
         jdbcTemplate.update("DELETE FROM Community_member WHERE member_login=? AND community_id=?",
                 communityMember.getMemberLogin(),
                 communityMember.getCommunityId());
+        return deletedCommunityMember;
+    }
+
+    public CommunityMember deleteById(int id) {
+        CommunityMember deletedCommunityMember = findById(id);
+        jdbcTemplate.update("DELETE FROM Community_member WHERE id=?",
+                id);
         return deletedCommunityMember;
     }
 

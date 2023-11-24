@@ -17,6 +17,7 @@ public class Photo {
     private LocalDateTime creationTimeStamp;
     private int albumId;
     private List<PhotoTag> tags;
+    private List<PhotoRating> ratings;
     private PhotoRating userRating;
     private Double rating;
     private List<PhotoComment> comments;

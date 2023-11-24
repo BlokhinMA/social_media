@@ -1,11 +1,9 @@
 package com.example.demo.services;
 
-import com.example.demo.models.Photo;
-import com.example.demo.models.PhotoComment;
-import com.example.demo.models.PhotoRating;
-import com.example.demo.models.PhotoTag;
+import com.example.demo.models.*;
 import com.example.demo.repositories.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -13,6 +11,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class PhotoService {
 
     private final AlbumRepository albumRepository;
@@ -21,6 +20,7 @@ public class PhotoService {
     private final PhotoRatingRepository photoRatingRepository;
     private final PhotoCommentRepository photoCommentRepository;
     private final FriendshipRepository friendshipRepository;
+    private final UserRepository userRepository;
 
     public Photo showEntity(int id) {
         return photoRepository.findById(id);
@@ -37,24 +37,43 @@ public class PhotoService {
         return photo;
     }
 
-    public boolean delete(Photo photo) {
+    public boolean delete(Photo photo, Principal principal) {
         if (albumRepository.findById(photo.getAlbumId()) == null)
             return false;
-        photoRepository.delete(photo);
+        int photoId = photo.getId();
+        List<PhotoTag> tags = photoTagRepository.findAllByPhotoId(photoId);
+        List<PhotoRating> ratings = photoRatingRepository.findAllByPhotoId(photoId);
+        List<PhotoComment> comments = photoCommentRepository.findAllByPhotoId(photoId);
+        Photo deletedPhoto = photoRepository.delete(photo);
+        deletedPhoto.setTags(tags);
+        deletedPhoto.setRatings(ratings);
+        deletedPhoto.setComments(comments);
+        deletedPhoto.setAlbum(albumRepository.findById(deletedPhoto.getAlbumId()));
+        log.info("Пользователь {} удалил фотографию {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedPhoto);
         return true;
     }
 
-    public boolean createTag(PhotoTag photoTag) {
+    public boolean createTag(PhotoTag photoTag, Principal principal) {
         if (photoTagRepository.findByTagAndPhotoId(photoTag) != null)
             return false;
-        photoTagRepository.save(photoTag);
+        PhotoTag createdPhotoTag = photoTagRepository.save(photoTag);
+        forLogs(createdPhotoTag);
+        log.info("Пользователь {} добавил тег {}",
+                userRepository.findByLogin(principal.getName()),
+                createdPhotoTag);
         return true;
     }
 
-    public boolean deleteTag(PhotoTag photoTag) {
+    public boolean deleteTag(PhotoTag photoTag, Principal principal) {
         if (photoRepository.findById(photoTag.getPhotoId()) == null)
             return false;
-        photoTagRepository.delete(photoTag);
+        PhotoTag deletedPhotoTag = photoTagRepository.delete(photoTag);
+        forLogs(deletedPhotoTag);
+        log.info("Пользователь {} удалил тег {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedPhotoTag);
         return true;
     }
 
@@ -62,21 +81,33 @@ public class PhotoService {
         if (photoRepository.findById(photoRating.getPhotoId()) == null)
             return false;
         photoRating.setRatingUserLogin(principal.getName());
-        photoRatingRepository.save(photoRating);
+        PhotoRating createdPhotoRating = photoRatingRepository.save(photoRating);
+        forLogs(createdPhotoRating);
+        log.info("Пользователь {} поставил оценку {}",
+                userRepository.findByLogin(principal.getName()),
+                createdPhotoRating);
         return true;
     }
 
-    public boolean updateRating(PhotoRating photoRating) {
+    public boolean updateRating(PhotoRating photoRating, Principal principal) {
         if (photoRepository.findById(photoRating.getPhotoId()) == null)
             return false;
-        photoRatingRepository.update(photoRating);
+        PhotoRating updatedPhotoRating = photoRatingRepository.update(photoRating);
+        forLogs(updatedPhotoRating);
+        log.info("Пользователь {} обновил оценку {}",
+                userRepository.findByLogin(principal.getName()),
+                updatedPhotoRating);
         return true;
     }
 
-    public boolean deleteRating(PhotoRating photoRating) {
+    public boolean deleteRating(PhotoRating photoRating, Principal principal) {
         if (photoRepository.findById(photoRating.getPhotoId()) == null)
             return false;
-        photoRatingRepository.delete(photoRating);
+        PhotoRating deletedPhotoRating = photoRatingRepository.delete(photoRating);
+        forLogs(deletedPhotoRating);
+        log.info("Пользователь {} удалил оценку {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedPhotoRating);
         return true;
     }
 
@@ -84,13 +115,21 @@ public class PhotoService {
         photoComment.setComment(photoComment.getComment());
         photoComment.setCommentingUserLogin(principal.getName());
         photoComment.setPhotoId(photoComment.getPhotoId());
-        photoCommentRepository.save(photoComment);
+        PhotoComment createdPhotoComment = photoCommentRepository.save(photoComment);
+        forLogs(createdPhotoComment);
+        log.info("Пользователь {} добавил комментарий {}",
+                userRepository.findByLogin(principal.getName()),
+                createdPhotoComment);
     }
 
-    public boolean deleteComment(PhotoComment photoComment) {
+    public boolean deleteComment(PhotoComment photoComment, Principal principal) {
         if (photoRepository.findById(photoComment.getPhotoId()) == null)
             return false;
-        photoCommentRepository.delete(photoComment);
+        PhotoComment deletedPhotoComment = photoCommentRepository.delete(photoComment);
+        forLogs(deletedPhotoComment);
+        log.info("Пользователь {} удалил комментарий {}",
+                userRepository.findByLogin(principal.getName()),
+                deletedPhotoComment);
         return true;
     }
 
@@ -111,12 +150,28 @@ public class PhotoService {
     }
 
     public boolean isFriend(Principal principal, String userLogin) {
-        /*List<User> friends = friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(userLogin);
-        for (User friend : friends) {
-            if (Objects.equals(friend.getLogin(), principal.getName()))
-                return true;
-        }*/
         return friendshipRepository.findByFriendLoginAndLogin(principal.getName(), userLogin) != null;
+    }
+
+    private void forLogs(PhotoTag photoTag) {
+        int photoId = photoTag.getPhotoId();
+        Photo photo = photoRepository.findById(photoId);
+        photo.setAlbum(albumRepository.findById(photoRepository.findById(photoId).getAlbumId()));
+        photoTag.setPhoto(photo);
+    }
+
+    private void forLogs(PhotoRating photoRating) {
+        int photoId = photoRating.getPhotoId();
+        Photo photo = photoRepository.findById(photoId);
+        photo.setAlbum(albumRepository.findById(photoRepository.findById(photoId).getAlbumId()));
+        photoRating.setPhoto(photo);
+    }
+
+    private void forLogs(PhotoComment photoComment) {
+        int photoId = photoComment.getPhotoId();
+        Photo photo = photoRepository.findById(photoId);
+        photo.setAlbum(albumRepository.findById(photoRepository.findById(photoId).getAlbumId()));
+        photoComment.setPhoto(photo);
     }
 
 }

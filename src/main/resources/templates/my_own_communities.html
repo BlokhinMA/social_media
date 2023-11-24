@@ -10,18 +10,16 @@
 <form th:action="@{/add_community}" method="post" th:object="${community}">
     <label for="name">Название сообщества</label><br>
     <input type="text" id="name" th:field="*{name}" placeholder="Название сообщества" required>
-    <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
     <button>Создать сообщество</button>
 </form>
 
 <div th:each="community : ${communities}">
     <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
-    <th:block th:if="${thisUser.getName()} == ${community.creatorLogin}">
-        <form th:action="@{/delete_community}" method="post">
-            <input type="hidden" name="id" th:value="${community.id}">
-            <button>удалить сообщество</button>
-        </form>
-    </th:block>
+    <form th:action="@{/delete_community}" method="post">
+        <input type="hidden" name="id" th:value="${community.id}">
+        <button>удалить сообщество</button>
+    </form>
 </div>
 
 </body>

@@ -28,7 +28,7 @@ public class MessageController {
                     .addAttribute("thisUser", principal);
             return "message";
         }
-        messageService.create(message);
+        messageService.create(message, principal);
         return "redirect:/messages/" + message.getToUserLogin();
     }
 
@@ -50,8 +50,8 @@ public class MessageController {
     }
 
     @PostMapping("/delete_message")
-    public String delete(Message message) {
-        messageService.delete(message);
+    public String delete(Message message, Principal principal) {
+        messageService.delete(message, principal);
         return "redirect:/messages/" + message.getToUserLogin();
     }
 

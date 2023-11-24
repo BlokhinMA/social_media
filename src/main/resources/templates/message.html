@@ -14,7 +14,7 @@
     <label for="message">Написать сообщение</label>
     <br>
     <textarea id="message" th:field="*{message}" required></textarea>
-    <div style="color: red" th:if="${#fields.hasErrors('message')}" th:errors="*{message}">Message Error</div>
+    <p style="color: red" th:if="${#fields.hasErrors('message')}" th:errors="*{message}">Message Error</p>
     <button>Отправить</button>
 </form>
 

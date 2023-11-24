@@ -44,7 +44,7 @@ public class AlbumController {
 
     @PostMapping("/add_album")
     public String addAlbum(@Valid Album album, BindingResult bindingResult, List<MultipartFile> files, Principal principal, Model model) throws IOException {
-        if (bindingResult.hasErrors()) { // если фотографии не добавлены, то добавляется пустая фотография
+        if (bindingResult.hasErrors()) {
             model
                     .addAttribute("albums", albumService.showAll(principal));
             return "my_albums";
@@ -64,7 +64,7 @@ public class AlbumController {
 
     @PostMapping("/create_photos")
     public String addPhotos(List<MultipartFile> files, int albumId, Principal principal, Model model) throws IOException {
-        if (!albumService.createPhotos(files, albumId)) {
+        if (!albumService.createPhotos(files, albumId, principal)) {
             model
                     .addAttribute("condition", true)
                     .addAttribute("thisUser", principal);
@@ -74,8 +74,8 @@ public class AlbumController {
     }
 
     @PostMapping("/delete_album")
-    public String deleteAlbum(int id) {
-        albumService.delete(id);
+    public String deleteAlbum(int id, Principal principal) {
+        albumService.delete(id, principal);
         return "redirect:/my_albums";
     }
 
@@ -95,7 +95,7 @@ public class AlbumController {
                     .addAttribute("thisUser", principal);
             return "album";
         }
-        if (!albumService.changeAccessType(album))
+        if (!albumService.changeAccessType(album, principal))
             return "redirect:/my_albums";
         return "redirect:/album/" + album.getId();
     }

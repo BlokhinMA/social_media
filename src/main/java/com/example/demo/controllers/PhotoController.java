@@ -30,8 +30,8 @@ public class PhotoController {
     }
 
     @PostMapping("/delete_photo")
-    public String deletePhoto(Photo photo) {
-        if (!photoService.delete(photo))
+    public String deletePhoto(Photo photo, Principal principal) {
+        if (!photoService.delete(photo, principal))
             return "redirect:/my_albums";
         return "redirect:/album/" + photo.getAlbumId();
     }
@@ -54,7 +54,7 @@ public class PhotoController {
                     .addAttribute("thisUser", principal);
             return "photo";
         }
-        if (!photoService.createTag(photoTag)) {
+        if (!photoService.createTag(photoTag, principal)) {
             model
                     .addAttribute("photo", photoService.show(photoTag.getPhotoId(), principal))
                     .addAttribute("thisUser", principal)
@@ -65,8 +65,8 @@ public class PhotoController {
     }
 
     @PostMapping("/delete_photo_tag")
-    public String deleteTag(PhotoTag photoTag) {
-        if (!photoService.deleteTag(photoTag))
+    public String deleteTag(PhotoTag photoTag, Principal principal) {
+        if (!photoService.deleteTag(photoTag, principal))
             return "redirect:/my_albums";
         return "redirect:/photo/" + photoTag.getPhotoId();
     }
@@ -79,15 +79,15 @@ public class PhotoController {
     }
 
     @PostMapping("/update_photo_rating")
-    public String updatePhotoRating(PhotoRating photoRating) {
-        if (!photoService.updateRating(photoRating))
+    public String updatePhotoRating(PhotoRating photoRating, Principal principal) {
+        if (!photoService.updateRating(photoRating, principal))
             return "redirect:/my_albums";
         return "redirect:/photo/" + photoRating.getPhotoId();
     }
 
     @PostMapping("/delete_photo_rating")
-    public String deletePhotoRating(PhotoRating photoRating) {
-        if (!photoService.deleteRating(photoRating))
+    public String deletePhotoRating(PhotoRating photoRating, Principal principal) {
+        if (!photoService.deleteRating(photoRating, principal))
             return "redirect:/my_albums";
         return "redirect:/photo/" + photoRating.getPhotoId();
     }
@@ -105,8 +105,8 @@ public class PhotoController {
     }
 
     @PostMapping("/delete_photo_comment")
-    public String deletePhotoComment(PhotoComment photoComment) {
-        if (!photoService.deleteComment(photoComment))
+    public String deletePhotoComment(PhotoComment photoComment, Principal principal) {
+        if (!photoService.deleteComment(photoComment, principal))
             return "redirect:/my_albums";
         return "redirect:/photo/" + photoComment.getPhotoId();
     }

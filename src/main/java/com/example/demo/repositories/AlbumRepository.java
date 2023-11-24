@@ -15,19 +15,28 @@ public class AlbumRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public Album save(Album album) {
-        jdbcTemplate.update("INSERT INTO Album(name, user_login) VALUES(?, ?)",
+        /*jdbcTemplate.update("INSERT INTO Album(name, access_type, user_login) VALUES(?, ?, ?)",
                 album.getName(),
+                album.getAccessType(),
                 album.getUserLogin());
         return jdbcTemplate.query("SELECT * FROM Album ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(Album.class))
+                .stream().findAny().orElse(null);*/
+        return jdbcTemplate.query("call save_album(?, ?, ?)", new BeanPropertyRowMapper<>(Album.class),
+                        album.getName(),
+                        album.getAccessType(),
+                        album.getUserLogin())
                 .stream().findAny().orElse(null);
     }
 
     public List<Album> findAllByUserLogin(String userLogin) {
-        return jdbcTemplate.query("SELECT * FROM Album WHERE user_login=?", new BeanPropertyRowMapper<>(Album.class), userLogin);
+        /*return jdbcTemplate.query("SELECT * FROM Album WHERE user_login=?", new BeanPropertyRowMapper<>(Album.class), userLogin);*/
+        return jdbcTemplate.query("call find_all_albums_by_user_login(?)", new BeanPropertyRowMapper<>(Album.class), userLogin);
     }
 
     public Album findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Album WHERE id=?", new BeanPropertyRowMapper<>(Album.class), id).
+        /*return jdbcTemplate.query("SELECT * FROM Album WHERE id=?", new BeanPropertyRowMapper<>(Album.class), id).
+                stream().findAny().orElse(null);*/
+        return jdbcTemplate.query("call find_album_by_id(?)", new BeanPropertyRowMapper<>(Album.class), id).
                 stream().findAny().orElse(null);
     }
 

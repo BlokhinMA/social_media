@@ -16,5 +16,6 @@ public class PhotoComment {
     private LocalDateTime commentingTimeStamp;
     private String commentingUserLogin;
     private int photoId;
+    private Photo photo;
 
 }

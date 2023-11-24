@@ -16,5 +16,6 @@ public class CommunityPost {
     private LocalDateTime creationTimeStamp;
     private String authorLogin;
     private int communityId;
+    private Community community;
 
 }

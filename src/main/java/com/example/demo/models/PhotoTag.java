@@ -12,5 +12,6 @@ public class PhotoTag {
     @Pattern(regexp="\\S+", message= "Поле не должно содержать пробелы")
     private String tag;
     private int photoId;
+    private Photo photo;
 
 }
