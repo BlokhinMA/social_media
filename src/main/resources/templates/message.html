@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
 <h1 th:text="|Диалог с пользователем ${companion}|"></h1>
 
 <form th:action="@{/create_message}" method="post" th:object="${message}">

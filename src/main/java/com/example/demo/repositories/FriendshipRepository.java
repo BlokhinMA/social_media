@@ -15,7 +15,7 @@ public class FriendshipRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public List<User> findLikeLoginOrFirstNameOrLastNameExceptThisUser(String thisUserLogin, String word) {
+    public List<User> findAllLikeLoginOrFirstNameOrLastNameExceptThisUser(String thisUserLogin, String word) {
         return jdbcTemplate.query("SELECT * FROM User WHERE login!=? AND (login LIKE CONCAT('%', ?, '%') OR first_name LIKE CONCAT('%', ?, '%') OR last_name LIKE CONCAT('%', ?, '%')) EXCEPT (SELECT User.* FROM User JOIN Friendship ON login = second_user_login WHERE first_user_login=? UNION SELECT User.* FROM User JOIN Friendship ON login = first_user_login WHERE second_user_login=?)", new BeanPropertyRowMapper<>(User.class),
                 thisUserLogin,
                 word,

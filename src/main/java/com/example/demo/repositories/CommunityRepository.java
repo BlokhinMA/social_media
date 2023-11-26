@@ -44,7 +44,7 @@ public class CommunityRepository {
         return deletedCommunity;
     }
 
-    public List<Community> findLikeName(String word) {
+    public List<Community> findAllLikeName(String word) {
         return jdbcTemplate.query("SELECT * FROM Community WHERE name LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Community.class),
                 word);
     }

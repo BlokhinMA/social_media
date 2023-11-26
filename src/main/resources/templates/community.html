@@ -7,6 +7,10 @@
 </head>
 <body>
 
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1 th:text="|Сообщество ${community.name}|"></h1>
+
 <th:block th:if="${thisUser.getName()} == ${community.creatorLogin}">
     <form th:action="@{/delete_community}" method="post">
         <input type="hidden" name="id" th:value="${community.id}">

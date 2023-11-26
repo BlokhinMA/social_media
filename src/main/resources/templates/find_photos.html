@@ -7,7 +7,10 @@
 </head>
 <body>
 
-<p>Найти фотографии</p>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1>Найти фотографии</h1>
+
 <form th:action="@{/find_photos}">
     <span>Введите параметр поиска</span>
     <th:block th:switch="${searchTerm}">

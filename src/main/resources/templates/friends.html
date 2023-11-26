@@ -7,7 +7,10 @@
 </head>
 <body>
 
-<p th:text="|Друзья пользователя ${userLogin}|"></p>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1 th:text="|Друзья пользователя ${userLogin}|"></h1>
+
 <div th:each="friend : ${friends}">
     <a th:href="@{/profile/{login}(login=${friend.login})}" th:text="${friend.login}"></a>
 </div>

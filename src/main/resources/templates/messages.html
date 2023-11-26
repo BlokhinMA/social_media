@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
 <h1>Мои сообщения</h1>
 
 <div th:each="message : ${messages}">

@@ -9,6 +9,5 @@ public class PhotoRating {
     private boolean rating;
     private String ratingUserLogin;
     private int photoId;
-    private Photo photo;
 
 }

@@ -7,7 +7,10 @@
 </head>
 <body>
 
-<p>Входящие заявки</p>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1>Входящие заявки</h1>
+
 <div th:each="incomingRequest : ${incomingRequests}">
     <form th:action="@{/accept_friend}" method="post">
         <a th:href="@{/profile/{login}(login=${incomingRequest.login})}" th:text="${incomingRequest.login}"></a>
@@ -17,7 +20,8 @@
     </form>
 </div>
 
-<p>Исходящие заявки</p>
+<h1>Исходящие заявки</h1>
+
 <div th:each="outgoingRequest : ${outgoingRequests}">
     <a th:href="@{/profile/{login}(login=${outgoingRequest.login})}" th:text="${outgoingRequest.login}"></a>
 </div>

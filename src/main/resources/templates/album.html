@@ -7,7 +7,12 @@
 </head>
 <body>
 
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
 <th:block th:if="${isFriend} or ${thisUser.getName()} == ${album.userLogin}">
+
+    <h1 th:text="|Альбом ${album.name}|"></h1>
+
     <th:block th:if="${thisUser.getName()} == ${album.userLogin}">
         <form th:action="@{/delete_album}" method="post">
             <input type="hidden" name="id" th:value="${album.id}">

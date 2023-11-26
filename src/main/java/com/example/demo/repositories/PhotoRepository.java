@@ -38,22 +38,22 @@ public class PhotoRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public Photo delete(Photo photo) {
-        Photo deletedPhoto = findById(photo.getId());
+    public Photo deleteById(int id) {
+        Photo deletedPhoto = findById(id);
         jdbcTemplate.update("DELETE FROM Photo WHERE id=?",
-                photo.getId());
+                id);
         return deletedPhoto;
     }
 
-    public List<Photo> findLikeCreationTimeStamp(String word) {
+    public List<Photo> findAllLikeCreationTimeStamp(String word) {
         return jdbcTemplate.query("SELECT * FROM Photo WHERE creation_time_stamp LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Photo.class), word);
     }
 
-    public List<Photo> findLikeTags(String word) {
+    public List<Photo> findAllLikeTags(String word) {
         return jdbcTemplate.query("SELECT Photo.* FROM Photo JOIN Photo_tag ON Photo.id = photo_id WHERE tag LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Photo.class), word);
     }
 
-    public List<Photo> findLikeComments(String word) {
+    public List<Photo> findAllLikeComments(String word) {
         return jdbcTemplate.query("SELECT Photo.* FROM Photo JOIN Photo_comment ON Photo.id = photo_id WHERE comment LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Photo.class), word);
     }
 

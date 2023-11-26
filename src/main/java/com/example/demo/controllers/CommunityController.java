@@ -22,11 +22,11 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
-    @GetMapping("/my_own_communities")
+    @GetMapping("/community_management")
     public String myOwnCommunities(Principal principal, Model model, Community community) {
         model
                 .addAttribute("communities", communityService.showAllOwn(principal));
-        return "my_own_communities";
+        return "community_management";
     }
 
     @GetMapping("/my_communities")
@@ -42,22 +42,22 @@ public class CommunityController {
             model
                     .addAttribute("communities", communityService.showAll(principal))
                     .addAttribute("thisUser", principal);
-            return "my_own_communities";
+            return "community_management";
         }
         communityService.create(community, principal);
-        return "redirect:/my_own_communities";
+        return "redirect:/community_management";
     }
 
     @PostMapping("/delete_community")
     public String deleteCommunity(int id, Principal principal) {
         communityService.delete(id, principal);
-        return "redirect:/my_own_communities";
+        return "redirect:/community_management";
     }
 
     @GetMapping("/communities/{memberLogin}")
     public String communities(@PathVariable String memberLogin, Principal principal, Model model) {
         if (Objects.equals(memberLogin, principal.getName()))
-            return "redirect:/my_communities";
+            return "redirect:/community_management";
         model
                 .addAttribute("memberLogin", memberLogin)
                 .addAttribute("communities", communityService.showAll(memberLogin));
@@ -90,7 +90,7 @@ public class CommunityController {
     @PostMapping("/kick_community_member")
     public String kickCommunityMember(CommunityMember communityMember, Principal principal) {
         if (!communityService.kickCommunityMember(communityMember, principal)) {
-            return "redirect:/my_own_communities";
+            return "redirect:/community_management";
         }
         return "redirect:/community/" + communityMember.getCommunityId();
     }

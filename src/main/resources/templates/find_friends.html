@@ -7,7 +7,10 @@
 </head>
 <body>
 
-<p>Найти друзей</p>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1>Найти друзей</h1>
+
 <form th:action="@{/find_friends}">
     <label for="word">Введите имя пользователя или имя или фамилию</label>
     <input type="search" id="word" name="word" placeholder="Например, ivan_ivanov или Иван Иванов" required th:value="${word}">

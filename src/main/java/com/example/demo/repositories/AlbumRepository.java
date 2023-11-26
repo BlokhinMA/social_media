@@ -30,31 +30,43 @@ public class AlbumRepository {
 
     public List<Album> findAllByUserLogin(String userLogin) {
         /*return jdbcTemplate.query("SELECT * FROM Album WHERE user_login=?", new BeanPropertyRowMapper<>(Album.class), userLogin);*/
-        return jdbcTemplate.query("call find_all_albums_by_user_login(?)", new BeanPropertyRowMapper<>(Album.class), userLogin);
+        return jdbcTemplate.query("call find_albums_by_user_login(?)", new BeanPropertyRowMapper<>(Album.class), userLogin);
     }
 
     public Album findById(int id) {
-        /*return jdbcTemplate.query("SELECT * FROM Album WHERE id=?", new BeanPropertyRowMapper<>(Album.class), id).
-                stream().findAny().orElse(null);*/
-        return jdbcTemplate.query("call find_album_by_id(?)", new BeanPropertyRowMapper<>(Album.class), id).
-                stream().findAny().orElse(null);
+        /*return jdbcTemplate.query("SELECT * FROM Album WHERE id=?", new BeanPropertyRowMapper<>(Album.class),
+                        id)
+                .stream().findAny().orElse(null);*/
+        return jdbcTemplate.query("call find_album_by_id(?)", new BeanPropertyRowMapper<>(Album.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
     public Album deleteById(int id) {
-        Album deletedAlbum = findById(id);
+        /*Album deletedAlbum = findById(id);
         jdbcTemplate.update("DELETE FROM Album WHERE id=?", id);
-        return deletedAlbum;
+        return deletedAlbum;*/
+        return jdbcTemplate.query("call delete_album_by_id(?)", new BeanPropertyRowMapper<>(Album.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
-    public List<Album> findLikeName(String word) {
-        return jdbcTemplate.query("SELECT * FROM Album WHERE name LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Album.class), word);
+    public List<Album> findAllLikeName(String word) {
+        /*return jdbcTemplate.query("SELECT * FROM Album WHERE name LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Album.class),
+                word);*/
+        return jdbcTemplate.query("call find_albums_like_name(?)", new BeanPropertyRowMapper<>(Album.class),
+                word);
     }
 
     public Album updateAccessTypeById(Album album) {
-        jdbcTemplate.update("UPDATE Album SET access_type=? WHERE id=?",
+        /*jdbcTemplate.update("UPDATE Album SET access_type=? WHERE id=?",
                 album.getAccessType(),
                 album.getId());
-        return findById(album.getId());
+        return findById(album.getId());*/
+        return jdbcTemplate.query("call update_album_access_type_by_id(?, ?)", new BeanPropertyRowMapper<>(Album.class),
+                        album.getAccessType(),
+                        album.getId())
+                .stream().findAny().orElse(null);
     }
 
 }

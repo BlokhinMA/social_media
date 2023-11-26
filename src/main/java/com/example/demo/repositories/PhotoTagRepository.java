@@ -41,10 +41,10 @@ public class PhotoTagRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public PhotoTag delete(PhotoTag photoTag) {
-        PhotoTag deletedPhotoTag = findById(photoTag.getId());
+    public PhotoTag deleteById(int id) {
+        PhotoTag deletedPhotoTag = findById(id);
         jdbcTemplate.update("DELETE FROM Photo_tag WHERE id=?",
-                photoTag.getId());
+                id);
         return deletedPhotoTag;
     }
 

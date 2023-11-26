@@ -35,7 +35,7 @@ public class MessageService {
     }
 
     public void delete(Message message, Principal principal) {
-        Message deletedMessage = messageRepository.delete(message);
+        Message deletedMessage = messageRepository.deleteById(message.getId());
         log.info("Пользователь {} удалил сообщение {}",
                 userRepository.findByLogin(principal.getName()),
                 deletedMessage);

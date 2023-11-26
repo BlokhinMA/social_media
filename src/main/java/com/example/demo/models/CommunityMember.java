@@ -8,6 +8,5 @@ public class CommunityMember {
     private int id;
     private String memberLogin;
     private int communityId;
-    private Community community;
 
 }

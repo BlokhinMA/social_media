@@ -84,6 +84,7 @@ public class AlbumService {
         if (Objects.requireNonNull(files.get(0).getOriginalFilename()).isEmpty())
             return false;
         List<Photo> photos = new ArrayList<>();
+        List<Photo> createdPhotos = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             photos.add(toPhotoEntity(files.get(i)));
             //photos.add(new Photo());
@@ -93,16 +94,17 @@ public class AlbumService {
             Photo createdPhoto = photoRepository.save(photos.get(i));
             files.get(i).transferTo(new File(uploadPath + "/" + originalFilename));
             createdPhoto.setAlbum(albumRepository.findById(createdPhoto.getAlbumId()));
-            log.info("Пользователь {} добавил фотографию {}",
-                    userRepository.findByLogin(principal.getName()),
-                    createdPhoto);
+            createdPhotos.add(createdPhoto);
         }
+        log.info("Пользователь {} добавил фотографии {}",
+                userRepository.findByLogin(principal.getName()),
+                createdPhotos);
         return true;
     }
 
     public List<Album> find(String word) {
         if (word != null && !word.isEmpty())
-            return albumRepository.findLikeName(word);
+            return albumRepository.findAllLikeName(word);
         return null;
     }
 

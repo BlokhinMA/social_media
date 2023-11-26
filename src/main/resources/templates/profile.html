@@ -7,7 +7,9 @@
 </head>
 <body>
 
-<div th:text="|Профиль пользователя ${user.login}|"></div>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1 th:text="|Профиль пользователя ${user.login}|"></h1>
 
 <p><a th:href="@{/friends/{userLogin}(userLogin=${user.login})}" th:text="|Друзья пользователя ${user.login}|"></a></p>
 <p><a th:href="@{/albums/{userLogin}(userLogin=${user.login})}" th:text="|Альбомы пользователя ${user.login}|"></a></p>

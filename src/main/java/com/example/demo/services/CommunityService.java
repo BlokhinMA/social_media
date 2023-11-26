@@ -70,7 +70,6 @@ public class CommunityService {
         communityMember.setMemberLogin(principal.getName());
         communityMember.setCommunityId(communityId);
         CommunityMember joinedCommunityMember = communityMemberRepository.save(communityMember);
-        joinedCommunityMember.setCommunity(communityRepository.findById(joinedCommunityMember.getCommunityId()));
         log.info("Пользователь {} стал участником сообщества {}",
                 userRepository.findByLogin(principal.getName()),
                 joinedCommunityMember);
@@ -85,8 +84,7 @@ public class CommunityService {
         if (communityRepository.findById(communityMember.getCommunityId()) == null)
             return false;
         communityMember.setMemberLogin(principal.getName());
-        CommunityMember leftCommunityMember = communityMemberRepository.delete(communityMember);
-        leftCommunityMember.setCommunity(communityRepository.findById(leftCommunityMember.getCommunityId()));
+        CommunityMember leftCommunityMember = communityMemberRepository.deleteByMemberLoginAndCommunityId(communityMember);
         log.info("Пользователь {} перестал быть участником сообщества {}",
                 userRepository.findByLogin(principal.getName()),
                 leftCommunityMember);
@@ -97,7 +95,6 @@ public class CommunityService {
         if (communityRepository.findById(communityMember.getCommunityId()) == null)
             return false;
         CommunityMember kickedCommunityMember = communityMemberRepository.deleteById(communityMember.getId());
-        kickedCommunityMember.setCommunity(communityRepository.findById(kickedCommunityMember.getCommunityId()));
         log.info("Пользователь {} выгнал участника сообщества {}",
                 userRepository.findByLogin(principal.getName()),
                 kickedCommunityMember);
@@ -107,7 +104,6 @@ public class CommunityService {
     public void createPost(CommunityPost communityPost, Principal principal) {
         communityPost.setAuthorLogin(principal.getName());
         CommunityPost createdPost = communityPostRepository.save(communityPost);
-        createdPost.setCommunity(communityRepository.findById(createdPost.getCommunityId()));
         log.info("Пользователь {} добавил пост {}",
                 userRepository.findByLogin(principal.getName()),
                 createdPost);
@@ -116,8 +112,7 @@ public class CommunityService {
     public boolean deletePost(CommunityPost communityPost, Principal principal) {
         if (communityRepository.findById(communityPost.getCommunityId()) == null)
             return false;
-        CommunityPost deletedCommunityPost = communityPostRepository.delete(communityPost);
-        deletedCommunityPost.setCommunity(communityRepository.findById(deletedCommunityPost.getCommunityId()));
+        CommunityPost deletedCommunityPost = communityPostRepository.deleteById(communityPost.getId());
         log.info("Пользователь {} удалил пост {}",
                 userRepository.findByLogin(principal.getName()),
                 deletedCommunityPost);
@@ -126,7 +121,7 @@ public class CommunityService {
 
     public List<Community> find(String word) {
         if (word != null && !word.isEmpty())
-            return communityRepository.findLikeName(word);
+            return communityRepository.findAllLikeName(word);
         return null;
     }
 

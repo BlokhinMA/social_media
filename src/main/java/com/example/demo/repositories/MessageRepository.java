@@ -43,9 +43,9 @@ public class MessageRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public Message delete(Message message) {
-        Message deletedMessage = findById(message.getId());
-        jdbcTemplate.update("DELETE FROM Message WHERE id=?", message.getId());
+    public Message deleteById(int id) {
+        Message deletedMessage = findById(id);
+        jdbcTemplate.update("DELETE FROM Message WHERE id=?", id);
         return deletedMessage;
     }
 

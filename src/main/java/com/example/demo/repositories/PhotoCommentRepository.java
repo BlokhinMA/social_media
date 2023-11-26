@@ -34,10 +34,10 @@ public class PhotoCommentRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public PhotoComment delete(PhotoComment photoComment) {
-        PhotoComment deletedPhotoComment = findById(photoComment.getId());
+    public PhotoComment deleteById(int id) {
+        PhotoComment deletedPhotoComment = findById(id);
         jdbcTemplate.update("DELETE FROM Photo_comment WHERE id=?",
-                photoComment.getId());
+                id);
         return deletedPhotoComment;
     }
 

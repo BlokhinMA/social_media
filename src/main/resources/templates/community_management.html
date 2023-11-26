@@ -7,6 +7,10 @@
 </head>
 <body>
 
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1>Управление сообществами</h1>
+
 <form th:action="@{/add_community}" method="post" th:object="${community}">
     <label for="name">Название сообщества</label><br>
     <input type="text" id="name" th:field="*{name}" placeholder="Название сообщества" required>

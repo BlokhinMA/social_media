@@ -7,7 +7,10 @@
 </head>
 <body>
 
-<p th:text="|Сообщества пользователя ${memberLogin}|"></p>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1 th:text="|Сообщества пользователя ${memberLogin}|"></h1>
+
 <div th:each="community : ${communities}">
     <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
 </div>

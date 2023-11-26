@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div>Мой профиль</div>
+<h1>Мой профиль</h1>
 
 <p>Вы вошли под логином <i th:text="${user.username}"></i></p>
 <form th:action="@{/sign_out}" method="post">
@@ -15,9 +15,15 @@
     <button>выйти</button>
 </form>
 
-<p><a th:href="@{/my_friends}">Мои друзья</a></p>
-<p><a th:href="@{/my_albums}">Мои альбомы</a></p>
-<p><a th:href="@{/my_communities}">Мои сообщества</a></p>
+<th:block th:fragment="header">
+
+    <p><a th:href="@{/my_friends}">Мои друзья</a></p>
+    <p><a th:href="@{/my_albums}">Мои альбомы</a></p>
+    <p><a th:href="@{/my_communities}">Мои сообщества</a></p>
+
+    <hr>
+
+</th:block>
 
 </body>
 </html>

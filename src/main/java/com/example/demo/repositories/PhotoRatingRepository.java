@@ -22,7 +22,7 @@ public class PhotoRatingRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public Double rating(int photoId) {
+    public Double calculateAverageRatingByPhotoId(int photoId) {
         return jdbcTemplate.queryForObject("SELECT AVG(rating) * 100 FROM photo_rating WHERE photo_id=?", Double.class,
                 photoId);
     }
@@ -46,7 +46,7 @@ public class PhotoRatingRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public PhotoRating update(PhotoRating photoRating) {
+    public PhotoRating updateRatingById(PhotoRating photoRating) {
         jdbcTemplate.update("UPDATE Photo_rating SET rating=? WHERE id=?",
                 photoRating.isRating(),
                 photoRating.getId());
@@ -55,9 +55,9 @@ public class PhotoRatingRepository {
                 .stream().findAny().orElse(null);
     }
 
-    public PhotoRating delete(PhotoRating photoRating) {
-        PhotoRating deletedPhotoRating = findById(photoRating.getId());
-        jdbcTemplate.update("DELETE FROM Photo_rating WHERE id=?", photoRating.getId());
+    public PhotoRating deleteById(int id) {
+        PhotoRating deletedPhotoRating = findById(id);
+        jdbcTemplate.update("DELETE FROM Photo_rating WHERE id=?", id);
         return deletedPhotoRating;
     }
 

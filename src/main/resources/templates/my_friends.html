@@ -7,6 +7,10 @@
 </head>
 <body>
 
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1>Мои друзья</h1>
+
 <a th:href="@{/find_friends}">Найти друзей</a>
 <br>
 <a th:href="@{/friends/requests}">Заявки в друзья</a>

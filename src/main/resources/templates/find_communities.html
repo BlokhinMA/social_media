@@ -7,7 +7,10 @@
 </head>
 <body>
 
-<p>Найти сообщества</p>
+<th:block th:replace="~{my_profile :: header}"></th:block>
+
+<h1>Найти сообщества</h1>
+
 <form th:action="@{/find_communities}">
     <label for="word">Введите ключевые слова</label>
     <input type="search" id="word" name="word" required th:value="${word}">
