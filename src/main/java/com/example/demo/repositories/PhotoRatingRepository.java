@@ -10,55 +10,46 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-
 public class PhotoRatingRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
     public PhotoRating findByRatingUserLoginAndPhotoId(String ratingUserLogin, int photoId) {
-        return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE rating_user_login=? AND photo_id=?", new BeanPropertyRowMapper<>(PhotoRating.class),
+        return jdbcTemplate.query("call find_photo_rating_by_rating_user_login_and_photo_id(?, ?)", new BeanPropertyRowMapper<>(PhotoRating.class),
                         ratingUserLogin,
                         photoId)
                 .stream().findAny().orElse(null);
     }
 
     public Double calculateAverageRatingByPhotoId(int photoId) {
-        return jdbcTemplate.queryForObject("SELECT AVG(rating) * 100 FROM photo_rating WHERE photo_id=?", Double.class,
+        return jdbcTemplate.queryForObject("call calculate_average_photo_rating_rating_by_photo_id(?)", Double.class,
                 photoId);
     }
 
-    public PhotoRating findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE id=?", new BeanPropertyRowMapper<>(PhotoRating.class),
-                        id).
-                stream().findAny().orElse(null);
-    }
-
     public List<PhotoRating> findAllByPhotoId(int photoId) {
-        return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE photo_id=?", new BeanPropertyRowMapper<>(PhotoRating.class), photoId);
+        return jdbcTemplate.query("call find_photo_ratings_by_photo_id(?)", new BeanPropertyRowMapper<>(PhotoRating.class),
+                photoId);
     }
 
     public PhotoRating save(PhotoRating photoRating) {
-        jdbcTemplate.update("INSERT INTO Photo_rating(rating, rating_user_login, photo_id) values(?, ?, ?)",
-                photoRating.isRating(),
-                photoRating.getRatingUserLogin(),
-                photoRating.getPhotoId());
-        return jdbcTemplate.query("SELECT * FROM Photo_rating ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(PhotoRating.class))
+        return jdbcTemplate.query("call save_photo_rating(?, ?, ?)", new BeanPropertyRowMapper<>(PhotoRating.class),
+                        photoRating.isRating(),
+                        photoRating.getRatingUserLogin(),
+                        photoRating.getPhotoId())
                 .stream().findAny().orElse(null);
     }
 
     public PhotoRating updateRatingById(PhotoRating photoRating) {
-        jdbcTemplate.update("UPDATE Photo_rating SET rating=? WHERE id=?",
-                photoRating.isRating(),
-                photoRating.getId());
-        return jdbcTemplate.query("SELECT * FROM Photo_rating WHERE id=?", new BeanPropertyRowMapper<>(PhotoRating.class),
+        return jdbcTemplate.query("call update_photo_rating_rating_by_id(?, ?)", new BeanPropertyRowMapper<>(PhotoRating.class),
+                        photoRating.isRating(),
                         photoRating.getId())
                 .stream().findAny().orElse(null);
     }
 
     public PhotoRating deleteById(int id) {
-        PhotoRating deletedPhotoRating = findById(id);
-        jdbcTemplate.update("DELETE FROM Photo_rating WHERE id=?", id);
-        return deletedPhotoRating;
+        return jdbcTemplate.query("call delete_photo_rating_by_id(?)", new BeanPropertyRowMapper<>(PhotoRating.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
 }

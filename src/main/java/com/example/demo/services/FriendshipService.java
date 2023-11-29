@@ -22,13 +22,13 @@ public class FriendshipService {
 
     public List<User> find(String word, Principal principal) {
         if (word != null && !word.isEmpty())
-            return friendshipRepository.findLikeLoginOrFirstNameOrLastNameExceptThisUser(principal.getName(), word);
+            return friendshipRepository.findAllLikeLoginOrFirstNameOrLastName(principal.getName(), word);
         return null;
     }
 
     public boolean create(String friendLogin, Principal principal) {
         if (userRepository.findByLogin(friendLogin) == null ||
-                friendshipRepository.findByFriendLoginAndLogin(friendLogin, principal.getName()) != null)
+                friendshipRepository.findByFriendLoginAndUserLogin(friendLogin, principal.getName()) != null)
             return false;
         Friendship friendship = new Friendship();
         friendship.setFirstUserLogin(principal.getName());
@@ -56,15 +56,16 @@ public class FriendshipService {
     }
 
     public List<User> show(Principal principal) {
-        return friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(principal.getName());
+        return friendshipRepository.findAllAcceptedByUserLogin(principal.getName());
     }
 
     public List<User> show(String userLogin) {
-        return friendshipRepository.findAllAcceptedByFirstUserLoginOrSecondUserLogin(userLogin);
+        return friendshipRepository.findAllAcceptedByUserLogin(userLogin);
     }
 
     public void delete(String friendLogin, Principal principal) {
-        Friendship deletedFriendship = friendshipRepository.deleteByFriendLoginAndLogin(friendLogin, principal.getName());
+        Friendship deletedFriendship =
+                friendshipRepository.deleteByFriendLoginAndUserLogin(friendLogin, principal.getName());
         if (Objects.equals(friendLogin, deletedFriendship.getSecondUserLogin()))
             log.info("Пользователь {} удалил из друзей пользователя {}",
                     userRepository.findByLogin(principal.getName()),

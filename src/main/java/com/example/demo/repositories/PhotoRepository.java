@@ -28,33 +28,35 @@ public class PhotoRepository {
     }
 
     public List<Photo> findAllByAlbumId(int albumId) {
-        return jdbcTemplate.query("SELECT * FROM Photo WHERE album_id=?", new BeanPropertyRowMapper<>(Photo.class),
+        return jdbcTemplate.query("call find_photos_by_album_id(?)", new BeanPropertyRowMapper<>(Photo.class),
                 albumId);
     }
 
     public Photo findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM Photo WHERE id=?", new BeanPropertyRowMapper<>(Photo.class),
+        return jdbcTemplate.query("call find_photo_by_id(?)", new BeanPropertyRowMapper<>(Photo.class),
                         id)
                 .stream().findAny().orElse(null);
     }
 
     public Photo deleteById(int id) {
-        Photo deletedPhoto = findById(id);
-        jdbcTemplate.update("DELETE FROM Photo WHERE id=?",
-                id);
-        return deletedPhoto;
+        return jdbcTemplate.query("call delete_photo_by_id(?)", new BeanPropertyRowMapper<>(Photo.class),
+                        id)
+                .stream().findAny().orElse(null);
     }
 
     public List<Photo> findAllLikeCreationTimeStamp(String word) {
-        return jdbcTemplate.query("SELECT * FROM Photo WHERE creation_time_stamp LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Photo.class), word);
+        return jdbcTemplate.query("call find_photos_like_creation_time_stamp(?)", new BeanPropertyRowMapper<>(Photo.class),
+                word);
     }
 
     public List<Photo> findAllLikeTags(String word) {
-        return jdbcTemplate.query("SELECT Photo.* FROM Photo JOIN Photo_tag ON Photo.id = photo_id WHERE tag LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Photo.class), word);
+        return jdbcTemplate.query("call find_photos_like_tags(?)", new BeanPropertyRowMapper<>(Photo.class),
+                word);
     }
 
     public List<Photo> findAllLikeComments(String word) {
-        return jdbcTemplate.query("SELECT Photo.* FROM Photo JOIN Photo_comment ON Photo.id = photo_id WHERE comment LIKE CONCAT('%', ?, '%')", new BeanPropertyRowMapper<>(Photo.class), word);
+        return jdbcTemplate.query("call find_photos_like_comments(?)", new BeanPropertyRowMapper<>(Photo.class),
+                word);
     }
 
 }

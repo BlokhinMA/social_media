@@ -32,13 +32,13 @@ public class MessageController {
         return "redirect:/messages/" + message.getToUserLogin();
     }
 
-    @GetMapping("/messages")
+    /*@GetMapping("/messages")
     public String showAll(Principal principal, Model model) {
         model
                 .addAttribute("messages", messageService.showAll(principal))
                 .addAttribute("thisUser", principal);
         return "messages";
-    }
+    }*/
 
     @GetMapping("/messages/{companion}")
     public String show(@PathVariable String companion, Principal principal, Model model, Message message) {

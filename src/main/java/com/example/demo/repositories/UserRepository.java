@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -15,52 +14,44 @@ public class UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public User findById(int id) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE id=?", new BeanPropertyRowMapper<>(User.class),
-                        id)
-                .stream().findAny().orElse(null);
-    }
-
     public User findByLogin(String login) {
-        User user = jdbcTemplate.query("SELECT * FROM User WHERE login=?", new BeanPropertyRowMapper<>(User.class),
+
+        User user = jdbcTemplate.query("call find_user_by_login(?)", new BeanPropertyRowMapper<>(User.class),
                         login)
                 .stream().findAny().orElse(null);
 
-       /* String role = jdbcTemplate.queryForObject("SELECT role FROM Role WHERE role='ROLE_ADMIN' AND user_login=?", String.class, login);
+        if (user != null) {
+            List<String> roles = jdbcTemplate.queryForList("call find_roles_by_user_login(?)", String.class,
+                    user.getLogin());
 
-        if (user != null)
-            user.getRoles().add(Role.valueOf(role));*/
+            for (String role : roles) {
+                user.getRoles().add(Role.valueOf(role));
+            }
+
+        }
 
         return user;
     }
 
     public User findByEmail(String email) {
-        return jdbcTemplate.query("SELECT * FROM User WHERE email=?", new BeanPropertyRowMapper<>(User.class),
+        return jdbcTemplate.query("call find_user_by_email(?)", new BeanPropertyRowMapper<>(User.class),
                         email)
                 .stream().findAny().orElse(null);
     }
 
     public User save(User user) {
-        jdbcTemplate.update("INSERT INTO User(login, email, first_name, last_name, birth_date, password) VALUES(?, ?, ?, ?, ?, ?)",
-                user.getLogin(),
-                user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getBirthDate(),
-                user.getPassword());
-
-        for (Role role : user.getRoles()) {
-            jdbcTemplate.update("INSERT INTO Role(role, user_login) VALUES(?, ?)",
-                    role.toString(),
-                    user.getLogin());
-        }
-
-        return jdbcTemplate.query("SELECT * FROM User ORDER BY id DESC LIMIT 1", new BeanPropertyRowMapper<>(User.class))
+        return jdbcTemplate.query("call save_user(?, ?, ?, ?, ?, ?)", new BeanPropertyRowMapper<>(User.class),
+                        user.getLogin(),
+                        user.getEmail(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getBirthDate(),
+                        user.getPassword())
                 .stream().findAny().orElse(null);
     }
 
     public List<User> findAll() {
-        return jdbcTemplate.query("SELECT * FROM User", new BeanPropertyRowMapper<>(User.class));
+        return jdbcTemplate.query("call find_users()", new BeanPropertyRowMapper<>(User.class));
     }
 
 }

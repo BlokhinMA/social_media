@@ -26,9 +26,9 @@ public class MessageService {
                 userRepository.findByLogin(createdMessage.getToUserLogin()));
     }
 
-    public List<Message> showAll(Principal principal) {
+    /*public List<Message> showAll(Principal principal) {
         return messageRepository.findAllByUserLogin(principal.getName());
-    }
+    }*/
 
     public List<Message> show(String companion, Principal principal) {
         return messageRepository.findAllByFromUserLoginAndToUserLogin(companion, principal.getName());

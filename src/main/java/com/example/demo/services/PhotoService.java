@@ -143,7 +143,7 @@ public class PhotoService {
     }
 
     public boolean isFriend(Principal principal, String userLogin) {
-        return friendshipRepository.findByFriendLoginAndLogin(principal.getName(), userLogin) != null;
+        return friendshipRepository.findByFriendLoginAndUserLogin(principal.getName(), userLogin) != null;
     }
 
 }
