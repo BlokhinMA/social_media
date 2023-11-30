@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="'Профиль пользователя ' + ${user.login}"></title>
-    <link rel="stylesheet" type="text/css" th:href="@{css/style.css}">
+    <th:block th:replace="~{my_profile :: style}"></th:block>
 </head>
 <body>
 

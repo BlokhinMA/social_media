@@ -5,11 +5,9 @@ import com.example.demo.models.Photo;
 import com.example.demo.repositories.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -28,9 +26,6 @@ public class AlbumService {
     private final PhotoCommentRepository photoCommentRepository;
     private final FriendshipRepository friendshipRepository;
     private final UserRepository userRepository;
-
-    @Value("${upload.path}")
-    private String uploadPath;
 
     public void create(Album album, List<MultipartFile> files, Principal principal) throws IOException {
         album.setUserLogin(principal.getName());
@@ -87,12 +82,8 @@ public class AlbumService {
         List<Photo> createdPhotos = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             photos.add(toPhotoEntity(files.get(i)));
-            //photos.add(new Photo());
             photos.get(i).setAlbumId(albumId);
-            String originalFilename = files.get(i).getOriginalFilename();
-            //photos.get(i).setOriginalFileName(originalFilename);
             Photo createdPhoto = photoRepository.save(photos.get(i));
-            files.get(i).transferTo(new File(uploadPath + "/" + originalFilename));
             createdPhoto.setAlbum(albumRepository.findById(createdPhoto.getAlbumId()));
             createdPhotos.add(createdPhoto);
         }
