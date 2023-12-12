@@ -28,7 +28,6 @@ public class PhotoService {
 
     public Photo show(int id, Principal principal) {
         Photo photo = photoRepository.findById(id);
-        //photo.getCreationTimeStamp().
         photo.setTags(photoTagRepository.findAllByPhotoId(id));
         photo.setUserRating(photoRatingRepository.findByRatingUserLoginAndPhotoId(principal.getName(), id));
         photo.setRating(photoRatingRepository.calculateAverageRatingByPhotoId(id));

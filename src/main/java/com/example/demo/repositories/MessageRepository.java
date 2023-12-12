@@ -22,15 +22,6 @@ public class MessageRepository {
                 .stream().findAny().orElse(null);
     }
 
-    /*public List<Message> findAllByUserLogin(String userLogin) {
-        *//*return jdbcTemplate.query("SELECT DISTINCT from_user_login, to_user_login FROM Message WHERE from_user_login=? OR to_user_login=?", new BeanPropertyRowMapper<>(Message.class),
-                userLogin,
-                userLogin);*//*
-        return jdbcTemplate.query("call find_messages_by_user_login(?, ?)", new BeanPropertyRowMapper<>(Message.class),
-                userLogin,
-                userLogin);
-    }*/
-
     public List<Message> findAllByFromUserLoginAndToUserLogin(String fromUserLogin, String toUserLogin) {
         return jdbcTemplate.query("call find_messages_by_from_user_login_and_to_user_login(?, ?)", new BeanPropertyRowMapper<>(Message.class),
                 fromUserLogin,
