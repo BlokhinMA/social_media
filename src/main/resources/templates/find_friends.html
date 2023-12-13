@@ -21,6 +21,7 @@
     <form th:action="@{/add_friend}" method="post">
         <a th:href="@{/profile/{login}(login=${possibleFriend.login})}" th:text="${possibleFriend.login}"></a>
         <input type="hidden" name="friendLogin" th:value="${possibleFriend.login}">
+        <input type="hidden" name="word" th:value="${word}">
         <button>добавить</button>
     </form>
     <th:block th:if="${condition}">

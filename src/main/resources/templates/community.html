@@ -57,8 +57,8 @@
 <p>Посты</p>
 <div th:each="post : ${community.posts}">
     <p th:text="${post.postText}"></p>
-    <p th:text="${post.creationTimeStamp}"></p>
     <p th:text="${post.authorLogin}"></p>
+    <p th:text="${post.creationTimeStamp}"></p>
     <th:block
             th:if="${thisUser.getName()} == ${post.authorLogin} or ${thisUser.getName()} == ${community.creatorLogin}">
         <form th:action="@{/delete_community_post}" method="post">

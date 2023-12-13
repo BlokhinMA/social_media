@@ -75,4 +75,28 @@ public class FriendshipService {
                 userRepository.findByLogin(deletedFriendship.getFirstUserLogin()));
     }
 
+    public void rejectFriend(String friendLogin, Principal principal) {
+        Friendship deletedFriendship =
+                friendshipRepository.deleteByFriendLoginAndUserLogin(friendLogin, principal.getName());
+        if (Objects.equals(friendLogin, deletedFriendship.getSecondUserLogin()))
+            log.info("Пользователь {} отклонил заявку в друзья от пользователя {}",
+                    userRepository.findByLogin(principal.getName()),
+                    userRepository.findByLogin(deletedFriendship.getSecondUserLogin()));
+        else log.info("Пользователь {} отклонил заявку в друзья от пользователя {}",
+                userRepository.findByLogin(principal.getName()),
+                userRepository.findByLogin(deletedFriendship.getFirstUserLogin()));
+    }
+
+    public void deleteOutgoingRequest(String friendLogin, Principal principal) {
+        Friendship deletedFriendship =
+                friendshipRepository.deleteByFriendLoginAndUserLogin(friendLogin, principal.getName());
+        if (Objects.equals(friendLogin, deletedFriendship.getSecondUserLogin()))
+            log.info("Пользователь {} удалил заявку в друзья пользователю {}",
+                    userRepository.findByLogin(principal.getName()),
+                    userRepository.findByLogin(deletedFriendship.getSecondUserLogin()));
+        else log.info("Пользователь {} удалил заявку в друзья пользователю {}",
+                userRepository.findByLogin(principal.getName()),
+                userRepository.findByLogin(deletedFriendship.getFirstUserLogin()));
+    }
+
 }

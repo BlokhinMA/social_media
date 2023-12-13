@@ -20,7 +20,7 @@
 
 <div th:each="community : ${communities}">
     <a th:href="@{/community/{id}(id=${community.id})}" th:text="${community.name}"></a>
-    <form th:action="@{/delete_community}" method="post">
+    <form th:action="@{/delete_community}" method="post" style="display: inline">
         <input type="hidden" name="id" th:value="${community.id}">
         <button>удалить сообщество</button>
     </form>

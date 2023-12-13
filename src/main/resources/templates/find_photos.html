@@ -18,39 +18,38 @@
             <input type="radio" th:id="creationTimeStamp" name="searchTerm" value="creationTimeStamp" checked>
             <label th:for="creationTimeStamp">по дате</label>
             <input type="radio" th:id="tags" name="searchTerm" value="tags">
-            <label th:for="tags">по тегам</label>
+            <label th:for="tags">по тегу</label>
             <input type="radio" th:id="comments" name="searchTerm" value="comments">
-            <label th:for="comments">по комментариям</label>
+            <label th:for="comments">по комментарию</label>
         </th:block>
         <th:block th:case="tags">
             <input type="radio" th:id="creationTimeStamp" name="searchTerm" value="creationTimeStamp">
             <label th:for="creationTimeStamp">по дате</label>
             <input type="radio" th:id="tags" name="searchTerm" value="tags" checked>
-            <label th:for="tags2">по тегам</label>
+            <label th:for="tags2">по тегу</label>
             <input type="radio" th:id="comments" name="searchTerm" value="comments">
-            <label th:for="comments">по комментариям</label>
+            <label th:for="comments">по комментарию</label>
         </th:block>
         <th:block th:case="comments">
             <input type="radio" th:id="creationTimeStamp" name="searchTerm" value="creationTimeStamp">
             <label th:for="creationTimeStamp">по дате</label>
             <input type="radio" th:id="tags" name="searchTerm" value="tags">
-            <label th:for="tags">по тегам</label>
+            <label th:for="tags">по тегу</label>
             <input type="radio" th:id="comments" name="searchTerm" value="comments" checked>
-            <label th:for="comments">по комментариям</label>
+            <label th:for="comments">по комментарию</label>
         </th:block>
         <th:block th:case="*">
             <input type="radio" id="creationTimeStamp" name="searchTerm" value="creationTimeStamp">
             <label for="creationTimeStamp">по дате</label>
             <input type="radio" id="tags" name="searchTerm" value="tags">
-            <label for="tags">по тегам</label>
+            <label for="tags">по тегу</label>
             <input type="radio" id="comments" name="searchTerm" value="comments">
-            <label for="comments">по комментариям</label>
+            <label for="comments">по комментарию</label>
         </th:block>
     </th:block>
     <br>
     <label for="word">Введите ключевые слова</label>
     <input type="search" id="word" name="word" required th:value="${word}">
-    <br>
     <button>искать</button>
 </form>
 

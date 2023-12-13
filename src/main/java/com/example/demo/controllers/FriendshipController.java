@@ -46,13 +46,16 @@ public class FriendshipController {
     }
 
     @PostMapping("/add_friend")
-    public String addFriend(String friendLogin, Principal principal, Model model) {
+    public String addFriend(String word, String friendLogin, Principal principal, Model model) {
         if (!friendshipService.create(friendLogin, principal)) {
             model
                     .addAttribute("condition", true);
             return "find_friends";
         }
-        return "redirect:/find_friends";
+        model
+                .addAttribute("possibleFriends", friendshipService.find(word, principal))
+                .addAttribute("word", word);
+        return "find_friends";
     }
 
     @GetMapping("friends/requests")
@@ -74,6 +77,18 @@ public class FriendshipController {
     public String deleteFriend(String friendLogin, Principal principal) {
         friendshipService.delete(friendLogin, principal);
         return "redirect:/my_friends";
+    }
+
+    @PostMapping("/reject_friend")
+    public String rejectFriend(String friendLogin, Principal principal) {
+        friendshipService.rejectFriend(friendLogin, principal);
+        return "redirect:/friends/requests";
+    }
+
+    @PostMapping("/delete_outgoing_request")
+    public String deleteOutgoingRequest(String friendLogin, Principal principal) {
+        friendshipService.deleteOutgoingRequest(friendLogin, principal);
+        return "redirect:/friends/requests";
     }
 
 }

@@ -34,9 +34,8 @@
             </th:block>
         </form>
     </th:block>
-    <th:block th:each="tag, iterStat : ${photo.tags}">
-        <span th:text="${tag.tag}"></span>
-        <span th:if="${!iterStat.last}">, </span>
+    <th:block th:if="${thisUser.getName()} != ${photo.album.userLogin}" th:each="tag, iterStat : ${photo.tags}">
+        <span th:text="${tag.tag}"></span><span th:if="${!iterStat.last}">, </span>
     </th:block>
 
     <th:block th:if="${thisUser.getName()} == ${photo.album.userLogin}">
